@@ -257,8 +257,6 @@ class Trainer(ABC):
         """
         progress_bar = tqdm.auto.tqdm(range(len(self.loader)), desc="loss: N/A")
 
-        checkpoint_energy = RunningEnergy(self.device.index)
-
         self.stats.start_train()
         for i, batch in enumerate(self.loader):
             self.stats.start_step()
@@ -267,11 +265,8 @@ class Trainer(ABC):
 
             if self.enable_checkpointing and self.should_save_checkpoint(i):
                 self.stats.start_save_checkpoint()
-                checkpoint_energy.start()
                 self.save_checkpoint(i)
-                checkpoint_energy.stop()
                 self.stats.stop_save_checkpoint()
-                print(f"checkpoint energy consumption: {checkpoint_energy.get_last()}")
 
             # for every rank, log the loss
             self.stats.log_loss(loss)

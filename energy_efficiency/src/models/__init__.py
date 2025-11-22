@@ -10,11 +10,7 @@ model's directory for model specific documentation.
 
 """
 from src.models import (
-    gpt2 as gpt2,
-    qwen as qwen,
-    switch_transformer as switch_transformer,
-    unet3d as unet3d,
-    unet3d_mlcommons as unet3d_mlcommons,)
+    gpt2 as gpt2,)
 from typing import Any, Dict, Optional, Tuple
 import src.config as config
 import src.trainer as trainer

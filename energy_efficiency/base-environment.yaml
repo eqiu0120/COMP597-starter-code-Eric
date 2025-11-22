@@ -1,8 +1,0 @@
-name: COMP597-base
-channels:
-  - defaults
-  - conda-forge
-dependencies:
-  - python=3.14
-  - conda=25.9
-  - libmamba-solver
