@@ -135,3 +135,4 @@ def gpt2_init(conf: config.Config, dataset: data.Dataset) -> Tuple[trainer.Train
         return simple_trainer(conf, model, dataset, tokenizer, data_collator)
     else:
         raise Exception(f"Unknown trainer type {conf.trainer}")
+

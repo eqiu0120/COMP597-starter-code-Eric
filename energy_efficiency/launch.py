@@ -15,7 +15,7 @@ def process_conf(conf : config.Config) -> Tuple[trainer.Trainer, Optional[Dict[s
 def get_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(config.ConfigArgs.MODEL.to_arg(), type=str, help="Which model to train.", choices=["gpt2"])
+    parser.add_argument(config.ConfigArgs.MODEL.to_arg(), type=str, help="Which model to train.", choices=[models.get_available_models()])
     parser.add_argument(config.ConfigArgs.TRAINER.to_arg(), type=str, help="How to train the model", default="simple", choices=["simple"])
     parser.add_argument(config.ConfigArgs.DATASET.to_arg(), type=str, help="Which dataset to use.", default="allenai/c4",  choices=["allenai/c4"])
     # TODO Remove default, it makes no sense.
@@ -39,6 +39,7 @@ def get_args() -> argparse.Namespace:
 def main():
     args = get_args()
     conf = config.Config(args)
+    print(f"available models: {models.get_available_models()}")
     model_trainer, model_kwargs = process_conf(conf)
 
     model_trainer.train(model_kwargs)
