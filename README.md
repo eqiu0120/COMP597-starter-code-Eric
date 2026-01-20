@@ -7,13 +7,13 @@ The repository also provides you with the means to run the code both locally and
 
 ## Getting Started
 
-As mentioned above, the provided code is a command line tool. The entry point is the `launch.py` file, located at the root of this repository. Running the `python3 launch.py --help` (locally) or `srun.sh --help` (Slurm) with print a basic help message listing all the possible flags that can be used to configure the execution of a training loop. 
+As mentioned above, the provided code is a command line tool. The entry point is the `launch.py` file, located at the root of this repository. Running the `python3 launch.py --help` (locally) or `srun.sh --help` (Slurm) will print a basic help message listing all the possible flags that can be used to configure the execution of a training loop. 
 
 Before digging straight into the code, visit the [documentation](docs/ToC.md). It provides details about the provided code, the required Python environment, how to use Slurm in the context of this project, and how to extend the code provided. 
 
 ## Models
 
-| Milabench Benchmark Name | Milebench Source Code | Model Name | Type | Architecture | Size | Documentation | Dataset | Pretrained Weights | Notes |
+| Milabench Benchmark Name | Milabench Source Code | Model Name | Type | Architecture | Size | Documentation | Dataset | Pretrained Weights | Notes |
 | :--- | :---: | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
 | bert-tf32-fp16 | [`milabench/benchmarks/huggingface`](https://github.com/mila-iqia/milabench/tree/master/benchmarks/huggingface) | BERT | NLP | Transformer | 116M | [HuggingFace Documentation](https://huggingface.co/docs/transformers/en/model_doc/bert) | [Synthetic Dataset from MilaBench](https://github.com/mila-iqia/milabench/blob/master/benchmarks/huggingface/bench/synth.py) | No pre-trained weights, Milabench uses the default HugginFace config. See how Milabench creates the model [here](https://github.com/mila-iqia/milabench/blob/master/benchmarks/huggingface/bench/models.py) | N/A |
 | N/A | [`milabench/benchmarks/huggingface`](https://github.com/mila-iqia/milabench/tree/master/benchmarks/huggingface) | DistilBERT | NLP | Transformer | 67M | [HuggingFace Documentation](https://huggingface.co/docs/transformers/en/model_doc/distilbert) | [Synthetic Dataset from MilaBench](https://github.com/mila-iqia/milabench/blob/master/benchmarks/huggingface/bench/synth.py) | [HuggingFace Model Card](https://huggingface.co/distilbert/distilbert-base-uncased), See how Milabench loads the model [here](https://github.com/mila-iqia/milabench/blob/master/benchmarks/huggingface/bench/models.py) | N/A |
