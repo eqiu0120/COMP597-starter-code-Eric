@@ -46,6 +46,4 @@ if [[ -d "${COMP597_JOB_WORKING_DIRECTORY}" ]]; then
 	cd ${COMP597_JOB_WORKING_DIRECTORY}
 fi
 
-# Run the job
-
 eval "$@"

@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 # Required paths
 
@@ -20,7 +21,6 @@ fi
 # Set up the Conda environment
 
 . ${SCRIPTS_DIR}/conda_init.sh
-
 conda activate ${COMP597_JOB_CONDA_ENV_PREFIX}
 
 # Logs
@@ -46,6 +46,35 @@ if [[ -d "${COMP597_JOB_WORKING_DIRECTORY}" ]]; then
 	cd ${COMP597_JOB_WORKING_DIRECTORY}
 fi
 
-# Run the job
 
+# Optional GPU logging (only when COMP597_LOG_GPU=1 and GPU is allocated)
+OUTDIR=/home/slurm/comp597/students/$USER/gpu_measurements
+mkdir -p "$OUTDIR"
+GPU_LOG="$OUTDIR/gpu_${SLURM_JOB_ID}.csv"
+
+GPU_PID=""
+if [[ "${COMP597_LOG_GPU:-0}" == "1" ]] && [[ -n "${CUDA_VISIBLE_DEVICES:-}" ]] && command -v nvidia-smi >/dev/null 2>&1; then
+	echo "Starting GPU logging -> $GPU_LOG"
+	nvidia-smi --query-gpu=timestamp,utilization.gpu,memory.used,power.draw,clocks.sm \
+  	--format=csv -l 0.1 > "$GPU_LOG" & 
+	GPU_PID=$!
+fi
+
+cleanup() {
+	if [[ -n "${GPU_PID}" ]]; then
+		kill "${GPU_PID}" 2>/dev/null || true
+		# Delete empty logs (e.g., if job ended too fast)
+		if [[ ! -s "$GPU_LOG" ]]; then
+			rm -f "$GPU_LOG"
+		else
+			echo "Stopped GPU logging. Saved: $GPU_LOG"
+		fi
+	fi
+}
+trap cleanup EXIT INT TERM
+
+# Run the job (original behavior)
+echo "PRECHECK: hostname=$(hostname)"
+echo "PRECHECK: CUDA_VISIBLE_DEVICES=${CUDA_VISIBLE_DEVICES:-<empty>}"
+python -c "import torch; print('PRECHECK: torch', torch.__version__); print('PRECHECK: cuda_available', torch.cuda.is_available()); print('PRECHECK: device_count', torch.cuda.device_count())"
 eval "${COMP597_JOB_COMMAND} $@"
