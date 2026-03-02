@@ -19,7 +19,7 @@ class LoggingConfig(_BaseConfig):
 
     def __init__(self) -> None:
         self._default = DefaultLoggingConfig()
-        self._arg_level = _Arg(type=str, help="Logging level.", default=self._default.level, choices=list(logging.getLevelNamesMapping().keys()))
+        self._arg_level = _Arg(type=str, help="Logging level.", default=self._default.level)
         self._arg_filename = _Arg(type=str, help="Filename to write logs to. If not provided, logs will go to stdout.", default=None)
         self._arg_filemode = _Arg(type=str, help="Filemode to use when filename is provided.", default='a')
         self._arg_format = _Arg(type=str, help="Format to use to output logs.", default=self._default.format)

@@ -157,15 +157,83 @@ Your arguments should become available with the `--trainer_configs.<trainer_name
 
 ## Data
 
-Additional information will be added as needed during the semester.
+To add a new data loading function, you will need to create a dedicated directory under `src/data/`. Give it a name that relates to your dataset, or a specific library you are using to load the data for example. It will become a submodule of the data module. You could use a structure similar to the one below:
+
+```
+src/models/<name>
+├── __init__.py
+├── data.py
+```
+
+You can check the submodule at `src/data/dataset` for an example. You module should provide a function with the signature `def load_data(conf : config.Config) -> torch.utils.data.Dataset`. Additionally, you can configure the name that will be available to select this function when using the `--data` flag. By default, the name assigned will be the name of the directory, but you can change it if your module provides the `data_load_name` variable, in which case it will use the content of the variable as the name. Here is a step by step process:
+
+1. Create directory `src/data/<name>`.
+2. Create file `src/data/<name>/__init__.py`.
+3. Create file `src/data/<name>/data.py`.
+4. Add the following to `src/data/<name>/__init__.py`.
+   ```python
+   from src.data.<name>.data import *
+   ```
+5. Add the following to `src/data/<name>/data.py`.
+   ```python
+   import src.config as config
+   import torch.utils.data
+
+   data_load_name="<your_name>"
+
+   def load_data(conf : config.Config) -> torch.utils.data.Dataset:
+       # Your implementation here
+       pass
+   ```
 
 ## Trainers
 
-Additional information will be added as needed during the semester.
+The provided trainer might not suit your model, in which case you will need to add a new one. There is no auto-discovery here, as there is no factory to create a trainer. Your implementation under `src/models/<your_model>/` will simply import whatever trainer it needs. For the sake of organization though, the code for your trainer should be stored under `src/trainer/`. 
+
+Before creating a new trainer, you should identify what it is that you need from it. For example, if the only reason preventing you from using the provided simple trainer under `src/trainer/simple.py` is the `process_batch` method, then you should probably use an implementation similar to this one:
+
+```python
+import src.trainer.simple as simple
+
+class MyTrainer(simple.Simple):
+
+    def __init__(...):
+        # Your implementation
+        pass
+
+    def process_batch(self, i : int, batch : Any) -> Any:
+        # Your implementation
+        pass
+```
+
+This way, you will keep a lean implementation and avoid reimplementing code that was already available. 
 
 ## Measurements
 
-Additional information will be added as needed during the semester.
+Measurement techniques will likely vary for each model. As such, you might need to make your own tools or extensions to tools in order to collect meaningful data. 
+
+Metrics can be collected during the training of a model using the `TrainerStats` class. If you need a specific way to perform measurements, you should create a class that extends the `TrainerStats` base class (or one of the already provided classes which extend it). To do so, create a python file under `src/trainer/stats/`, and give a name appropriate to what you are doing or the tools you are using. Here's what your file should look like:
+
+```python
+import src.config as config
+import src.trainer.stats.base as base
+
+trainer_stats_name="<your_name>"
+
+def construct_trainer_stats(conf : config.Config, **kwargs) -> base.TrainerStats:
+    # Handle additional configurations here
+    return YourTrainerStats(...)
+
+class YourTrainerStats(base.TrainerStats):
+
+    def __init__(...):
+        pass
+
+    # Override any method from base.TrainerStats that you need.
+
+```
+
+The function signature `def construct_trainer_stats(conf : config.Config, **kwargs) -> base.TrainerStats` is really important, as this is what will be used to construct the TrainerStats object. You can use the `trainer_stats_name` variable to configure the name by which it will be available using the `--trainer_stats` flag. If the variable is not provided, it should default to the name of the file (without the `.py` extension).
 
 ## Logging
 
