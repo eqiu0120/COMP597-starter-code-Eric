@@ -159,8 +159,10 @@ class CodeCarbonStats(base.TrainerStats):
         # tracking the run number to distinguish between different parameter settings
         self.run_num = run_num
         run_number = f"run_{run_num}_"
-        # GPU ranks - wrap in torch.device
-        gpu_id = self.device.index
+        # GPU ranks - device.index is None when created as torch.device("cuda") without
+        # an explicit index (e.g. regnet/model.py).  Default to GPU 0 in that case.
+        gpu_id = self.device.index if self.device.index is not None else 0
+        self._gpu_id = gpu_id  # store for use in log_stats
         # log the losses
         self.losses = []
         self.project_name = project_name
@@ -273,7 +275,7 @@ class CodeCarbonStats(base.TrainerStats):
         
         # save to file ({output_dir}/losses/run_{run_num}_cc_loss_rank_{gpu_id}.csv)
         run_number = f"run_{self.run_num}_"
-        gpu_id = self.device.index
+        gpu_id = self._gpu_id
         losses_dir = os.path.join(self.output_dir, "losses")
         os.makedirs(losses_dir, exist_ok=True)
         save_file_path = os.path.join(losses_dir, f"{run_number}cc_loss_rank_{gpu_id}.csv")
