@@ -47,27 +47,40 @@ if [[ -d "${COMP597_JOB_WORKING_DIRECTORY}" ]]; then
 fi
 
 
-# Optional GPU logging (only when COMP597_LOG_GPU=1 and GPU is allocated)
+# Optional GPU + CPU logging (only when COMP597_LOG_GPU=1 and GPU is allocated)
 OUTDIR=/home/slurm/comp597/students/$USER/gpu_measurements
 mkdir -p "$OUTDIR"
 GPU_LOG="$OUTDIR/gpu_${SLURM_JOB_ID}.csv"
+CPU_LOG="$OUTDIR/cpu_${SLURM_JOB_ID}.csv"
 
 GPU_PID=""
+CPU_PID=""
 if [[ "${COMP597_LOG_GPU:-0}" == "1" ]] && [[ -n "${CUDA_VISIBLE_DEVICES:-}" ]] && command -v nvidia-smi >/dev/null 2>&1; then
 	echo "Starting GPU logging -> $GPU_LOG"
 	nvidia-smi --query-gpu=timestamp,utilization.gpu,memory.used,power.draw,clocks.sm \
-  	--format=csv -l 0.1 > "$GPU_LOG" & 
+  	--format=csv -l 0.1 > "$GPU_LOG" &
 	GPU_PID=$!
+
+	echo "Starting CPU logging -> $CPU_LOG"
+	python "${SCRIPTS_DIR}/cpu_monitor.py" "$CPU_LOG" 0.5 &
+	CPU_PID=$!
 fi
 
 cleanup() {
 	if [[ -n "${GPU_PID}" ]]; then
 		kill "${GPU_PID}" 2>/dev/null || true
-		# Delete empty logs (e.g., if job ended too fast)
 		if [[ ! -s "$GPU_LOG" ]]; then
 			rm -f "$GPU_LOG"
 		else
 			echo "Stopped GPU logging. Saved: $GPU_LOG"
+		fi
+	fi
+	if [[ -n "${CPU_PID}" ]]; then
+		kill "${CPU_PID}" 2>/dev/null || true
+		if [[ ! -s "$CPU_LOG" ]]; then
+			rm -f "$CPU_LOG"
+		else
+			echo "Stopped CPU logging. Saved: $CPU_LOG"
 		fi
 	fi
 }
