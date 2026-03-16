@@ -122,10 +122,8 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
         df = pd.read_csv(csv_path)
         df["timestamp"] = pd.to_datetime(df["timestamp"])
         t = (df["timestamp"] - df["timestamp"].iloc[0]).dt.total_seconds()
-        df["t"] = t
-        df = df.set_index("t")
-        # Resample to 1-second bins
-        df_rs = df.resample("1s").mean()
+        df["t_s"] = t.round(0).astype(int)
+        df_rs = df.groupby("t_s").mean(numeric_only=True)
         for col in metrics:
             if col in df_rs.columns:
                 run_series[col].append(_strip_unit(df_rs[col], metrics[col][0]))

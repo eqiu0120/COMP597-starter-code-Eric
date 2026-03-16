@@ -6,16 +6,17 @@
 # Results from all runs can then be averaged with plot_measurements.py.
 #
 # Usage:
-#   ./scripts/submit_regnet_runs.sh [NUM_RUNS]
+#   ./scripts/submit_regnet_runs.sh [NUM_RUNS] [BATCH_SIZE]
 #
-# Default number of runs is 3.  Override with the first argument:
-#   ./scripts/submit_regnet_runs.sh 5
+# Default: 3 runs, batch size 8.
+#   ./scripts/submit_regnet_runs.sh 3 32
 
 set -euo pipefail
 
 SCRIPTS_DIR=$(readlink -f -n "$(dirname "$0")")
 REPO_DIR=$(readlink -f -n "${SCRIPTS_DIR}/..")
 NUM_RUNS="${1:-3}"
+BATCH_SIZE="${2:-8}"
 
 # Load the same SLURM configuration that scripts/sbatch.sh uses so we get
 # the correct partition, account, QOS, memory, time limit, etc.
@@ -27,7 +28,7 @@ fi
 
 module load slurm
 
-echo "Submitting ${NUM_RUNS} RegNet run(s) to partition=${COMP597_SLURM_PARTITION} account=${COMP597_SLURM_ACCOUNT}..."
+echo "Submitting ${NUM_RUNS} RegNet run(s) [batch_size=${BATCH_SIZE}] to partition=${COMP597_SLURM_PARTITION} account=${COMP597_SLURM_ACCOUNT}..."
 echo ""
 
 for RUN in $(seq 0 $((NUM_RUNS - 1))); do
@@ -43,7 +44,7 @@ for RUN in $(seq 0 $((NUM_RUNS - 1))); do
             --cpus-per-task=${COMP597_SLURM_CPUS_PER_TASK} \
             --qos=${COMP597_SLURM_QOS} \
             --gpus=${COMP597_SLURM_NUM_GPUS} \
-            --export=COMP597_SLURM_SCRIPTS_DIR=${COMP597_SLURM_SCRIPTS_DIR},REGNET_RUN_NUM=${RUN} \
+            --export=COMP597_SLURM_SCRIPTS_DIR=${COMP597_SLURM_SCRIPTS_DIR},REGNET_RUN_NUM=${RUN},REGNET_BATCH_SIZE=${BATCH_SIZE} \
             "${COMP597_SLURM_JOB_SCRIPT}" \
         | awk '{print $NF}'
     )
@@ -65,7 +66,7 @@ echo "Monitor with:  squeue -u ${USER}"
 echo ""
 echo "Once all jobs finish, generate averaged plots with:"
 echo "  python GPU_result/plot_measurements.py \\"
-echo "    --cc_dir   /home/slurm/comp597/students/${zqiu6}/regnet_measurements \\"
-echo "    --out_dir  /home/slurm/comp597/students/${zqiu6}/regnet_plots \\"
-echo "    --num_runs ${3} \\"
+echo "    --cc_dir   /home/slurm/comp597/students/${USER}/regnet_measurements \\"
+echo "    --out_dir  ~/COMP597-starter-code-Eric/GPU_result/plots \\"
+echo "    --num_runs ${NUM_RUNS} \\"
 echo "    --log_files \$(ls comp597-regnet-run*-*.log 2>/dev/null | sort)"

@@ -29,9 +29,13 @@ REGNET_RUN_NUM="${REGNET_RUN_NUM:-0}"
 #   --data  regnet          : load FakeImageNet from the student storage
 #   --trainer_stats combined: enable GPU resource + CodeCarbon tracking
 #   --trainer_stats_configs.combined.*: pass CodeCarbon output settings
+REGNET_BATCH_SIZE="${REGNET_BATCH_SIZE:-8}"
+
 export COMP597_JOB_COMMAND="${COMP597_JOB_COMMAND} \
   --model regnet \
   --data regnet \
+  --model_configs.regnet.batch_size ${REGNET_BATCH_SIZE} \
+  --model_configs.regnet.duration_seconds 300 \
   --trainer_stats combined \
   --trainer_stats_configs.combined.run_num ${REGNET_RUN_NUM} \
   --trainer_stats_configs.combined.project_name regnet-energy \

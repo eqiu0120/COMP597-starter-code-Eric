@@ -19,7 +19,7 @@ export COMP597_SLURM_NODELIST="gpu-teach-03"
 export COMP597_SLURM_MIN_MEM="4GB"
 
 # Allow enough wall-clock time for ~250 steps over 2000 samples
-export COMP597_SLURM_TIME_LIMIT="30:00"
+export COMP597_SLURM_TIME_LIMIT="12:00"
 
 # One GPU is sufficient for a single-process run
 export COMP597_SLURM_NUM_GPUS=1
