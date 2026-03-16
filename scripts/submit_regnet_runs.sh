@@ -49,6 +49,15 @@ for RUN in $(seq 0 $((NUM_RUNS - 1))); do
     )
     echo "  Run ${RUN} -> SLURM job ${JOB_ID}"
     echo "           log : ${REPO_DIR}/comp597-regnet-run${RUN}-*-${JOB_ID}.log"
+
+    if [[ ${RUN} -lt $((NUM_RUNS - 1)) ]]; then
+        echo "           waiting for job ${JOB_ID} to complete before submitting run $((RUN + 1))..."
+        while squeue -j "${JOB_ID}" -h 2>/dev/null | grep -q "${JOB_ID}"; do
+            sleep 30
+        done
+        echo "           job ${JOB_ID} finished."
+        echo ""
+    fi
 done
 
 echo ""
@@ -56,7 +65,7 @@ echo "Monitor with:  squeue -u ${USER}"
 echo ""
 echo "Once all jobs finish, generate averaged plots with:"
 echo "  python GPU_result/plot_measurements.py \\"
-echo "    --cc_dir   /home/slurm/comp597/students/${USER}/regnet_measurements \\"
-echo "    --out_dir  /home/slurm/comp597/students/${USER}/regnet_plots \\"
-echo "    --num_runs ${NUM_RUNS} \\"
+echo "    --cc_dir   /home/slurm/comp597/students/${zqiu6}/regnet_measurements \\"
+echo "    --out_dir  /home/slurm/comp597/students/${zqiu6}/regnet_plots \\"
+echo "    --num_runs ${3} \\"
 echo "    --log_files \$(ls comp597-regnet-run*-*.log 2>/dev/null | sort)"

@@ -16,7 +16,7 @@ fi
 export COMP597_SLURM_NODELIST="gpu-teach-03"
 
 # RegNet y-128GF is large; request enough RAM
-export COMP597_SLURM_MIN_MEM="24GB"
+export COMP597_SLURM_MIN_MEM="4GB"
 
 # Allow enough wall-clock time for ~250 steps over 2000 samples
 export COMP597_SLURM_TIME_LIMIT="30:00"
