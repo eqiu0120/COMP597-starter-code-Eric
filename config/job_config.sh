@@ -17,7 +17,7 @@ fi
 export COMP597_LOG_GPU=1
 
 # Results directory on the SLURM storage partition
-REGNET_OUT_DIR="/home/slurm/comp597/students/${USER}/regnet_measurements"
+REGNET_OUT_DIR="/home/slurm/comp597/students/zqiu6/regnet_measurements"
 
 # Run number: override by setting REGNET_RUN_NUM before sourcing this file
 # (or by passing --export=ALL,REGNET_RUN_NUM=N to sbatch).
