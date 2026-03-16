@@ -169,16 +169,18 @@ class CodeCarbonStats(base.TrainerStats):
         self.output_dir = output_dir
         os.makedirs(self.output_dir, exist_ok=True)
         
-        # Normal-mode tracker to track the entire training loop
+        # Normal-mode tracker to track the entire training loop.
+        # measure_power_secs=0.5 samples hardware every 500 ms as required.
         self.total_training_tracker = OfflineEmissionsTracker(
-            project_name = project_name, 
+            project_name = project_name,
             country_iso_code = "CAN",
             region = "quebec",
-            save_to_file = False, 
+            save_to_file = False,
             output_handlers = [SimpleFileOutput(output_file_name = f"{run_number}cc_full_rank_{gpu_id}.csv", output_dir=output_dir)],
             allow_multiple_runs = True,
             log_level = "warning",
             gpu_ids = [gpu_id],
+            measure_power_secs = 0.5,
         )
 
         # Task-mode tracker to track steps (iterations) within the training loop

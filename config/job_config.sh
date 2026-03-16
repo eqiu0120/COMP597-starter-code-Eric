@@ -30,6 +30,7 @@ REGNET_RUN_NUM="${REGNET_RUN_NUM:-0}"
 #   --trainer_stats combined: enable GPU resource + CodeCarbon tracking
 #   --trainer_stats_configs.combined.*: pass CodeCarbon output settings
 REGNET_BATCH_SIZE="${REGNET_BATCH_SIZE:-8}"
+REGNET_OUT_DIR="/home/slurm/comp597/students/zqiu6/regnet_measurements/bs_${REGNET_BATCH_SIZE}"
 
 export COMP597_JOB_COMMAND="${COMP597_JOB_COMMAND} \
   --model regnet \
