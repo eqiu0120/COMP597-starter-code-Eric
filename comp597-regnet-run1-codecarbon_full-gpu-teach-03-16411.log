@@ -1,0 +1,1310 @@
+┌─────────────────────────────┐
+│ SLURM Hardware Configuration│
+├─────────────────────┬───────┤
+│ Variable            │ Value │
+├─────────────────────┼───────┤
+│ SLURM_CPUS_ON_NODE  │ 4     │
+│ SLURM_CPUS_PER_TASK │ 4     │
+│ SLURM_GPUS          │ 1     │
+│ SLURM_GPUS_ON_NODE  │ 1     │
+│ SLURM_MEM_PER_NODE  │ 4096  │
+└─────────────────────┴───────┘
+
+
+┌─────────────────────────────────────────────────────┐
+│                    SLURM Job Info                   │
+├─────────────────────────┬───────────────────────────┤
+│ Variable                │ Value                     │
+├─────────────────────────┼───────────────────────────┤
+│ SLURM_JOBID             │ 16411                     │
+│ SLURM_JOB_ACCOUNT       │ energy-efficiency-comp597 │
+│ SLURM_JOB_CPUS_PER_NODE │ 4                         │
+│ SLURM_JOB_END_TIME      │ 1773783235                │
+│ SLURM_JOB_GID           │ 65534                     │
+│ SLURM_JOB_GPUS          │ 0                         │
+│ SLURM_JOB_ID            │ 16411                     │
+│ SLURM_JOB_NAME          │ job.sh                    │
+│ SLURM_JOB_NODELIST      │ gpu-teach-03              │
+│ SLURM_JOB_NUM_NODES     │ 1                         │
+│ SLURM_JOB_PARTITION     │ all                       │
+│ SLURM_JOB_QOS           │ comp597                   │
+│ SLURM_JOB_START_TIME    │ 1773782515                │
+│ SLURM_JOB_UID           │ 2529343                   │
+│ SLURM_JOB_USER          │ zqiu6                     │
+└─────────────────────────┴───────────────────────────┘
+
+
+┌───────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                                                                                                                                                                                                                                  SLURM Job Configuration                                                                                                                                                                                                                                                  │
+├─────────────────────────────────────────┬─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ Variable                                │ Value                                                                                                                                                                                                                                                                                                                                                                                                                                                                           │
+├─────────────────────────────────────────┼─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ COMP597_JOB_CACHE_DIR                   │ /mnt/teaching/slurm/zqiu6/.cache                                                                                                                                                                                                                                                                                                                                                                                                                                                │
+│ COMP597_JOB_COMMAND                     │ /home/2025/zqiu6/COMP597-starter-code-Eric/scripts/launch.sh                                                                                                                                                                                                                                                                                                                                                                                                                    │
+│ --model                                 │ regnet                                                                                                                                                                                                                                                                                                                                                                                                                                                                          │
+│ --data                                  │ regnet                                                                                                                                                                                                                                                                                                                                                                                                                                                                          │
+│ --model_configs.regnet.batch_size       │ 32                                                                                                                                                                                                                                                                                                                                                                                                                                                                              │
+│ --model_configs.regnet.duration_seconds │ 300                                                                                                                                                                                                                                                                                                                                                                                                                                                                             │
+│ --trainer_stats                         │ codecarbon_full                                                                                                                                                                                                                                                                                                                                                                                                                                                                 │
+│ --trainer_stats_configs.codecarbon_full.run_num │ 1                                                                                                                                                                                                                                                                                                                                                                                                                                                                               │
+│ --trainer_stats_configs.codecarbon_full.project_name │ regnet-energy                                                                                                                                                                                                                                                                                                                                                                                                                                                                   │
+│ --trainer_stats_configs.codecarbon_full.output_dir │ /home/slurm/comp597/students/zqiu6/regnet_measurements/bs_32_codecarbon_full                                                                                                                                                                                                                                                                                                                                                                                                    │
+│ COMP597_JOB_CONDA_DIR                   │ /home/slurm/comp597/conda                                                                                                                                                                                                                                                                                                                                                                                                                                                       │
+│ COMP597_JOB_CONDA_ENV_DIR               │ /home/slurm/comp597/conda/envs                                                                                                                                                                                                                                                                                                                                                                                                                                                  │
+│ COMP597_JOB_CONDA_ENV_NAME              │ comp597                                                                                                                                                                                                                                                                                                                                                                                                                                                                         │
+│ COMP597_JOB_CONDA_ENV_PREFIX            │ /home/slurm/comp597/conda/envs/comp597                                                                                                                                                                                                                                                                                                                                                                                                                                          │
+│ COMP597_JOB_CONFIG                      │ /home/2025/zqiu6/COMP597-starter-code-Eric/config/job_config.sh                                                                                                                                                                                                                                                                                                                                                                                                                 │
+│ COMP597_JOB_CONFIG_LOG                  │ true                                                                                                                                                                                                                                                                                                                                                                                                                                                                            │
+│ COMP597_JOB_SCRATCH_STORAGE             │ /mnt/teaching/slurm                                                                                                                                                                                                                                                                                                                                                                                                                                                             │
+│ COMP597_JOB_STORAGE_PARTITION           │ /home/slurm/comp597                                                                                                                                                                                                                                                                                                                                                                                                                                                             │
+│ COMP597_JOB_STUDENTS_BASE_DIR           │ /home/slurm/comp597/students                                                                                                                                                                                                                                                                                                                                                                                                                                                    │
+│ COMP597_JOB_STUDENT_SCRATCH_STORAGE_DIR │ /mnt/teaching/slurm/zqiu6                                                                                                                                                                                                                                                                                                                                                                                                                                                       │
+│ COMP597_JOB_STUDENT_STORAGE_DIR         │ /home/slurm/comp597/students/zqiu6                                                                                                                                                                                                                                                                                                                                                                                                                                              │
+│ COMP597_JOB_WORKING_DIRECTORY           │                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 │
+└─────────────────────────────────────────┴─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
+
+
+┌────────────────────────────────────────────────────────────────┐
+│                   Conda Environment Variables                  │
+├───────────────────────┬────────────────────────────────────────┤
+│ Variable              │ Value                                  │
+├───────────────────────┼────────────────────────────────────────┤
+│ CONDA_DEFAULT_ENV     │ comp597                                │
+│ CONDA_EXE             │ /usr/local/pkgs/anaconda/bin/conda     │
+│ CONDA_PREFIX          │ /home/slurm/comp597/conda/envs/comp597 │
+│ CONDA_PREFIX_1        │ /usr/local/pkgs/anaconda               │
+│ CONDA_PROMPT_MODIFIER │ (comp597)                              │
+│ CONDA_PYTHON_EXE      │ /usr/local/pkgs/anaconda/bin/python    │
+│ CONDA_SHLVL           │ 2                                      │
+└───────────────────────┴────────────────────────────────────────┘
+
+
+Starting GPU logging -> /home/slurm/comp597/students/zqiu6/gpu_measurements/gpu_16411.csv
+Starting CPU logging -> /home/slurm/comp597/students/zqiu6/gpu_measurements/cpu_16411.csv
+PRECHECK: hostname=gpu-teach-03.cs.mcgill.ca
+PRECHECK: CUDA_VISIBLE_DEVICES=0
+PRECHECK: torch 2.9.1+cu128
+PRECHECK: cuda_available True
+PRECHECK: device_count 1
+[codecarbon INFO @ 17:22:10] offline tracker init
+[codecarbon WARNING @ 17:22:10] Multiple instances of codecarbon are allowed to run at the same time.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:10] Error running `scontrol show job $SLURM_JOB_ID` to count SLURM-available cpus. Using the machine's cpu count.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:11] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+[codecarbon WARNING @ 17:22:12] 	RAPL - Permission denied reading RAPL file /sys/class/powercap/intel-rapl/subsystem/intel-rapl:1/intel-rapl:1:0/energy_uj. You can grant read permission with: sudo chmod -R a+r /sys/class/powercap/*
+[codecarbon WARNING @ 17:22:12] No CPU tracking mode found. Falling back on estimation based on TDP for CPU. 
+ Linux OS detected: Please ensure RAPL files exist, and are readable, at /sys/class/powercap/intel-rapl/subsystem to measure CPU
+
+[codecarbon WARNING @ 17:22:12] No CPU tracking mode found. Falling back on CPU constant mode.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:12] Error running `scontrol show job $SLURM_JOB_ID` to count SLURM-available cpus. Using the machine's cpu count.
+REGNET DEBUG device: cuda
+REGNET DEBUG model param device: cuda:0
+REGNET CONFIG batch_size=32 duration_seconds=300
+loss: N/A: 0it [00:00, ?it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:13] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:13] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:14] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:14] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:15] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:15] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.1763: : 0it [00:03, ?it/s]loss: 7.1763: : 1it [00:03,  3.75s/it]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:16] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 14.9659: : 1it [00:04,  3.75s/it]loss: 14.9659: : 2it [00:04,  1.75s/it]loss: 15.8699: : 2it [00:04,  1.75s/it]loss: 15.8699: : 3it [00:04,  1.11s/it]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:16] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 15.0338: : 3it [00:04,  1.11s/it]loss: 15.0338: : 4it [00:04,  1.23it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:17] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 13.3191: : 4it [00:05,  1.23it/s]loss: 13.3191: : 5it [00:05,  1.55it/s]loss: 12.7925: : 5it [00:05,  1.55it/s]loss: 12.7925: : 6it [00:05,  1.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:17] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 12.5091: : 6it [00:05,  1.83it/s]loss: 12.5091: : 7it [00:05,  2.07it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:18] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 12.3540: : 7it [00:06,  2.07it/s]loss: 12.3540: : 8it [00:06,  2.27it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:18] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 10.3233: : 8it [00:06,  2.27it/s]loss: 10.3233: : 9it [00:06,  2.42it/s]loss: 10.7750: : 9it [00:06,  2.42it/s]loss: 10.7750: : 10it [00:06,  2.54it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:19] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 10.0823: : 10it [00:07,  2.54it/s]loss: 10.0823: : 11it [00:07,  2.62it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:19] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 9.9787: : 11it [00:07,  2.62it/s] loss: 9.9787: : 12it [00:07,  2.69it/s]loss: 9.2975: : 12it [00:07,  2.69it/s]loss: 9.2975: : 13it [00:07,  2.73it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:20] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 8.9216: : 13it [00:08,  2.73it/s]loss: 8.9216: : 14it [00:08,  2.76it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:20] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 9.2729: : 14it [00:08,  2.76it/s]loss: 9.2729: : 15it [00:08,  2.79it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:21] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 8.3772: : 15it [00:09,  2.79it/s]loss: 8.3772: : 16it [00:09,  2.80it/s]loss: 9.0997: : 16it [00:09,  2.80it/s]loss: 9.0997: : 17it [00:09,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:21] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 8.0990: : 17it [00:09,  2.81it/s]loss: 8.0990: : 18it [00:09,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:22] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 8.5778: : 18it [00:10,  2.82it/s]loss: 8.5778: : 19it [00:10,  2.83it/s]loss: 8.6241: : 19it [00:10,  2.83it/s]loss: 8.6241: : 20it [00:10,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:22] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 8.1785: : 20it [00:10,  2.83it/s]loss: 8.1785: : 21it [00:10,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:23] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 8.1187: : 21it [00:11,  2.83it/s]loss: 8.1187: : 22it [00:11,  2.84it/s]loss: 7.8812: : 22it [00:11,  2.84it/s]loss: 7.8812: : 23it [00:11,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:23] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.7365: : 23it [00:11,  2.84it/s]loss: 7.7365: : 24it [00:11,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:24] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.8076: : 24it [00:12,  2.84it/s]loss: 7.8076: : 25it [00:12,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:24] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.6076: : 25it [00:12,  2.84it/s]loss: 7.6076: : 26it [00:12,  2.84it/s]loss: 7.7555: : 26it [00:12,  2.84it/s]loss: 7.7555: : 27it [00:12,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:25] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.4116: : 27it [00:13,  2.84it/s]loss: 7.4116: : 28it [00:13,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:25] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.6005: : 28it [00:13,  2.84it/s]loss: 7.6005: : 29it [00:13,  2.84it/s]loss: 8.0629: : 29it [00:13,  2.84it/s]loss: 8.0629: : 30it [00:13,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:26] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.3354: : 30it [00:14,  2.84it/s]loss: 7.3354: : 31it [00:14,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:26] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.4344: : 31it [00:14,  2.84it/s]loss: 7.4344: : 32it [00:14,  2.84it/s]/bin/sh: 1: scontrol: not foundloss: 7.3844: : 32it [00:15,  2.84it/s]
+loss: 7.3844: : 33it [00:15,  2.84it/s][codecarbon WARNING @ 17:22:27] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.4317: : 33it [00:15,  2.84it/s]loss: 7.4317: : 34it [00:15,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:27] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.3744: : 34it [00:15,  2.84it/s]loss: 7.3744: : 35it [00:15,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:28] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.2073: : 35it [00:16,  2.84it/s]loss: 7.2073: : 36it [00:16,  2.84it/s]loss: 7.2457: : 36it [00:16,  2.84it/s]loss: 7.2457: : 37it [00:16,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:28] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.3303: : 37it [00:16,  2.84it/s]loss: 7.3303: : 38it [00:16,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:29] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.4757: : 38it [00:17,  2.84it/s]loss: 7.4757: : 39it [00:17,  2.84it/s]loss: 7.1991: : 39it [00:17,  2.84it/s]loss: 7.1991: : 40it [00:17,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:29] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.4543: : 40it [00:17,  2.84it/s]loss: 7.4543: : 41it [00:17,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:30] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0877: : 41it [00:18,  2.83it/s]loss: 7.0877: : 42it [00:18,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:30] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.2089: : 42it [00:18,  2.84it/s]loss: 7.2089: : 43it [00:18,  2.84it/s]loss: 7.0808: : 43it [00:18,  2.84it/s]loss: 7.0808: : 44it [00:18,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:31] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9901: : 44it [00:19,  2.84it/s]loss: 6.9901: : 45it [00:19,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:31] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.2007: : 45it [00:19,  2.84it/s]loss: 7.2007: : 46it [00:19,  2.84it/s]loss: 7.1241: : 46it [00:19,  2.84it/s]loss: 7.1241: : 47it [00:19,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:32] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0139: : 47it [00:20,  2.84it/s]loss: 7.0139: : 48it [00:20,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:32] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9350: : 48it [00:20,  2.84it/s]loss: 6.9350: : 49it [00:20,  2.84it/s]loss: 6.8839: : 49it [00:21,  2.84it/s]loss: 6.8839: : 50it [00:21,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:33] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9931: : 50it [00:21,  2.84it/s]loss: 6.9931: : 51it [00:21,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:33] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0174: : 51it [00:21,  2.83it/s]loss: 7.0174: : 52it [00:21,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:34] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0077: : 52it [00:22,  2.83it/s]loss: 7.0077: : 53it [00:22,  2.83it/s]loss: 7.0123: : 53it [00:22,  2.83it/s]loss: 7.0123: : 54it [00:22,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:34] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0445: : 54it [00:22,  2.83it/s]loss: 7.0445: : 55it [00:22,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:35] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9959: : 55it [00:23,  2.84it/s]loss: 6.9959: : 56it [00:23,  2.83it/s]loss: 6.9714: : 56it [00:23,  2.83it/s]loss: 6.9714: : 57it [00:23,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:35] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9799: : 57it [00:23,  2.83it/s]loss: 6.9799: : 58it [00:23,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:36] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9509: : 58it [00:24,  2.84it/s]loss: 6.9509: : 59it [00:24,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:36] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9726: : 59it [00:24,  2.84it/s]loss: 6.9726: : 60it [00:24,  2.84it/s]loss: 6.9984: : 60it [00:24,  2.84it/s]loss: 6.9984: : 61it [00:24,  2.84it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:37] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9958: : 61it [00:25,  2.84it/s]loss: 6.9958: : 62it [00:25,  2.84it/s]loss: 6.9999: : 62it [00:25,  2.84it/s]loss: 6.9999: : 63it [00:25,  3.20it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:37] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9275: : 63it [00:25,  3.20it/s]loss: 6.9275: : 64it [00:25,  2.69it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:38] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9158: : 64it [00:26,  2.69it/s]loss: 6.9158: : 65it [00:26,  2.73it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:38] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9226: : 65it [00:26,  2.73it/s]loss: 6.9226: : 66it [00:26,  2.76it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:39] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7832: : 66it [00:27,  2.76it/s]loss: 6.7832: : 67it [00:27,  2.78it/s]loss: 6.8988: : 67it [00:27,  2.78it/s]loss: 6.8988: : 68it [00:27,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:39] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9873: : 68it [00:27,  2.80it/s]loss: 6.9873: : 69it [00:27,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:40] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.1068: : 69it [00:28,  2.81it/s]loss: 7.1068: : 70it [00:28,  2.81it/s]loss: 6.8552: : 70it [00:28,  2.81it/s]loss: 6.8552: : 71it [00:28,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:40] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0115: : 71it [00:28,  2.82it/s]loss: 7.0115: : 72it [00:28,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:41] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9177: : 72it [00:29,  2.82it/s]loss: 6.9177: : 73it [00:29,  2.83it/s]loss: 6.9688: : 73it [00:29,  2.83it/s]loss: 6.9688: : 74it [00:29,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:41] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9313: : 74it [00:29,  2.83it/s]loss: 6.9313: : 75it [00:29,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:42] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9045: : 75it [00:30,  2.83it/s]loss: 6.9045: : 76it [00:30,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:42] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0011: : 76it [00:30,  2.83it/s]loss: 7.0011: : 77it [00:30,  2.83it/s]loss: 6.9090: : 77it [00:30,  2.83it/s]loss: 6.9090: : 78it [00:30,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:43] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9298: : 78it [00:31,  2.83it/s]loss: 6.9298: : 79it [00:31,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:43] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9124: : 79it [00:31,  2.83it/s]loss: 6.9124: : 80it [00:31,  2.83it/s]loss: 6.9625: : 80it [00:31,  2.83it/s]loss: 6.9625: : 81it [00:31,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:44] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8641: : 81it [00:32,  2.83it/s]loss: 6.8641: : 82it [00:32,  2.83it/s]loss: 6.9641: : 82it [00:32,  2.83it/s]loss: 6.9641: : 83it [00:32,  2.72it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:45] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:45] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8524: : 83it [00:33,  2.72it/s]loss: 6.8524: : 84it [00:33,  2.75it/s]loss: 6.9672: : 84it [00:33,  2.75it/s]loss: 6.9672: : 85it [00:33,  2.77it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:45] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9665: : 85it [00:33,  2.77it/s]loss: 6.9665: : 86it [00:33,  2.79it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:46] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9405: : 86it [00:34,  2.79it/s]loss: 6.9405: : 87it [00:34,  2.80it/s]loss: 6.9191: : 87it [00:34,  2.80it/s]loss: 6.9191: : 88it [00:34,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:46] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9124: : 88it [00:34,  2.81it/s]loss: 6.9124: : 89it [00:34,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:47] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9477: : 89it [00:35,  2.81it/s]loss: 6.9477: : 90it [00:35,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:47] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0816: : 90it [00:35,  2.82it/s]loss: 7.0816: : 91it [00:35,  2.82it/s]loss: 6.8856: : 91it [00:35,  2.82it/s]loss: 6.8856: : 92it [00:35,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:48] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9302: : 92it [00:36,  2.82it/s]loss: 6.9302: : 93it [00:36,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:48] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0470: : 93it [00:36,  2.82it/s]loss: 7.0470: : 94it [00:36,  2.83it/s]loss: 6.8783: : 94it [00:36,  2.83it/s]loss: 6.8783: : 95it [00:36,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:49] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9164: : 95it [00:37,  2.83it/s]loss: 6.9164: : 96it [00:37,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:49] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9158: : 96it [00:37,  2.83it/s]loss: 6.9158: : 97it [00:37,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:50] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9208: : 97it [00:38,  2.82it/s]loss: 6.9208: : 98it [00:38,  2.82it/s]loss: 6.8751: : 98it [00:38,  2.82it/s]loss: 6.8751: : 99it [00:38,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:50] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9408: : 99it [00:38,  2.83it/s]loss: 6.9408: : 100it [00:38,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:51] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9087: : 100it [00:39,  2.83it/s]loss: 6.9087: : 101it [00:39,  2.83it/s]loss: 6.9278: : 101it [00:39,  2.83it/s]loss: 6.9278: : 102it [00:39,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:51] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9223: : 102it [00:39,  2.83it/s]loss: 6.9223: : 103it [00:39,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:52] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8993: : 103it [00:40,  2.83it/s]loss: 6.8993: : 104it [00:40,  2.82it/s]loss: 6.9752: : 104it [00:40,  2.82it/s]loss: 6.9752: : 105it [00:40,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:52] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0386: : 105it [00:40,  2.83it/s]loss: 7.0386: : 106it [00:40,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:53] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9002: : 106it [00:41,  2.82it/s]loss: 6.9002: : 107it [00:41,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:53] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9272: : 107it [00:41,  2.82it/s]loss: 6.9272: : 108it [00:41,  2.82it/s]loss: 6.9101: : 108it [00:41,  2.82it/s]loss: 6.9101: : 109it [00:41,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:54] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9384: : 109it [00:42,  2.82it/s]loss: 6.9384: : 110it [00:42,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:54] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9439: : 110it [00:42,  2.82it/s]loss: 6.9439: : 111it [00:42,  2.82it/s]loss: 6.9594: : 111it [00:42,  2.82it/s]loss: 6.9594: : 112it [00:42,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:55] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9460: : 112it [00:43,  2.82it/s]loss: 6.9460: : 113it [00:43,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:55] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9438: : 113it [00:43,  2.82it/s]loss: 6.9438: : 114it [00:43,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:56] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9305: : 114it [00:44,  2.82it/s]loss: 6.9305: : 115it [00:44,  2.82it/s]loss: 6.9111: : 115it [00:44,  2.82it/s]loss: 6.9111: : 116it [00:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:56] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9519: : 116it [00:44,  2.82it/s]loss: 6.9519: : 117it [00:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:57] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9401: : 117it [00:45,  2.82it/s]loss: 6.9401: : 118it [00:45,  2.82it/s]loss: 6.9428: : 118it [00:45,  2.82it/s]loss: 6.9428: : 119it [00:45,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:57] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9338: : 119it [00:45,  2.82it/s]loss: 6.9338: : 120it [00:45,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:58] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9469: : 120it [00:46,  2.82it/s]loss: 6.9469: : 121it [00:46,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:58] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9990: : 121it [00:46,  2.82it/s]loss: 6.9990: : 122it [00:46,  2.82it/s]loss: 6.9100: : 122it [00:46,  2.82it/s]loss: 6.9100: : 123it [00:46,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:59] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9133: : 123it [00:47,  2.82it/s]loss: 6.9133: : 124it [00:47,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:22:59] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9172: : 124it [00:47,  2.82it/s]loss: 6.9172: : 125it [00:47,  2.82it/s]loss: 6.9377: : 125it [00:47,  2.82it/s]loss: 6.9377: : 126it [00:47,  3.20it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:00] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9029: : 126it [00:48,  3.20it/s]loss: 6.9029: : 127it [00:48,  2.66it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:00] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8863: : 127it [00:48,  2.66it/s]loss: 6.8863: : 128it [00:48,  2.70it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:01] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8553: : 128it [00:49,  2.70it/s]loss: 6.8553: : 129it [00:49,  2.74it/s]loss: 6.9001: : 129it [00:49,  2.74it/s]loss: 6.9001: : 130it [00:49,  2.76it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:01] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8664: : 130it [00:49,  2.76it/s]loss: 6.8664: : 131it [00:49,  2.78it/s]loss: 6.8956: : 131it [00:50,  2.78it/s]loss: 6.8956: : 132it [00:50,  2.52it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:02] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:02] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9221: : 132it [00:50,  2.52it/s]loss: 6.9221: : 133it [00:50,  2.60it/s]loss: 6.8657: : 133it [00:50,  2.60it/s]loss: 6.8657: : 134it [00:50,  2.66it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:03] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8799: : 134it [00:51,  2.66it/s]loss: 6.8799: : 135it [00:51,  2.71it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:03] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8699: : 135it [00:51,  2.71it/s]loss: 6.8699: : 136it [00:51,  2.75it/s]loss: 6.8590: : 136it [00:52,  2.75it/s]loss: 6.8590: : 137it [00:52,  2.77it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:04] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9109: : 137it [00:52,  2.77it/s]loss: 6.9109: : 138it [00:52,  2.78it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:04] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9138: : 138it [00:52,  2.78it/s]loss: 6.9138: : 139it [00:52,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:05] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9159: : 139it [00:53,  2.80it/s]loss: 6.9159: : 140it [00:53,  2.80it/s]loss: 6.9172: : 140it [00:53,  2.80it/s]loss: 6.9172: : 141it [00:53,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:05] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8656: : 141it [00:53,  2.81it/s]loss: 6.8656: : 142it [00:53,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:06] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8410: : 142it [00:54,  2.82it/s]loss: 6.8410: : 143it [00:54,  2.82it/s]loss: 7.0174: : 143it [00:54,  2.82it/s]loss: 7.0174: : 144it [00:54,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:06] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8745: : 144it [00:54,  2.82it/s]loss: 6.8745: : 145it [00:54,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:07] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8533: : 145it [00:55,  2.82it/s]loss: 6.8533: : 146it [00:55,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:07] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9230: : 146it [00:55,  2.82it/s]loss: 6.9230: : 147it [00:55,  2.82it/s]loss: 6.9007: : 147it [00:55,  2.82it/s]loss: 6.9007: : 148it [00:55,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:08] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9271: : 148it [00:56,  2.82it/s]loss: 6.9271: : 149it [00:56,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:08] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8906: : 149it [00:56,  2.83it/s]loss: 6.8906: : 150it [00:56,  2.82it/s]loss: 6.9198: : 150it [00:56,  2.82it/s]loss: 6.9198: : 151it [00:56,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:09] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8594: : 151it [00:57,  2.82it/s]loss: 6.8594: : 152it [00:57,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:09] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7933: : 152it [00:57,  2.83it/s]loss: 6.7933: : 153it [00:57,  2.83it/s]loss: 6.8899: : 153it [00:58,  2.83it/s]loss: 6.8899: : 154it [00:58,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:10] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9291: : 154it [00:58,  2.82it/s]loss: 6.9291: : 155it [00:58,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:10] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8565: : 155it [00:58,  2.82it/s]loss: 6.8565: : 156it [00:58,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:11] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9137: : 156it [00:59,  2.82it/s]loss: 6.9137: : 157it [00:59,  2.82it/s]loss: 6.9076: : 157it [00:59,  2.82it/s]loss: 6.9076: : 158it [00:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:11] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8776: : 158it [00:59,  2.82it/s]loss: 6.8776: : 159it [00:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9188: : 159it [01:00,  2.82it/s]loss: 6.9188: : 160it [01:00,  2.82it/s]loss: 6.8818: : 160it [01:00,  2.82it/s]loss: 6.8818: : 161it [01:00,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8609: : 161it [01:00,  2.82it/s]loss: 6.8609: : 162it [01:00,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:13] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9263: : 162it [01:01,  2.82it/s]loss: 6.9263: : 163it [01:01,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:13] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9047: : 163it [01:01,  2.82it/s]loss: 6.9047: : 164it [01:01,  2.82it/s]loss: 6.9272: : 164it [01:01,  2.82it/s]loss: 6.9272: : 165it [01:01,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:14] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9406: : 165it [01:02,  2.82it/s]loss: 6.9406: : 166it [01:02,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:14] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9074: : 166it [01:02,  2.82it/s]loss: 6.9074: : 167it [01:02,  2.82it/s]loss: 6.8277: : 167it [01:02,  2.82it/s]loss: 6.8277: : 168it [01:02,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:15] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9206: : 168it [01:03,  2.82it/s]loss: 6.9206: : 169it [01:03,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:15] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9171: : 169it [01:03,  2.82it/s]loss: 6.9171: : 170it [01:03,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:16] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8822: : 170it [01:04,  2.82it/s]loss: 6.8822: : 171it [01:04,  2.82it/s]loss: 6.9062: : 171it [01:04,  2.82it/s]loss: 6.9062: : 172it [01:04,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:16] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9119: : 172it [01:04,  2.82it/s]loss: 6.9119: : 173it [01:04,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:17] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8720: : 173it [01:05,  2.82it/s]loss: 6.8720: : 174it [01:05,  2.82it/s]loss: 6.8709: : 174it [01:05,  2.82it/s]loss: 6.8709: : 175it [01:05,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:17] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8483: : 175it [01:05,  2.83it/s]loss: 6.8483: : 176it [01:05,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:18] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9412: : 176it [01:06,  2.83it/s]loss: 6.9412: : 177it [01:06,  2.83it/s]loss: 6.8563: : 177it [01:06,  2.83it/s]loss: 6.8563: : 178it [01:06,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:18] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9380: : 178it [01:06,  2.82it/s]loss: 6.9380: : 179it [01:06,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:19] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8754: : 179it [01:07,  2.82it/s]loss: 6.8754: : 180it [01:07,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:19] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8627: : 180it [01:07,  2.82it/s]loss: 6.8627: : 181it [01:07,  2.82it/s]loss: 6.9254: : 181it [01:07,  2.82it/s]loss: 6.9254: : 182it [01:07,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:20] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8320: : 182it [01:08,  2.82it/s]loss: 6.8320: : 183it [01:08,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:20] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8143: : 183it [01:08,  2.83it/s]loss: 6.8143: : 184it [01:08,  2.83it/s]loss: 6.9485: : 184it [01:09,  2.83it/s]loss: 6.9485: : 185it [01:09,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:21] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8857: : 185it [01:09,  2.83it/s]loss: 6.8857: : 186it [01:09,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:21] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9264: : 186it [01:09,  2.83it/s]loss: 6.9264: : 187it [01:09,  2.83it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:22] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9272: : 187it [01:10,  2.83it/s]loss: 6.9272: : 188it [01:10,  2.83it/s]loss: 6.9251: : 188it [01:10,  2.83it/s]loss: 6.9251: : 189it [01:10,  3.21it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:22] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8807: : 189it [01:10,  3.21it/s]loss: 6.8807: : 190it [01:10,  2.74it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:23] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8783: : 190it [01:11,  2.74it/s]loss: 6.8783: : 191it [01:11,  2.76it/s]loss: 6.8796: : 191it [01:11,  2.76it/s]loss: 6.8796: : 192it [01:11,  2.78it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:23] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8985: : 192it [01:11,  2.78it/s]loss: 6.8985: : 193it [01:11,  2.79it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:24] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8397: : 193it [01:12,  2.79it/s]loss: 6.8397: : 194it [01:12,  2.80it/s]loss: 6.9450: : 194it [01:12,  2.80it/s]loss: 6.9450: : 195it [01:12,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:24] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8282: : 195it [01:12,  2.81it/s]loss: 6.8282: : 196it [01:12,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:25] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9085: : 196it [01:13,  2.81it/s]loss: 6.9085: : 197it [01:13,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:25] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8650: : 197it [01:13,  2.82it/s]loss: 6.8650: : 198it [01:13,  2.82it/s]loss: 6.8573: : 198it [01:13,  2.82it/s]loss: 6.8573: : 199it [01:13,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:26] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8847: : 199it [01:14,  2.82it/s]loss: 6.8847: : 200it [01:14,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:26] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9186: : 200it [01:14,  2.82it/s]loss: 6.9186: : 201it [01:14,  2.82it/s]loss: 6.8857: : 201it [01:15,  2.82it/s]loss: 6.8857: : 202it [01:15,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:27] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8461: : 202it [01:15,  2.82it/s]loss: 6.8461: : 203it [01:15,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:27] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8461: : 203it [01:15,  2.82it/s]loss: 6.8461: : 204it [01:15,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:28] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8634: : 204it [01:16,  2.82it/s]loss: 6.8634: : 205it [01:16,  2.82it/s]loss: 6.9307: : 205it [01:16,  2.82it/s]loss: 6.9307: : 206it [01:16,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:28] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9167: : 206it [01:16,  2.82it/s]loss: 6.9167: : 207it [01:16,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:29] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8940: : 207it [01:17,  2.82it/s]loss: 6.8940: : 208it [01:17,  2.82it/s]loss: 6.8484: : 208it [01:17,  2.82it/s]loss: 6.8484: : 209it [01:17,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:29] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8145: : 209it [01:17,  2.82it/s]loss: 6.8145: : 210it [01:17,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:30] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8990: : 210it [01:18,  2.82it/s]loss: 6.8990: : 211it [01:18,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:30] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9394: : 211it [01:18,  2.82it/s]loss: 6.9394: : 212it [01:18,  2.82it/s]loss: 6.8646: : 212it [01:18,  2.82it/s]loss: 6.8646: : 213it [01:18,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:31] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9169: : 213it [01:19,  2.82it/s]loss: 6.9169: : 214it [01:19,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:31] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9010: : 214it [01:19,  2.82it/s]loss: 6.9010: : 215it [01:19,  2.82it/s]loss: 6.8542: : 215it [01:19,  2.82it/s]loss: 6.8542: : 216it [01:19,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:32] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8841: : 216it [01:20,  2.82it/s]loss: 6.8841: : 217it [01:20,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:32] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9805: : 217it [01:20,  2.82it/s]loss: 6.9805: : 218it [01:20,  2.82it/s]loss: 6.8848: : 218it [01:21,  2.82it/s]loss: 6.8848: : 219it [01:21,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:33] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8614: : 219it [01:21,  2.82it/s]loss: 6.8614: : 220it [01:21,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:33] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9226: : 220it [01:21,  2.82it/s]loss: 6.9226: : 221it [01:21,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:34] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8495: : 221it [01:22,  2.82it/s]loss: 6.8495: : 222it [01:22,  2.82it/s]loss: 6.9106: : 222it [01:22,  2.82it/s]loss: 6.9106: : 223it [01:22,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:34] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8566: : 223it [01:22,  2.82it/s]loss: 6.8566: : 224it [01:22,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:35] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9196: : 224it [01:23,  2.82it/s]loss: 6.9196: : 225it [01:23,  2.82it/s]loss: 6.8391: : 225it [01:23,  2.82it/s]loss: 6.8391: : 226it [01:23,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:35] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8987: : 226it [01:23,  2.82it/s]loss: 6.8987: : 227it [01:23,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:36] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9093: : 227it [01:24,  2.82it/s]loss: 6.9093: : 228it [01:24,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:36] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8786: : 228it [01:24,  2.82it/s]loss: 6.8786: : 229it [01:24,  2.82it/s]loss: 6.8737: : 229it [01:24,  2.82it/s]loss: 6.8737: : 230it [01:24,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:37] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9086: : 230it [01:25,  2.82it/s]loss: 6.9086: : 231it [01:25,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:37] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8449: : 231it [01:25,  2.82it/s]loss: 6.8449: : 232it [01:25,  2.82it/s]loss: 6.9084: : 232it [01:26,  2.82it/s]loss: 6.9084: : 233it [01:26,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:38] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8920: : 233it [01:26,  2.82it/s]loss: 6.8920: : 234it [01:26,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:38] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9243: : 234it [01:26,  2.82it/s]loss: 6.9243: : 235it [01:26,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:39] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8788: : 235it [01:27,  2.82it/s]loss: 6.8788: : 236it [01:27,  2.82it/s]loss: 6.8407: : 236it [01:27,  2.82it/s]loss: 6.8407: : 237it [01:27,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:39] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8579: : 237it [01:27,  2.82it/s]loss: 6.8579: : 238it [01:27,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:40] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7543: : 238it [01:28,  2.82it/s]loss: 6.7543: : 239it [01:28,  2.82it/s]loss: 6.8524: : 239it [01:28,  2.82it/s]loss: 6.8524: : 240it [01:28,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:41] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8845: : 240it [01:28,  2.82it/s]loss: 6.8845: : 241it [01:28,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:41] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9716: : 241it [01:29,  2.82it/s]loss: 6.9716: : 242it [01:29,  2.82it/s]loss: 6.9130: : 242it [01:29,  2.82it/s]loss: 6.9130: : 243it [01:29,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:41] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7819: : 243it [01:29,  2.82it/s]loss: 6.7819: : 244it [01:29,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:42] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8885: : 244it [01:30,  2.82it/s]loss: 6.8885: : 245it [01:30,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:42] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0127: : 245it [01:30,  2.82it/s]loss: 7.0127: : 246it [01:30,  2.82it/s]loss: 6.9115: : 246it [01:30,  2.82it/s]loss: 6.9115: : 247it [01:30,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:43] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8642: : 247it [01:31,  2.82it/s]loss: 6.8642: : 248it [01:31,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:43] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9008: : 248it [01:31,  2.82it/s]loss: 6.9008: : 249it [01:31,  2.82it/s]loss: 6.8887: : 249it [01:32,  2.82it/s]loss: 6.8887: : 250it [01:32,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:44] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8856: : 250it [01:32,  2.82it/s]loss: 6.8856: : 251it [01:32,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:44] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9092: : 251it [01:32,  2.82it/s]loss: 6.9092: : 252it [01:32,  3.20it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:45] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8703: : 252it [01:33,  3.20it/s]loss: 6.8703: : 253it [01:33,  2.69it/s]loss: 6.8787: : 253it [01:33,  2.69it/s]loss: 6.8787: : 254it [01:33,  2.73it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:45] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8609: : 254it [01:33,  2.73it/s]loss: 6.8609: : 255it [01:33,  2.75it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:46] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8531: : 255it [01:34,  2.75it/s]loss: 6.8531: : 256it [01:34,  2.77it/s]loss: 6.8785: : 256it [01:34,  2.77it/s]loss: 6.8785: : 257it [01:34,  2.79it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:46] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8881: : 257it [01:34,  2.79it/s]loss: 6.8881: : 258it [01:34,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:47] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8392: : 258it [01:35,  2.80it/s]loss: 6.8392: : 259it [01:35,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:47] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8884: : 259it [01:35,  2.80it/s]loss: 6.8884: : 260it [01:35,  2.81it/s]loss: 6.8967: : 260it [01:35,  2.81it/s]loss: 6.8967: : 261it [01:35,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:48] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8718: : 261it [01:36,  2.81it/s]loss: 6.8718: : 262it [01:36,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:48] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8667: : 262it [01:36,  2.81it/s]loss: 6.8667: : 263it [01:36,  2.82it/s]loss: 6.9012: : 263it [01:37,  2.82it/s]loss: 6.9012: : 264it [01:37,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:49] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9484: : 264it [01:37,  2.82it/s]loss: 6.9484: : 265it [01:37,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:49] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9280: : 265it [01:37,  2.82it/s]loss: 6.9280: : 266it [01:37,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:50] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9269: : 266it [01:38,  2.82it/s]loss: 6.9269: : 267it [01:38,  2.82it/s]loss: 6.8885: : 267it [01:38,  2.82it/s]loss: 6.8885: : 268it [01:38,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:50] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8461: : 268it [01:38,  2.82it/s]loss: 6.8461: : 269it [01:38,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:51] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8458: : 269it [01:39,  2.82it/s]loss: 6.8458: : 270it [01:39,  2.82it/s]loss: 6.8614: : 270it [01:39,  2.82it/s]loss: 6.8614: : 271it [01:39,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:51] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8710: : 271it [01:39,  2.82it/s]loss: 6.8710: : 272it [01:39,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:52] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8866: : 272it [01:40,  2.82it/s]loss: 6.8866: : 273it [01:40,  2.82it/s]loss: 6.9117: : 273it [01:40,  2.82it/s]loss: 6.9117: : 274it [01:40,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:52] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8990: : 274it [01:40,  2.82it/s]loss: 6.8990: : 275it [01:40,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:53] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9210: : 275it [01:41,  2.82it/s]loss: 6.9210: : 276it [01:41,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:53] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8639: : 276it [01:41,  2.82it/s]loss: 6.8639: : 277it [01:41,  2.82it/s]loss: 6.8755: : 277it [01:41,  2.82it/s]loss: 6.8755: : 278it [01:41,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:54] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8651: : 278it [01:42,  2.82it/s]loss: 6.8651: : 279it [01:42,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:54] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8939: : 279it [01:42,  2.82it/s]loss: 6.8939: : 280it [01:42,  2.82it/s]loss: 6.8446: : 280it [01:43,  2.82it/s]loss: 6.8446: : 281it [01:43,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:55] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7717: : 281it [01:43,  2.82it/s]loss: 6.7717: : 282it [01:43,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:55] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9102: : 282it [01:43,  2.82it/s]loss: 6.9102: : 283it [01:43,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:56] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8575: : 283it [01:44,  2.82it/s]loss: 6.8575: : 284it [01:44,  2.82it/s]loss: 6.9231: : 284it [01:44,  2.82it/s]loss: 6.9231: : 285it [01:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:56] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8737: : 285it [01:44,  2.82it/s]loss: 6.8737: : 286it [01:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:57] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8869: : 286it [01:45,  2.82it/s]loss: 6.8869: : 287it [01:45,  2.82it/s]loss: 6.9184: : 287it [01:45,  2.82it/s]loss: 6.9184: : 288it [01:45,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:57] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8732: : 288it [01:45,  2.82it/s]loss: 6.8732: : 289it [01:45,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:58] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9141: : 289it [01:46,  2.82it/s]loss: 6.9141: : 290it [01:46,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:58] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8817: : 290it [01:46,  2.82it/s]loss: 6.8817: : 291it [01:46,  2.82it/s]loss: 6.9068: : 291it [01:46,  2.82it/s]loss: 6.9068: : 292it [01:46,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:59] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9014: : 292it [01:47,  2.82it/s]loss: 6.9014: : 293it [01:47,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:23:59] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8440: : 293it [01:47,  2.82it/s]loss: 6.8440: : 294it [01:47,  2.82it/s]loss: 6.9319: : 294it [01:48,  2.82it/s]loss: 6.9319: : 295it [01:48,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:00] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8397: : 295it [01:48,  2.82it/s]loss: 6.8397: : 296it [01:48,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:00] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9073: : 296it [01:48,  2.82it/s]loss: 6.9073: : 297it [01:48,  2.82it/s]/bin/sh: 1: scontrol: not found
+loss: 6.9897: : 297it [01:49,  2.82it/s]loss: 6.9897: : 298it [01:49,  2.81it/s][codecarbon WARNING @ 17:24:01] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8942: : 298it [01:49,  2.81it/s]loss: 6.8942: : 299it [01:49,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:01] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8929: : 299it [01:49,  2.81it/s]loss: 6.8929: : 300it [01:49,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:02] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8712: : 300it [01:50,  2.82it/s]loss: 6.8712: : 301it [01:50,  2.82it/s]loss: 6.8675: : 301it [01:50,  2.82it/s]loss: 6.8675: : 302it [01:50,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:02] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9154: : 302it [01:50,  2.82it/s]loss: 6.9154: : 303it [01:50,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:03] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9128: : 303it [01:51,  2.82it/s]loss: 6.9128: : 304it [01:51,  2.82it/s]loss: 6.8836: : 304it [01:51,  2.82it/s]loss: 6.8836: : 305it [01:51,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:03] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8924: : 305it [01:51,  2.82it/s]loss: 6.8924: : 306it [01:51,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:04] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8885: : 306it [01:52,  2.82it/s]loss: 6.8885: : 307it [01:52,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:04] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9124: : 307it [01:52,  2.82it/s]loss: 6.9124: : 308it [01:52,  2.82it/s]loss: 6.8450: : 308it [01:52,  2.82it/s]loss: 6.8450: : 309it [01:52,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:05] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9032: : 309it [01:53,  2.82it/s]loss: 6.9032: : 310it [01:53,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:05] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8985: : 310it [01:53,  2.82it/s]loss: 6.8985: : 311it [01:53,  2.82it/s]loss: 6.9021: : 311it [01:54,  2.82it/s]loss: 6.9021: : 312it [01:54,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:06] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9369: : 312it [01:54,  2.82it/s]loss: 6.9369: : 313it [01:54,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:06] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8646: : 313it [01:54,  2.82it/s]loss: 6.8646: : 314it [01:54,  2.82it/s]loss: 6.8677: : 314it [01:54,  2.82it/s]loss: 6.8677: : 315it [01:54,  3.20it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:07] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8664: : 315it [01:55,  3.20it/s]loss: 6.8664: : 316it [01:55,  2.67it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:08] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9060: : 316it [01:55,  2.67it/s]loss: 6.9060: : 317it [01:55,  2.71it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:08] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8818: : 317it [01:56,  2.71it/s]loss: 6.8818: : 318it [01:56,  2.74it/s]loss: 6.8454: : 318it [01:56,  2.74it/s]loss: 6.8454: : 319it [01:56,  2.76it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:08] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8762: : 319it [01:56,  2.76it/s]loss: 6.8762: : 320it [01:56,  2.78it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:09] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8618: : 320it [01:57,  2.78it/s]loss: 6.8618: : 321it [01:57,  2.79it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:09] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9012: : 321it [01:57,  2.79it/s]loss: 6.9012: : 322it [01:57,  2.80it/s]loss: 6.8625: : 322it [01:57,  2.80it/s]loss: 6.8625: : 323it [01:57,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:10] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9345: : 323it [01:58,  2.81it/s]loss: 6.9345: : 324it [01:58,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:10] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9380: : 324it [01:58,  2.81it/s]loss: 6.9380: : 325it [01:58,  2.81it/s]loss: 6.8549: : 325it [01:59,  2.81it/s]loss: 6.8549: : 326it [01:59,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:11] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8689: : 326it [01:59,  2.81it/s]loss: 6.8689: : 327it [01:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:11] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8966: : 327it [01:59,  2.82it/s]loss: 6.8966: : 328it [01:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8738: : 328it [02:00,  2.82it/s]loss: 6.8738: : 329it [02:00,  2.82it/s]loss: 6.9085: : 329it [02:00,  2.82it/s]loss: 6.9085: : 330it [02:00,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9081: : 330it [02:00,  2.82it/s]loss: 6.9081: : 331it [02:00,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:13] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8744: : 331it [02:01,  2.82it/s]loss: 6.8744: : 332it [02:01,  2.82it/s]loss: 6.8567: : 332it [02:01,  2.82it/s]loss: 6.8567: : 333it [02:01,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:13] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8470: : 333it [02:01,  2.82it/s]loss: 6.8470: : 334it [02:01,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:14] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8565: : 334it [02:02,  2.82it/s]loss: 6.8565: : 335it [02:02,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:14] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8815: : 335it [02:02,  2.82it/s]loss: 6.8815: : 336it [02:02,  2.82it/s]loss: 6.7590: : 336it [02:02,  2.82it/s]loss: 6.7590: : 337it [02:02,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:15] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9046: : 337it [02:03,  2.82it/s]loss: 6.9046: : 338it [02:03,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:15] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8784: : 338it [02:03,  2.82it/s]loss: 6.8784: : 339it [02:03,  2.82it/s]loss: 6.9135: : 339it [02:04,  2.82it/s]loss: 6.9135: : 340it [02:04,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:16] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9250: : 340it [02:04,  2.82it/s]loss: 6.9250: : 341it [02:04,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:16] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8531: : 341it [02:04,  2.82it/s]loss: 6.8531: : 342it [02:04,  2.82it/s]loss: 6.9426: : 342it [02:05,  2.82it/s]loss: 6.9426: : 343it [02:05,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:17] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8613: : 343it [02:05,  2.82it/s]loss: 6.8613: : 344it [02:05,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:17] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9439: : 344it [02:05,  2.82it/s]loss: 6.9439: : 345it [02:05,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:18] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8627: : 345it [02:06,  2.82it/s]loss: 6.8627: : 346it [02:06,  2.82it/s]loss: 6.8184: : 346it [02:06,  2.82it/s]loss: 6.8184: : 347it [02:06,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:18] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9225: : 347it [02:06,  2.82it/s]loss: 6.9225: : 348it [02:06,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:19] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9227: : 348it [02:07,  2.82it/s]loss: 6.9227: : 349it [02:07,  2.82it/s]loss: 6.9194: : 349it [02:07,  2.82it/s]loss: 6.9194: : 350it [02:07,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:19] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8704: : 350it [02:07,  2.82it/s]loss: 6.8704: : 351it [02:07,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:20] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9222: : 351it [02:08,  2.82it/s]loss: 6.9222: : 352it [02:08,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:20] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9160: : 352it [02:08,  2.82it/s]loss: 6.9160: : 353it [02:08,  2.82it/s]loss: 6.8579: : 353it [02:08,  2.82it/s]loss: 6.8579: : 354it [02:08,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:21] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8971: : 354it [02:09,  2.82it/s]loss: 6.8971: : 355it [02:09,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:21] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8889: : 355it [02:09,  2.82it/s]loss: 6.8889: : 356it [02:09,  2.82it/s]loss: 6.8806: : 356it [02:10,  2.82it/s]loss: 6.8806: : 357it [02:10,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:22] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8182: : 357it [02:10,  2.82it/s]loss: 6.8182: : 358it [02:10,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:22] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8509: : 358it [02:10,  2.82it/s]loss: 6.8509: : 359it [02:10,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:23] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8935: : 359it [02:11,  2.82it/s]loss: 6.8935: : 360it [02:11,  2.82it/s]loss: 7.1635: : 360it [02:11,  2.82it/s]loss: 7.1635: : 361it [02:11,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:23] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8545: : 361it [02:11,  2.82it/s]loss: 6.8545: : 362it [02:11,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:24] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8991: : 362it [02:12,  2.82it/s]loss: 6.8991: : 363it [02:12,  2.82it/s]loss: 6.9294: : 363it [02:12,  2.82it/s]loss: 6.9294: : 364it [02:12,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:24] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8970: : 364it [02:12,  2.82it/s]loss: 6.8970: : 365it [02:12,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:25] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8670: : 365it [02:13,  2.82it/s]loss: 6.8670: : 366it [02:13,  2.82it/s]loss: 6.9077: : 366it [02:13,  2.82it/s]loss: 6.9077: : 367it [02:13,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:25] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9310: : 367it [02:13,  2.82it/s]loss: 6.9310: : 368it [02:13,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:26] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8416: : 368it [02:14,  2.82it/s]loss: 6.8416: : 369it [02:14,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:26] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9076: : 369it [02:14,  2.82it/s]loss: 6.9076: : 370it [02:14,  2.82it/s]loss: 6.8384: : 370it [02:15,  2.82it/s]loss: 6.8384: : 371it [02:15,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:27] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9087: : 371it [02:15,  2.82it/s]loss: 6.9087: : 372it [02:15,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:27] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9304: : 372it [02:15,  2.82it/s]loss: 6.9304: : 373it [02:15,  2.82it/s]loss: 6.9011: : 373it [02:16,  2.82it/s]loss: 6.9011: : 374it [02:16,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:28] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8922: : 374it [02:16,  2.82it/s]loss: 6.8922: : 375it [02:16,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:28] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8501: : 375it [02:16,  2.82it/s]loss: 6.8501: : 376it [02:16,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:29] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8810: : 376it [02:17,  2.82it/s]loss: 6.8810: : 377it [02:17,  2.82it/s]loss: 6.8482: : 377it [02:17,  2.82it/s]loss: 6.8482: : 378it [02:17,  3.20it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:29] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8338: : 378it [02:17,  3.20it/s]loss: 6.8338: : 379it [02:17,  2.68it/s]/bin/sh: 1: scontrol: not found
+loss: 6.8572: : 379it [02:18,  2.68it/s]loss: 6.8572: : 380it [02:18,  2.68it/s][codecarbon WARNING @ 17:24:30] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9018: : 380it [02:18,  2.68it/s]loss: 6.9018: : 381it [02:18,  2.72it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:30] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9125: : 381it [02:18,  2.72it/s]loss: 6.9125: : 382it [02:18,  2.75it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:31] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8603: : 382it [02:19,  2.75it/s]loss: 6.8603: : 383it [02:19,  2.77it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:31] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8623: : 383it [02:19,  2.77it/s]loss: 6.8623: : 384it [02:19,  2.79it/s]loss: 6.8985: : 384it [02:20,  2.79it/s]loss: 6.8985: : 385it [02:20,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:32] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9123: : 385it [02:20,  2.80it/s]loss: 6.9123: : 386it [02:20,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:32] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8573: : 386it [02:20,  2.80it/s]loss: 6.8573: : 387it [02:20,  2.81it/s]loss: 6.9267: : 387it [02:21,  2.81it/s]loss: 6.9267: : 388it [02:21,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:33] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9192: : 388it [02:21,  2.81it/s]loss: 6.9192: : 389it [02:21,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:33] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9673: : 389it [02:21,  2.81it/s]loss: 6.9673: : 390it [02:21,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:34] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8762: : 390it [02:22,  2.82it/s]loss: 6.8762: : 391it [02:22,  2.82it/s]loss: 6.8507: : 391it [02:22,  2.82it/s]loss: 6.8507: : 392it [02:22,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:34] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8527: : 392it [02:22,  2.82it/s]loss: 6.8527: : 393it [02:22,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:35] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8388: : 393it [02:23,  2.82it/s]loss: 6.8388: : 394it [02:23,  2.82it/s]loss: 6.8670: : 394it [02:23,  2.82it/s]loss: 6.8670: : 395it [02:23,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:35] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8831: : 395it [02:23,  2.82it/s]loss: 6.8831: : 396it [02:23,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:36] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8144: : 396it [02:24,  2.82it/s]loss: 6.8144: : 397it [02:24,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:36] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8673: : 397it [02:24,  2.82it/s]loss: 6.8673: : 398it [02:24,  2.82it/s]loss: 6.8664: : 398it [02:24,  2.82it/s]loss: 6.8664: : 399it [02:24,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:37] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8471: : 399it [02:25,  2.82it/s]loss: 6.8471: : 400it [02:25,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:37] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9355: : 400it [02:25,  2.82it/s]loss: 6.9355: : 401it [02:25,  2.82it/s]loss: 6.7694: : 401it [02:26,  2.82it/s]loss: 6.7694: : 402it [02:26,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:38] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8662: : 402it [02:26,  2.82it/s]loss: 6.8662: : 403it [02:26,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:38] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9010: : 403it [02:26,  2.82it/s]loss: 6.9010: : 404it [02:26,  2.82it/s]loss: 6.8845: : 404it [02:27,  2.82it/s]loss: 6.8845: : 405it [02:27,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:39] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8965: : 405it [02:27,  2.82it/s]loss: 6.8965: : 406it [02:27,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:39] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8777: : 406it [02:27,  2.82it/s]loss: 6.8777: : 407it [02:27,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:40] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8693: : 407it [02:28,  2.82it/s]loss: 6.8693: : 408it [02:28,  2.82it/s]loss: 6.8985: : 408it [02:28,  2.82it/s]loss: 6.8985: : 409it [02:28,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:40] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9096: : 409it [02:28,  2.82it/s]loss: 6.9096: : 410it [02:28,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:41] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8807: : 410it [02:29,  2.82it/s]loss: 6.8807: : 411it [02:29,  2.82it/s]loss: 6.8851: : 411it [02:29,  2.82it/s]loss: 6.8851: : 412it [02:29,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:41] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8448: : 412it [02:29,  2.82it/s]loss: 6.8448: : 413it [02:29,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:42] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9148: : 413it [02:30,  2.82it/s]loss: 6.9148: : 414it [02:30,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:42] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9252: : 414it [02:30,  2.82it/s]loss: 6.9252: : 415it [02:30,  2.82it/s]loss: 6.8887: : 415it [02:31,  2.82it/s]loss: 6.8887: : 416it [02:31,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:43] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9227: : 416it [02:31,  2.82it/s]loss: 6.9227: : 417it [02:31,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:43] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9411: : 417it [02:31,  2.82it/s]loss: 6.9411: : 418it [02:31,  2.82it/s]loss: 6.8764: : 418it [02:32,  2.82it/s]loss: 6.8764: : 419it [02:32,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:44] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9121: : 419it [02:32,  2.82it/s]loss: 6.9121: : 420it [02:32,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:44] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8737: : 420it [02:32,  2.82it/s]loss: 6.8737: : 421it [02:32,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:45] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8947: : 421it [02:33,  2.82it/s]loss: 6.8947: : 422it [02:33,  2.82it/s]loss: 6.8652: : 422it [02:33,  2.82it/s]loss: 6.8652: : 423it [02:33,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:45] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8803: : 423it [02:33,  2.82it/s]loss: 6.8803: : 424it [02:33,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:46] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8994: : 424it [02:34,  2.82it/s]loss: 6.8994: : 425it [02:34,  2.82it/s]loss: 6.8634: : 425it [02:34,  2.82it/s]loss: 6.8634: : 426it [02:34,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:46] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8504: : 426it [02:34,  2.82it/s]loss: 6.8504: : 427it [02:34,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:47] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8422: : 427it [02:35,  2.82it/s]loss: 6.8422: : 428it [02:35,  2.82it/s]/bin/sh: 1: scontrol: not found
+loss: 6.8380: : 428it [02:35,  2.82it/s]loss: 6.8380: : 429it [02:35,  2.81it/s][codecarbon WARNING @ 17:24:47] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9197: : 429it [02:35,  2.81it/s]loss: 6.9197: : 430it [02:35,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:48] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8557: : 430it [02:36,  2.82it/s]loss: 6.8557: : 431it [02:36,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:48] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9190: : 431it [02:36,  2.82it/s]loss: 6.9190: : 432it [02:36,  2.82it/s]loss: 6.8826: : 432it [02:37,  2.82it/s]loss: 6.8826: : 433it [02:37,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:49] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8735: : 433it [02:37,  2.82it/s]loss: 6.8735: : 434it [02:37,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:49] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9119: : 434it [02:37,  2.82it/s]loss: 6.9119: : 435it [02:37,  2.82it/s]loss: 6.8378: : 435it [02:38,  2.82it/s]loss: 6.8378: : 436it [02:38,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:50] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9037: : 436it [02:38,  2.82it/s]loss: 6.9037: : 437it [02:38,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:50] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9166: : 437it [02:38,  2.82it/s]loss: 6.9166: : 438it [02:38,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:51] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9197: : 438it [02:39,  2.82it/s]loss: 6.9197: : 439it [02:39,  2.82it/s]loss: 6.9091: : 439it [02:39,  2.82it/s]loss: 6.9091: : 440it [02:39,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:51] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9182: : 440it [02:39,  2.82it/s]loss: 6.9182: : 441it [02:39,  3.20it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:52] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8553: : 441it [02:40,  3.20it/s]loss: 6.8553: : 442it [02:40,  2.65it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:52] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8420: : 442it [02:40,  2.65it/s]loss: 6.8420: : 443it [02:40,  2.70it/s]loss: 6.8702: : 443it [02:40,  2.70it/s]loss: 6.8702: : 444it [02:40,  2.73it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:53] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7875: : 444it [02:41,  2.73it/s]loss: 6.7875: : 445it [02:41,  2.76it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:53] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8592: : 445it [02:41,  2.76it/s]loss: 6.8592: : 446it [02:41,  2.78it/s]loss: 6.8768: : 446it [02:42,  2.78it/s]loss: 6.8768: : 447it [02:42,  2.79it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:54] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8657: : 447it [02:42,  2.79it/s]loss: 6.8657: : 448it [02:42,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:54] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9250: : 448it [02:42,  2.80it/s]loss: 6.9250: : 449it [02:42,  2.80it/s]loss: 6.9113: : 449it [02:43,  2.80it/s]loss: 6.9113: : 450it [02:43,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:55] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8495: : 450it [02:43,  2.81it/s]loss: 6.8495: : 451it [02:43,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:55] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8752: : 451it [02:43,  2.81it/s]loss: 6.8752: : 452it [02:43,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:56] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9020: : 452it [02:44,  2.81it/s]loss: 6.9020: : 453it [02:44,  2.81it/s]loss: 6.9342: : 453it [02:44,  2.81it/s]loss: 6.9342: : 454it [02:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:56] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8456: : 454it [02:44,  2.82it/s]loss: 6.8456: : 455it [02:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:57] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8913: : 455it [02:45,  2.82it/s]loss: 6.8913: : 456it [02:45,  2.82it/s]loss: 6.8768: : 456it [02:45,  2.82it/s]loss: 6.8768: : 457it [02:45,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:57] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9102: : 457it [02:45,  2.82it/s]loss: 6.9102: : 458it [02:45,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:58] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8687: : 458it [02:46,  2.82it/s]loss: 6.8687: : 459it [02:46,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:58] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0215: : 459it [02:46,  2.82it/s]loss: 7.0215: : 460it [02:46,  2.82it/s]loss: 6.9124: : 460it [02:47,  2.82it/s]loss: 6.9124: : 461it [02:47,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:59] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8735: : 461it [02:47,  2.82it/s]loss: 6.8735: : 462it [02:47,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:24:59] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8946: : 462it [02:47,  2.82it/s]loss: 6.8946: : 463it [02:47,  2.82it/s]loss: 6.9079: : 463it [02:48,  2.82it/s]loss: 6.9079: : 464it [02:48,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:00] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9049: : 464it [02:48,  2.82it/s]loss: 6.9049: : 465it [02:48,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:00] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8177: : 465it [02:48,  2.82it/s]loss: 6.8177: : 466it [02:48,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:01] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8540: : 466it [02:49,  2.82it/s]loss: 6.8540: : 467it [02:49,  2.82it/s]loss: 6.8241: : 467it [02:49,  2.82it/s]loss: 6.8241: : 468it [02:49,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:01] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8142: : 468it [02:49,  2.82it/s]loss: 6.8142: : 469it [02:49,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:02] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9375: : 469it [02:50,  2.82it/s]loss: 6.9375: : 470it [02:50,  2.82it/s]loss: 6.9125: : 470it [02:50,  2.82it/s]loss: 6.9125: : 471it [02:50,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:02] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8982: : 471it [02:50,  2.82it/s]loss: 6.8982: : 472it [02:50,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:03] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8819: : 472it [02:51,  2.82it/s]loss: 6.8819: : 473it [02:51,  2.82it/s]loss: 6.9019: : 473it [02:51,  2.82it/s]loss: 6.9019: : 474it [02:51,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:03] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9244: : 474it [02:51,  2.82it/s]loss: 6.9244: : 475it [02:51,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:04] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8447: : 475it [02:52,  2.82it/s]loss: 6.8447: : 476it [02:52,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:04] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9072: : 476it [02:52,  2.82it/s]loss: 6.9072: : 477it [02:52,  2.82it/s]loss: 6.9282: : 477it [02:53,  2.82it/s]loss: 6.9282: : 478it [02:53,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:05] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8677: : 478it [02:53,  2.82it/s]loss: 6.8677: : 479it [02:53,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:05] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8753: : 479it [02:53,  2.82it/s]loss: 6.8753: : 480it [02:53,  2.82it/s]loss: 6.9140: : 480it [02:54,  2.82it/s]loss: 6.9140: : 481it [02:54,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:06] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0003: : 481it [02:54,  2.82it/s]loss: 7.0003: : 482it [02:54,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:06] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9251: : 482it [02:54,  2.82it/s]loss: 6.9251: : 483it [02:54,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:07] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7620: : 483it [02:55,  2.82it/s]loss: 6.7620: : 484it [02:55,  2.82it/s]loss: 6.8673: : 484it [02:55,  2.82it/s]loss: 6.8673: : 485it [02:55,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:07] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9104: : 485it [02:55,  2.82it/s]loss: 6.9104: : 486it [02:55,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:08] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8800: : 486it [02:56,  2.82it/s]loss: 6.8800: : 487it [02:56,  2.82it/s]loss: 6.9129: : 487it [02:56,  2.82it/s]loss: 6.9129: : 488it [02:56,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:08] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8690: : 488it [02:56,  2.82it/s]loss: 6.8690: : 489it [02:56,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:09] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8817: : 489it [02:57,  2.82it/s]loss: 6.8817: : 490it [02:57,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:09] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9099: : 490it [02:57,  2.82it/s]loss: 6.9099: : 491it [02:57,  2.82it/s]loss: 6.8991: : 491it [02:58,  2.82it/s]loss: 6.8991: : 492it [02:58,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:10] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8630: : 492it [02:58,  2.82it/s]loss: 6.8630: : 493it [02:58,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:10] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8943: : 493it [02:58,  2.82it/s]loss: 6.8943: : 494it [02:58,  2.82it/s]loss: 6.8411: : 494it [02:59,  2.82it/s]loss: 6.8411: : 495it [02:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:11] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8787: : 495it [02:59,  2.82it/s]loss: 6.8787: : 496it [02:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:11] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9146: : 496it [02:59,  2.82it/s]loss: 6.9146: : 497it [02:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9188: : 497it [03:00,  2.82it/s]loss: 6.9188: : 498it [03:00,  2.82it/s]loss: 6.8648: : 498it [03:00,  2.82it/s]loss: 6.8648: : 499it [03:00,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8626: : 499it [03:00,  2.82it/s]loss: 6.8626: : 500it [03:00,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:13] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8650: : 500it [03:01,  2.82it/s]loss: 6.8650: : 501it [03:01,  2.82it/s]loss: 6.9333: : 501it [03:01,  2.82it/s]loss: 6.9333: : 502it [03:01,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:13] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9133: : 502it [03:01,  2.82it/s]loss: 6.9133: : 503it [03:01,  2.82it/s]loss: 6.9309: : 503it [03:02,  2.82it/s]loss: 6.9309: : 504it [03:02,  3.20it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:14] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9205: : 504it [03:02,  3.20it/s]loss: 6.9205: : 505it [03:02,  2.74it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:15] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8647: : 505it [03:02,  2.74it/s]loss: 6.8647: : 506it [03:02,  2.76it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:15] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8935: : 506it [03:03,  2.76it/s]loss: 6.8935: : 507it [03:03,  2.78it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:16] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8632: : 507it [03:03,  2.78it/s]loss: 6.8632: : 508it [03:03,  2.79it/s]loss: 6.8784: : 508it [03:04,  2.79it/s]loss: 6.8784: : 509it [03:04,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:16] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9143: : 509it [03:04,  2.80it/s]loss: 6.9143: : 510it [03:04,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:17] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8932: : 510it [03:04,  2.80it/s]loss: 6.8932: : 511it [03:04,  2.81it/s]loss: 6.8518: : 511it [03:05,  2.81it/s]loss: 6.8518: : 512it [03:05,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:17] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9121: : 512it [03:05,  2.81it/s]loss: 6.9121: : 513it [03:05,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:18] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8877: : 513it [03:05,  2.81it/s]loss: 6.8877: : 514it [03:05,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:18] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8593: : 514it [03:06,  2.82it/s]loss: 6.8593: : 515it [03:06,  2.82it/s]loss: 6.8939: : 515it [03:06,  2.82it/s]loss: 6.8939: : 516it [03:06,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:19] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9094: : 516it [03:06,  2.82it/s]loss: 6.9094: : 517it [03:06,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:19] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9178: : 517it [03:07,  2.82it/s]loss: 6.9178: : 518it [03:07,  2.82it/s]loss: 6.7902: : 518it [03:07,  2.82it/s]loss: 6.7902: : 519it [03:07,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:20] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8235: : 519it [03:07,  2.82it/s]loss: 6.8235: : 520it [03:07,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:20] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8430: : 520it [03:08,  2.82it/s]loss: 6.8430: : 521it [03:08,  2.82it/s]loss: 6.9039: : 521it [03:08,  2.82it/s]loss: 6.9039: : 522it [03:08,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:21] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9147: : 522it [03:08,  2.82it/s]loss: 6.9147: : 523it [03:08,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:21] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8819: : 523it [03:09,  2.82it/s]loss: 6.8819: : 524it [03:09,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:22] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9023: : 524it [03:09,  2.82it/s]loss: 6.9023: : 525it [03:09,  2.82it/s]loss: 6.9137: : 525it [03:10,  2.82it/s]loss: 6.9137: : 526it [03:10,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:22] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9159: : 526it [03:10,  2.82it/s]loss: 6.9159: : 527it [03:10,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:23] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9220: : 527it [03:10,  2.82it/s]loss: 6.9220: : 528it [03:10,  2.82it/s]loss: 6.9002: : 528it [03:11,  2.82it/s]loss: 6.9002: : 529it [03:11,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:23] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7614: : 529it [03:11,  2.82it/s]loss: 6.7614: : 530it [03:11,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:24] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8973: : 530it [03:11,  2.82it/s]loss: 6.8973: : 531it [03:11,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:24] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8904: : 531it [03:12,  2.82it/s]loss: 6.8904: : 532it [03:12,  2.82it/s]loss: 6.8928: : 532it [03:12,  2.82it/s]loss: 6.8928: : 533it [03:12,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:25] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9119: : 533it [03:12,  2.82it/s]loss: 6.9119: : 534it [03:12,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:25] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9509: : 534it [03:13,  2.82it/s]loss: 6.9509: : 535it [03:13,  2.82it/s]loss: 6.9507: : 535it [03:13,  2.82it/s]loss: 6.9507: : 536it [03:13,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:26] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9049: : 536it [03:13,  2.82it/s]loss: 6.9049: : 537it [03:13,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:26] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9127: : 537it [03:14,  2.82it/s]loss: 6.9127: : 538it [03:14,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:27] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9082: : 538it [03:14,  2.82it/s]loss: 6.9082: : 539it [03:14,  2.82it/s]loss: 6.8888: : 539it [03:15,  2.82it/s]loss: 6.8888: : 540it [03:15,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:27] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8577: : 540it [03:15,  2.82it/s]loss: 6.8577: : 541it [03:15,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:28] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8423: : 541it [03:15,  2.82it/s]loss: 6.8423: : 542it [03:15,  2.82it/s]loss: 6.8806: : 542it [03:16,  2.82it/s]loss: 6.8806: : 543it [03:16,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:28] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8841: : 543it [03:16,  2.82it/s]loss: 6.8841: : 544it [03:16,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:29] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9347: : 544it [03:16,  2.82it/s]loss: 6.9347: : 545it [03:16,  2.82it/s]loss: 6.8708: : 545it [03:17,  2.82it/s]loss: 6.8708: : 546it [03:17,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:29] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8768: : 546it [03:17,  2.82it/s]loss: 6.8768: : 547it [03:17,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:30] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8589: : 547it [03:17,  2.82it/s]loss: 6.8589: : 548it [03:17,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:30] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8907: : 548it [03:18,  2.82it/s]loss: 6.8907: : 549it [03:18,  2.82it/s]loss: 6.8626: : 549it [03:18,  2.82it/s]loss: 6.8626: : 550it [03:18,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:31] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8725: : 550it [03:18,  2.82it/s]loss: 6.8725: : 551it [03:18,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:31] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8456: : 551it [03:19,  2.82it/s]loss: 6.8456: : 552it [03:19,  2.82it/s]loss: 6.8568: : 552it [03:19,  2.82it/s]loss: 6.8568: : 553it [03:19,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:32] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9066: : 553it [03:19,  2.82it/s]loss: 6.9066: : 554it [03:19,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:32] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8875: : 554it [03:20,  2.82it/s]loss: 6.8875: : 555it [03:20,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:33] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8173: : 555it [03:20,  2.82it/s]loss: 6.8173: : 556it [03:20,  2.82it/s]loss: 6.8781: : 556it [03:21,  2.82it/s]loss: 6.8781: : 557it [03:21,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:33] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8992: : 557it [03:21,  2.82it/s]loss: 6.8992: : 558it [03:21,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:34] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8550: : 558it [03:21,  2.82it/s]loss: 6.8550: : 559it [03:21,  2.82it/s]loss: 6.8682: : 559it [03:22,  2.82it/s]loss: 6.8682: : 560it [03:22,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:34] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8712: : 560it [03:22,  2.82it/s]loss: 6.8712: : 561it [03:22,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:35] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9524: : 561it [03:22,  2.82it/s]loss: 6.9524: : 562it [03:22,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:35] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8488: : 562it [03:23,  2.82it/s]loss: 6.8488: : 563it [03:23,  2.82it/s]loss: 6.8471: : 563it [03:23,  2.82it/s]loss: 6.8471: : 564it [03:23,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:36] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8695: : 564it [03:23,  2.82it/s]loss: 6.8695: : 565it [03:23,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:36] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9739: : 565it [03:24,  2.82it/s]loss: 6.9739: : 566it [03:24,  2.82it/s]loss: 6.9032: : 566it [03:24,  2.82it/s]loss: 6.9032: : 567it [03:24,  3.20it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:37] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8766: : 567it [03:24,  3.20it/s]loss: 6.8766: : 568it [03:24,  2.75it/s]/bin/sh: 1: scontrol: not found
+loss: 6.9370: : 568it [03:25,  2.75it/s]loss: 6.9370: : 569it [03:25,  2.60it/s][codecarbon WARNING @ 17:25:37] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:38] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7773: : 569it [03:25,  2.60it/s]loss: 6.7773: : 570it [03:25,  2.66it/s]loss: 6.8875: : 570it [03:26,  2.66it/s]loss: 6.8875: : 571it [03:26,  2.71it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:38] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9249: : 571it [03:26,  2.71it/s]loss: 6.9249: : 572it [03:26,  2.74it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:39] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9016: : 572it [03:26,  2.74it/s]loss: 6.9016: : 573it [03:26,  2.77it/s]loss: 6.8865: : 573it [03:27,  2.77it/s]loss: 6.8865: : 574it [03:27,  2.78it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:39] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9032: : 574it [03:27,  2.78it/s]loss: 6.9032: : 575it [03:27,  2.79it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:40] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9624: : 575it [03:27,  2.79it/s]loss: 6.9624: : 576it [03:27,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:40] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8589: : 576it [03:28,  2.80it/s]loss: 6.8589: : 577it [03:28,  2.81it/s]loss: 6.8702: : 577it [03:28,  2.81it/s]loss: 6.8702: : 578it [03:28,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:41] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8157: : 578it [03:28,  2.81it/s]loss: 6.8157: : 579it [03:28,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:41] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8724: : 579it [03:29,  2.81it/s]loss: 6.8724: : 580it [03:29,  2.82it/s]loss: 6.9028: : 580it [03:29,  2.82it/s]loss: 6.9028: : 581it [03:29,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:42] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8695: : 581it [03:29,  2.82it/s]loss: 6.8695: : 582it [03:29,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:42] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9019: : 582it [03:30,  2.82it/s]loss: 6.9019: : 583it [03:30,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:43] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8806: : 583it [03:30,  2.82it/s]loss: 6.8806: : 584it [03:30,  2.82it/s]loss: 6.9267: : 584it [03:31,  2.82it/s]loss: 6.9267: : 585it [03:31,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:43] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8904: : 585it [03:31,  2.82it/s]loss: 6.8904: : 586it [03:31,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:44] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9463: : 586it [03:31,  2.82it/s]loss: 6.9463: : 587it [03:31,  2.82it/s]loss: 6.9342: : 587it [03:32,  2.82it/s]loss: 6.9342: : 588it [03:32,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:44] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9317: : 588it [03:32,  2.82it/s]loss: 6.9317: : 589it [03:32,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:45] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9301: : 589it [03:32,  2.82it/s]loss: 6.9301: : 590it [03:32,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:45] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9271: : 590it [03:33,  2.82it/s]loss: 6.9271: : 591it [03:33,  2.82it/s]loss: 6.8573: : 591it [03:33,  2.82it/s]loss: 6.8573: : 592it [03:33,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:46] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9379: : 592it [03:33,  2.82it/s]loss: 6.9379: : 593it [03:33,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:46] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9028: : 593it [03:34,  2.82it/s]loss: 6.9028: : 594it [03:34,  2.82it/s]loss: 6.9138: : 594it [03:34,  2.82it/s]loss: 6.9138: : 595it [03:34,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:47] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8538: : 595it [03:34,  2.82it/s]loss: 6.8538: : 596it [03:34,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:47] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8447: : 596it [03:35,  2.82it/s]loss: 6.8447: : 597it [03:35,  2.82it/s]loss: 6.9240: : 597it [03:35,  2.82it/s]loss: 6.9240: : 598it [03:35,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:48] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8971: : 598it [03:36,  2.82it/s]loss: 6.8971: : 599it [03:36,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:48] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8434: : 599it [03:36,  2.82it/s]loss: 6.8434: : 600it [03:36,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:49] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8598: : 600it [03:36,  2.82it/s]loss: 6.8598: : 601it [03:36,  2.82it/s]loss: 6.8946: : 601it [03:37,  2.82it/s]loss: 6.8946: : 602it [03:37,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:49] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8199: : 602it [03:37,  2.82it/s]loss: 6.8199: : 603it [03:37,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:50] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8990: : 603it [03:37,  2.82it/s]loss: 6.8990: : 604it [03:37,  2.82it/s]loss: 6.7900: : 604it [03:38,  2.82it/s]loss: 6.7900: : 605it [03:38,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:50] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8625: : 605it [03:38,  2.82it/s]loss: 6.8625: : 606it [03:38,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:51] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9187: : 606it [03:38,  2.82it/s]loss: 6.9187: : 607it [03:38,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:51] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9042: : 607it [03:39,  2.82it/s]loss: 6.9042: : 608it [03:39,  2.82it/s]loss: 6.9176: : 608it [03:39,  2.82it/s]loss: 6.9176: : 609it [03:39,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:52] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8865: : 609it [03:39,  2.82it/s]loss: 6.8865: : 610it [03:39,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:52] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8497: : 610it [03:40,  2.82it/s]loss: 6.8497: : 611it [03:40,  2.82it/s]loss: 6.8491: : 611it [03:40,  2.82it/s]loss: 6.8491: : 612it [03:40,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:53] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9174: : 612it [03:40,  2.82it/s]loss: 6.9174: : 613it [03:40,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:53] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8499: : 613it [03:41,  2.82it/s]loss: 6.8499: : 614it [03:41,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:54] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8904: : 614it [03:41,  2.82it/s]loss: 6.8904: : 615it [03:41,  2.82it/s]loss: 6.9088: : 615it [03:42,  2.82it/s]loss: 6.9088: : 616it [03:42,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:54] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9072: : 616it [03:42,  2.82it/s]loss: 6.9072: : 617it [03:42,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:55] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8838: : 617it [03:42,  2.82it/s]loss: 6.8838: : 618it [03:42,  2.82it/s]loss: 6.9152: : 618it [03:43,  2.82it/s]loss: 6.9152: : 619it [03:43,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:55] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8664: : 619it [03:43,  2.82it/s]loss: 6.8664: : 620it [03:43,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:56] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8131: : 620it [03:43,  2.82it/s]loss: 6.8131: : 621it [03:43,  2.82it/s]loss: 6.9273: : 621it [03:44,  2.82it/s]loss: 6.9273: : 622it [03:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:56] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8643: : 622it [03:44,  2.82it/s]loss: 6.8643: : 623it [03:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:57] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9076: : 623it [03:44,  2.82it/s]loss: 6.9076: : 624it [03:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:57] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8618: : 624it [03:45,  2.82it/s]loss: 6.8618: : 625it [03:45,  2.82it/s]loss: 6.9031: : 625it [03:45,  2.82it/s]loss: 6.9031: : 626it [03:45,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:58] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9087: : 626it [03:45,  2.82it/s]loss: 6.9087: : 627it [03:45,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:58] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8474: : 627it [03:46,  2.82it/s]loss: 6.8474: : 628it [03:46,  2.82it/s]loss: 6.9133: : 628it [03:46,  2.82it/s]loss: 6.9133: : 629it [03:46,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:59] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9215: : 629it [03:46,  2.82it/s]loss: 6.9215: : 630it [03:46,  3.20it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:25:59] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8569: : 630it [03:47,  3.20it/s]loss: 6.8569: : 631it [03:47,  2.69it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:00] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9172: : 631it [03:47,  2.69it/s]loss: 6.9172: : 632it [03:47,  2.73it/s]loss: 6.9258: : 632it [03:48,  2.73it/s]loss: 6.9258: : 633it [03:48,  2.75it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:00] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8359: : 633it [03:48,  2.75it/s]loss: 6.8359: : 634it [03:48,  2.77it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:01] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8883: : 634it [03:48,  2.77it/s]loss: 6.8883: : 635it [03:48,  2.78it/s]loss: 6.9130: : 635it [03:49,  2.78it/s]loss: 6.9130: : 636it [03:49,  2.79it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:01] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8659: : 636it [03:49,  2.79it/s]loss: 6.8659: : 637it [03:49,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:02] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8231: : 637it [03:49,  2.80it/s]loss: 6.8231: : 638it [03:49,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:02] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8644: : 638it [03:50,  2.81it/s]loss: 6.8644: : 639it [03:50,  2.81it/s]loss: 6.8775: : 639it [03:50,  2.81it/s]loss: 6.8775: : 640it [03:50,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:03] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9412: : 640it [03:50,  2.81it/s]loss: 6.9412: : 641it [03:50,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:03] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9259: : 641it [03:51,  2.81it/s]loss: 6.9259: : 642it [03:51,  2.81it/s]loss: 6.9176: : 642it [03:51,  2.81it/s]loss: 6.9176: : 643it [03:51,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:04] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9402: : 643it [03:51,  2.82it/s]loss: 6.9402: : 644it [03:51,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:04] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8568: : 644it [03:52,  2.82it/s]loss: 6.8568: : 645it [03:52,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:05] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8802: : 645it [03:52,  2.82it/s]loss: 6.8802: : 646it [03:52,  2.82it/s]loss: 6.8774: : 646it [03:53,  2.82it/s]loss: 6.8774: : 647it [03:53,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:05] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8829: : 647it [03:53,  2.82it/s]loss: 6.8829: : 648it [03:53,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:06] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9029: : 648it [03:53,  2.82it/s]loss: 6.9029: : 649it [03:53,  2.82it/s]loss: 6.8876: : 649it [03:54,  2.82it/s]loss: 6.8876: : 650it [03:54,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:06] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8489: : 650it [03:54,  2.82it/s]loss: 6.8489: : 651it [03:54,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:07] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9110: : 651it [03:54,  2.82it/s]loss: 6.9110: : 652it [03:54,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:07] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9565: : 652it [03:55,  2.82it/s]loss: 6.9565: : 653it [03:55,  2.82it/s]loss: 6.9016: : 653it [03:55,  2.82it/s]loss: 6.9016: : 654it [03:55,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:08] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9129: : 654it [03:55,  2.82it/s]loss: 6.9129: : 655it [03:55,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:08] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8544: : 655it [03:56,  2.82it/s]loss: 6.8544: : 656it [03:56,  2.82it/s]loss: 6.9175: : 656it [03:56,  2.82it/s]loss: 6.9175: : 657it [03:56,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:09] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8671: : 657it [03:56,  2.82it/s]loss: 6.8671: : 658it [03:56,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:09] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8381: : 658it [03:57,  2.82it/s]loss: 6.8381: : 659it [03:57,  2.82it/s]loss: 6.7800: : 659it [03:57,  2.82it/s]loss: 6.7800: : 660it [03:57,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:10] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9255: : 660it [03:58,  2.82it/s]loss: 6.9255: : 661it [03:58,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:10] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8707: : 661it [03:58,  2.82it/s]loss: 6.8707: : 662it [03:58,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:11] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8784: : 662it [03:58,  2.82it/s]loss: 6.8784: : 663it [03:58,  2.82it/s]loss: 6.8758: : 663it [03:59,  2.82it/s]loss: 6.8758: : 664it [03:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:11] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8795: : 664it [03:59,  2.82it/s]loss: 6.8795: : 665it [03:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9043: : 665it [03:59,  2.82it/s]loss: 6.9043: : 666it [03:59,  2.82it/s]loss: 6.9000: : 666it [04:00,  2.82it/s]loss: 6.9000: : 667it [04:00,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9004: : 667it [04:00,  2.82it/s]loss: 6.9004: : 668it [04:00,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:13] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9077: : 668it [04:00,  2.82it/s]loss: 6.9077: : 669it [04:00,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:13] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8595: : 669it [04:01,  2.82it/s]loss: 6.8595: : 670it [04:01,  2.82it/s]loss: 6.9122: : 670it [04:01,  2.82it/s]loss: 6.9122: : 671it [04:01,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:14] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8797: : 671it [04:01,  2.82it/s]loss: 6.8797: : 672it [04:01,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:14] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8429: : 672it [04:02,  2.82it/s]loss: 6.8429: : 673it [04:02,  2.82it/s]loss: 6.8600: : 673it [04:02,  2.82it/s]loss: 6.8600: : 674it [04:02,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:15] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8836: : 674it [04:02,  2.82it/s]loss: 6.8836: : 675it [04:02,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:15] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9238: : 675it [04:03,  2.82it/s]loss: 6.9238: : 676it [04:03,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:16] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8667: : 676it [04:03,  2.82it/s]loss: 6.8667: : 677it [04:03,  2.82it/s]loss: 6.9200: : 677it [04:04,  2.82it/s]loss: 6.9200: : 678it [04:04,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:16] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8888: : 678it [04:04,  2.82it/s]loss: 6.8888: : 679it [04:04,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:17] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8544: : 679it [04:04,  2.82it/s]loss: 6.8544: : 680it [04:04,  2.82it/s]loss: 6.8788: : 680it [04:05,  2.82it/s]loss: 6.8788: : 681it [04:05,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:17] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9102: : 681it [04:05,  2.82it/s]loss: 6.9102: : 682it [04:05,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:18] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7502: : 682it [04:05,  2.82it/s]loss: 6.7502: : 683it [04:05,  2.82it/s]loss: 6.9075: : 683it [04:06,  2.82it/s]loss: 6.9075: : 684it [04:06,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:18] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8825: : 684it [04:06,  2.82it/s]loss: 6.8825: : 685it [04:06,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:19] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9239: : 685it [04:06,  2.82it/s]loss: 6.9239: : 686it [04:06,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:19] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9177: : 686it [04:07,  2.82it/s]loss: 6.9177: : 687it [04:07,  2.82it/s]loss: 6.8699: : 687it [04:07,  2.82it/s]loss: 6.8699: : 688it [04:07,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:20] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8777: : 688it [04:07,  2.82it/s]loss: 6.8777: : 689it [04:07,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:20] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8536: : 689it [04:08,  2.82it/s]loss: 6.8536: : 690it [04:08,  2.82it/s]loss: 6.9062: : 690it [04:08,  2.82it/s]loss: 6.9062: : 691it [04:08,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:21] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8756: : 691it [04:09,  2.82it/s]loss: 6.8756: : 692it [04:09,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:21] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8598: : 692it [04:09,  2.82it/s]loss: 6.8598: : 693it [04:09,  3.20it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:22] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8712: : 693it [04:09,  3.20it/s]loss: 6.8712: : 694it [04:09,  2.70it/s]loss: 6.8840: : 694it [04:10,  2.70it/s]loss: 6.8840: : 695it [04:10,  2.74it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:22] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8950: : 695it [04:10,  2.74it/s]loss: 6.8950: : 696it [04:10,  2.76it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:23] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8333: : 696it [04:10,  2.76it/s]loss: 6.8333: : 697it [04:10,  2.78it/s]loss: 6.9092: : 697it [04:11,  2.78it/s]loss: 6.9092: : 698it [04:11,  2.79it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:23] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8534: : 698it [04:11,  2.79it/s]loss: 6.8534: : 699it [04:11,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:24] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7823: : 699it [04:11,  2.80it/s]loss: 6.7823: : 700it [04:11,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:24] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8801: : 700it [04:12,  2.80it/s]loss: 6.8801: : 701it [04:12,  2.81it/s]loss: 6.8769: : 701it [04:12,  2.81it/s]loss: 6.8769: : 702it [04:12,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:25] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8915: : 702it [04:12,  2.81it/s]loss: 6.8915: : 703it [04:12,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:25] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9391: : 703it [04:13,  2.81it/s]loss: 6.9391: : 704it [04:13,  2.81it/s]loss: 6.8754: : 704it [04:13,  2.81it/s]loss: 6.8754: : 705it [04:13,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:26] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9137: : 705it [04:14,  2.82it/s]loss: 6.9137: : 706it [04:14,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:26] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8898: : 706it [04:14,  2.82it/s]loss: 6.8898: : 707it [04:14,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:27] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9370: : 707it [04:14,  2.82it/s]loss: 6.9370: : 708it [04:14,  2.82it/s]loss: 6.8748: : 708it [04:15,  2.82it/s]loss: 6.8748: : 709it [04:15,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:27] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8657: : 709it [04:15,  2.82it/s]loss: 6.8657: : 710it [04:15,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:28] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9413: : 710it [04:15,  2.82it/s]loss: 6.9413: : 711it [04:15,  2.82it/s]loss: 6.9010: : 711it [04:16,  2.82it/s]loss: 6.9010: : 712it [04:16,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:28] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8751: : 712it [04:16,  2.82it/s]loss: 6.8751: : 713it [04:16,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:29] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8616: : 713it [04:16,  2.82it/s]loss: 6.8616: : 714it [04:16,  2.82it/s]loss: 6.9144: : 714it [04:17,  2.82it/s]loss: 6.9144: : 715it [04:17,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:29] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8906: : 715it [04:17,  2.82it/s]loss: 6.8906: : 716it [04:17,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:30] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8607: : 716it [04:17,  2.82it/s]loss: 6.8607: : 717it [04:17,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:30] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8524: : 717it [04:18,  2.82it/s]loss: 6.8524: : 718it [04:18,  2.82it/s]loss: 6.9045: : 718it [04:18,  2.82it/s]loss: 6.9045: : 719it [04:18,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:31] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8938: : 719it [04:18,  2.82it/s]loss: 6.8938: : 720it [04:18,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:31] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8954: : 720it [04:19,  2.82it/s]loss: 6.8954: : 721it [04:19,  2.82it/s]loss: 6.9333: : 721it [04:19,  2.82it/s]loss: 6.9333: : 722it [04:19,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:32] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9271: : 722it [04:20,  2.82it/s]loss: 6.9271: : 723it [04:20,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:32] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9089: : 723it [04:20,  2.82it/s]loss: 6.9089: : 724it [04:20,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:33] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9208: : 724it [04:20,  2.82it/s]loss: 6.9208: : 725it [04:20,  2.82it/s]loss: 6.8448: : 725it [04:21,  2.82it/s]loss: 6.8448: : 726it [04:21,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:33] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8860: : 726it [04:21,  2.82it/s]loss: 6.8860: : 727it [04:21,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:34] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8745: : 727it [04:21,  2.82it/s]loss: 6.8745: : 728it [04:21,  2.82it/s]loss: 6.8184: : 728it [04:22,  2.82it/s]loss: 6.8184: : 729it [04:22,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:34] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8929: : 729it [04:22,  2.82it/s]loss: 6.8929: : 730it [04:22,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:35] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8830: : 730it [04:22,  2.82it/s]loss: 6.8830: : 731it [04:22,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:35] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8787: : 731it [04:23,  2.82it/s]loss: 6.8787: : 732it [04:23,  2.82it/s]loss: 6.8721: : 732it [04:23,  2.82it/s]loss: 6.8721: : 733it [04:23,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:36] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9142: : 733it [04:23,  2.82it/s]loss: 6.9142: : 734it [04:23,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:36] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9103: : 734it [04:24,  2.82it/s]loss: 6.9103: : 735it [04:24,  2.82it/s]loss: 6.7578: : 735it [04:24,  2.82it/s]loss: 6.7578: : 736it [04:24,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:37] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8869: : 736it [04:25,  2.82it/s]loss: 6.8869: : 737it [04:25,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:37] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9197: : 737it [04:25,  2.82it/s]loss: 6.9197: : 738it [04:25,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:38] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8653: : 738it [04:25,  2.82it/s]loss: 6.8653: : 739it [04:25,  2.82it/s]loss: 6.8603: : 739it [04:26,  2.82it/s]loss: 6.8603: : 740it [04:26,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:38] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8988: : 740it [04:26,  2.82it/s]loss: 6.8988: : 741it [04:26,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:39] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8884: : 741it [04:26,  2.82it/s]loss: 6.8884: : 742it [04:26,  2.82it/s]loss: 6.8729: : 742it [04:27,  2.82it/s]loss: 6.8729: : 743it [04:27,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:39] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8728: : 743it [04:27,  2.82it/s]loss: 6.8728: : 744it [04:27,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:40] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8980: : 744it [04:27,  2.82it/s]loss: 6.8980: : 745it [04:27,  2.82it/s]loss: 6.9106: : 745it [04:28,  2.82it/s]loss: 6.9106: : 746it [04:28,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:40] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9188: : 746it [04:28,  2.82it/s]loss: 6.9188: : 747it [04:28,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:41] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8509: : 747it [04:28,  2.82it/s]loss: 6.8509: : 748it [04:28,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:41] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8910: : 748it [04:29,  2.82it/s]loss: 6.8910: : 749it [04:29,  2.82it/s]loss: 6.8815: : 749it [04:29,  2.82it/s]loss: 6.8815: : 750it [04:29,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:42] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8306: : 750it [04:29,  2.82it/s]loss: 6.8306: : 751it [04:29,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:42] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9012: : 751it [04:30,  2.82it/s]loss: 6.9012: : 752it [04:30,  2.82it/s]loss: 6.8938: : 752it [04:30,  2.82it/s]loss: 6.8938: : 753it [04:30,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:43] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8382: : 753it [04:31,  2.82it/s]loss: 6.8382: : 754it [04:31,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:43] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9260: : 754it [04:31,  2.82it/s]loss: 6.9260: : 755it [04:31,  2.82it/s]loss: 6.9067: : 755it [04:31,  2.82it/s]loss: 6.9067: : 756it [04:31,  3.20it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:44] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9146: : 756it [04:32,  3.20it/s]loss: 6.9146: : 757it [04:32,  2.65it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:44] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8105: : 757it [04:32,  2.65it/s]loss: 6.8105: : 758it [04:32,  2.70it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:45] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8608: : 758it [04:32,  2.70it/s]loss: 6.8608: : 759it [04:32,  2.74it/s]loss: 6.8559: : 759it [04:33,  2.74it/s]loss: 6.8559: : 760it [04:33,  2.76it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:45] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9469: : 760it [04:33,  2.76it/s]loss: 6.9469: : 761it [04:33,  2.78it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:46] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7546: : 761it [04:33,  2.78it/s]loss: 6.7546: : 762it [04:33,  2.79it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:46] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8881: : 762it [04:34,  2.79it/s]loss: 6.8881: : 763it [04:34,  2.80it/s]loss: 6.9246: : 763it [04:34,  2.80it/s]loss: 6.9246: : 764it [04:34,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:47] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8597: : 764it [04:34,  2.80it/s]loss: 6.8597: : 765it [04:34,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:47] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8964: : 765it [04:35,  2.81it/s]loss: 6.8964: : 766it [04:35,  2.81it/s]loss: 6.9282: : 766it [04:35,  2.81it/s]loss: 6.9282: : 767it [04:35,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:48] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8693: : 767it [04:36,  2.81it/s]loss: 6.8693: : 768it [04:36,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:48] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9034: : 768it [04:36,  2.82it/s]loss: 6.9034: : 769it [04:36,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:49] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9143: : 769it [04:36,  2.82it/s]loss: 6.9143: : 770it [04:36,  2.82it/s]loss: 6.8827: : 770it [04:37,  2.82it/s]loss: 6.8827: : 771it [04:37,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:49] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8237: : 771it [04:37,  2.82it/s]loss: 6.8237: : 772it [04:37,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:50] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8268: : 772it [04:37,  2.82it/s]loss: 6.8268: : 773it [04:37,  2.82it/s]loss: 6.9415: : 773it [04:38,  2.82it/s]loss: 6.9415: : 774it [04:38,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:50] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9056: : 774it [04:38,  2.82it/s]loss: 6.9056: : 775it [04:38,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:51] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8499: : 775it [04:38,  2.82it/s]loss: 6.8499: : 776it [04:38,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:51] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8546: : 776it [04:39,  2.82it/s]loss: 6.8546: : 777it [04:39,  2.82it/s]loss: 6.9124: : 777it [04:39,  2.82it/s]loss: 6.9124: : 778it [04:39,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:52] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9079: : 778it [04:39,  2.82it/s]loss: 6.9079: : 779it [04:39,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:52] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8778: : 779it [04:40,  2.82it/s]loss: 6.8778: : 780it [04:40,  2.82it/s]loss: 7.0001: : 780it [04:40,  2.82it/s]loss: 7.0001: : 781it [04:40,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:53] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8637: : 781it [04:41,  2.82it/s]loss: 6.8637: : 782it [04:41,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:53] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8168: : 782it [04:41,  2.82it/s]loss: 6.8168: : 783it [04:41,  2.82it/s]loss: 6.9184: : 783it [04:41,  2.82it/s]loss: 6.9184: : 784it [04:41,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:54] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9509: : 784it [04:42,  2.82it/s]loss: 6.9509: : 785it [04:42,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:54] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8198: : 785it [04:42,  2.82it/s]loss: 6.8198: : 786it [04:42,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:55] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9171: : 786it [04:42,  2.82it/s]loss: 6.9171: : 787it [04:42,  2.82it/s]loss: 6.8354: : 787it [04:43,  2.82it/s]loss: 6.8354: : 788it [04:43,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:55] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8823: : 788it [04:43,  2.82it/s]loss: 6.8823: : 789it [04:43,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:56] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9034: : 789it [04:43,  2.82it/s]loss: 6.9034: : 790it [04:43,  2.82it/s]loss: 6.8352: : 790it [04:44,  2.82it/s]loss: 6.8352: : 791it [04:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:56] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9030: : 791it [04:44,  2.82it/s]loss: 6.9030: : 792it [04:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:57] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8622: : 792it [04:44,  2.82it/s]loss: 6.8622: : 793it [04:44,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:57] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8648: : 793it [04:45,  2.82it/s]loss: 6.8648: : 794it [04:45,  2.82it/s]loss: 6.9050: : 794it [04:45,  2.82it/s]loss: 6.9050: : 795it [04:45,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:58] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8630: : 795it [04:45,  2.82it/s]loss: 6.8630: : 796it [04:45,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:58] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9475: : 796it [04:46,  2.82it/s]loss: 6.9475: : 797it [04:46,  2.82it/s]loss: 6.8738: : 797it [04:46,  2.82it/s]loss: 6.8738: : 798it [04:46,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:59] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 7.0054: : 798it [04:47,  2.82it/s]loss: 7.0054: : 799it [04:47,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:26:59] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8837: : 799it [04:47,  2.82it/s]loss: 6.8837: : 800it [04:47,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:00] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9057: : 800it [04:47,  2.82it/s]loss: 6.9057: : 801it [04:47,  2.82it/s]loss: 6.8968: : 801it [04:48,  2.82it/s]loss: 6.8968: : 802it [04:48,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:00] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8699: : 802it [04:48,  2.82it/s]loss: 6.8699: : 803it [04:48,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:01] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9072: : 803it [04:48,  2.82it/s]loss: 6.9072: : 804it [04:48,  2.82it/s]loss: 6.9179: : 804it [04:49,  2.82it/s]loss: 6.9179: : 805it [04:49,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:01] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8833: : 805it [04:49,  2.82it/s]loss: 6.8833: : 806it [04:49,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:02] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8677: : 806it [04:49,  2.82it/s]loss: 6.8677: : 807it [04:49,  2.82it/s]loss: 6.9240: : 807it [04:50,  2.82it/s]loss: 6.9240: : 808it [04:50,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:02] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8802: : 808it [04:50,  2.82it/s]loss: 6.8802: : 809it [04:50,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:03] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9079: : 809it [04:50,  2.82it/s]loss: 6.9079: : 810it [04:50,  2.82it/s]loss: 6.8688: : 810it [04:51,  2.82it/s]loss: 6.8688: : 811it [04:51,  2.51it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:03] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:04] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8660: : 811it [04:51,  2.51it/s]loss: 6.8660: : 812it [04:51,  2.59it/s]loss: 6.9128: : 812it [04:52,  2.59it/s]loss: 6.9128: : 813it [04:52,  2.66it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:04] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9355: : 813it [04:52,  2.66it/s]loss: 6.9355: : 814it [04:52,  2.70it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:05] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8895: : 814it [04:52,  2.70it/s]loss: 6.8895: : 815it [04:52,  2.74it/s]loss: 6.8925: : 815it [04:53,  2.74it/s]loss: 6.8925: : 816it [04:53,  2.76it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:05] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9058: : 816it [04:53,  2.76it/s]loss: 6.9058: : 817it [04:53,  2.78it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:06] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9117: : 817it [04:53,  2.78it/s]loss: 6.9117: : 818it [04:53,  2.79it/s]loss: 6.8792: : 818it [04:54,  2.79it/s]loss: 6.8792: : 819it [04:54,  3.17it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:06] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8518: : 819it [04:54,  3.17it/s]loss: 6.8518: : 820it [04:54,  2.74it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:07] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9362: : 820it [04:54,  2.74it/s]loss: 6.9362: : 821it [04:54,  2.76it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:07] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8546: : 821it [04:55,  2.76it/s]loss: 6.8546: : 822it [04:55,  2.78it/s]loss: 6.8604: : 822it [04:55,  2.78it/s]loss: 6.8604: : 823it [04:55,  2.79it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:08] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9769: : 823it [04:56,  2.79it/s]loss: 6.9769: : 824it [04:56,  2.80it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:08] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9260: : 824it [04:56,  2.80it/s]loss: 6.9260: : 825it [04:56,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:09] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.9053: : 825it [04:56,  2.81it/s]loss: 6.9053: : 826it [04:56,  2.81it/s]loss: 6.8853: : 826it [04:57,  2.81it/s]loss: 6.8853: : 827it [04:57,  2.81it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:09] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8994: : 827it [04:57,  2.81it/s]loss: 6.8994: : 828it [04:57,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:10] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8821: : 828it [04:57,  2.82it/s]loss: 6.8821: : 829it [04:57,  2.82it/s]loss: 6.8610: : 829it [04:58,  2.82it/s]loss: 6.8610: : 830it [04:58,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:10] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8275: : 830it [04:58,  2.82it/s]loss: 6.8275: : 831it [04:58,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:11] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8751: : 831it [04:58,  2.82it/s]loss: 6.8751: : 832it [04:58,  2.82it/s]loss: 6.8854: : 832it [04:59,  2.82it/s]loss: 6.8854: : 833it [04:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:11] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8993: : 833it [04:59,  2.82it/s]loss: 6.8993: : 834it [04:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.7876: : 834it [04:59,  2.82it/s]loss: 6.7876: : 835it [04:59,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8610: : 835it [05:00,  2.82it/s]loss: 6.8610: : 836it [05:00,  2.82it/s]/bin/sh: 1: scontrol: not found
+[codecarbon WARNING @ 17:27:12] Error running `scontrol show job $SLURM_JOB_ID` to retrieve SLURM-available RAM.Using the machine's total RAM.
+loss: 6.8610: : 836it [05:00,  2.78it/s]
+TRAINING_SUMMARY total_steps=836 elapsed_s=300.3 batch_size=32 throughput_samples_per_sec=89.07
+Stopped GPU logging. Saved: /home/slurm/comp597/students/zqiu6/gpu_measurements/gpu_16411.csv
+Stopped CPU logging. Saved: /home/slurm/comp597/students/zqiu6/gpu_measurements/cpu_16411.csv
