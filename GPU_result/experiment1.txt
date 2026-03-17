@@ -1,0 +1,54 @@
+Experiment 1 — Noop Baseline (No Measurement Overhead)
+=======================================================
+Trainer Stats : noop
+Duration      : 300 seconds per run
+Runs          : 3 per batch size
+Model         : RegNet y-128GF
+Dataset       : FakeImageNet (2000 images)
+
+Raw Results
+-----------
+Batch Size 32:
+  Run 0 : total_steps=846  elapsed_s=300.1  throughput=90.21 samples/sec
+  Run 1 : total_steps=845  elapsed_s=300.3  throughput=90.05 samples/sec
+  Run 2 : total_steps=845  elapsed_s=300.2  throughput=90.08 samples/sec
+  Mean throughput : 90.11 samples/sec
+
+Batch Size 16:
+  Run 0 : total_steps=1392  elapsed_s=300.2  throughput=74.19 samples/sec
+  Run 1 : total_steps=1390  elapsed_s=300.2  throughput=74.08 samples/sec
+  Run 2 : total_steps=1389  elapsed_s=300.1  throughput=74.05 samples/sec
+  Mean throughput : 74.11 samples/sec
+
+Batch Size 8:
+  Run 0 : total_steps=2030  elapsed_s=300.2  throughput=54.10 samples/sec
+  Run 1 : total_steps=2030  elapsed_s=300.2  throughput=54.10 samples/sec
+  Run 2 : total_steps=2026  elapsed_s=300.1  throughput=54.02 samples/sec
+  Mean throughput : 54.07 samples/sec
+
+Comparison vs Experiment 3 (combined — full measurement overhead)
+-----------------------------------------------------------------
+Batch Size  | Exp1 (noop)       | Exp3 (combined)   | Overhead
+------------|-------------------|-------------------|----------
+bs=32       | 90.11 samples/sec | ~83.0 samples/sec | ~8%
+bs=16       | 74.11 samples/sec | ~64.0 samples/sec | ~14%
+bs=8        | 54.07 samples/sec | ~46.0 samples/sec | ~15%
+
+Key Finding
+-----------
+Smaller batch sizes suffer proportionally more overhead from measurement.
+This is because each step is faster at smaller batch sizes, so the fixed
+cost of cuda.synchronize() + NVML energy queries represents a larger
+fraction of total step time.
+
+Log Files
+---------
+comp597-regnet-run0-noop-gpu-teach-03-16336.log  (bs=32, run 0)
+comp597-regnet-run1-noop-gpu-teach-03-16339.log  (bs=32, run 1)
+comp597-regnet-run2-noop-gpu-teach-03-16342.log  (bs=32, run 2)
+comp597-regnet-run0-noop-gpu-teach-03-16346.log  (bs=16, run 0)
+comp597-regnet-run1-noop-gpu-teach-03-16349.log  (bs=16, run 1)
+comp597-regnet-run2-noop-gpu-teach-03-16351.log  (bs=16, run 2)
+comp597-regnet-run0-noop-gpu-teach-03-16354.log  (bs=8,  run 0)
+comp597-regnet-run1-noop-gpu-teach-03-16356.log  (bs=8,  run 1)
+comp597-regnet-run2-noop-gpu-teach-03-16358.log  (bs=8,  run 2)
