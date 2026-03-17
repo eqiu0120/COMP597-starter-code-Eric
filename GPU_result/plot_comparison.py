@@ -74,12 +74,19 @@ def main():
     parser.add_argument("--out_dir",     required=True)
     parser.add_argument("--batch_sizes", nargs="+", type=int, default=[32, 16, 8])
     parser.add_argument("--num_runs",    type=int, default=3)
-    parser.add_argument("--log_pattern", default="comp597-regnet-run*-*.log",
-                        help="Glob pattern for SLURM log files")
+    parser.add_argument("--logs_bs32",   nargs="*", default=[],
+                        help="Log files for batch size 32")
+    parser.add_argument("--logs_bs16",   nargs="*", default=[],
+                        help="Log files for batch size 16")
+    parser.add_argument("--logs_bs8",    nargs="*", default=[],
+                        help="Log files for batch size 8")
     args = parser.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
     batch_sizes = args.batch_sizes
+
+    # Map batch size -> explicit log files
+    logs_map = {32: args.logs_bs32, 16: args.logs_bs16, 8: args.logs_bs8}
 
     # ------------------------------------------------------------------ #
     # Load per-batch-size data                                            #
@@ -91,12 +98,9 @@ def main():
     phase_stds  = {"forward": [], "backward": [], "optimizer": []}
 
     for bs in batch_sizes:
-        # Find log files for this batch size
-        log_files = sorted(glob.glob(args.log_pattern.replace("*", f"*bs{bs}*")))
+        log_files = logs_map.get(bs, [])
         if not log_files:
-            # fallback: all logs (user may pass them sorted)
-            log_files = sorted(glob.glob(args.log_pattern))
-
+            print(f"  [warn] no log files provided for batch_size={bs}; skipping")
         df = parse_logs(log_files)
 
         if df.empty:
