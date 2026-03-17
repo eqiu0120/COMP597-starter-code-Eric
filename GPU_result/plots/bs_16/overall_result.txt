@@ -1,0 +1,8 @@
+===== Total Training Summary — 3 run(s) =====
+  duration        : 300.15 ± 0.03 s
+  energy_consumed : 0.048211 ± 0.000072 kWh  (173.560 ± 0.261 kJ)
+  emissions       : 0.189824 ± 0.000285 g CO2eq
+  cpu_energy      : 0.029881 ± 0.000003 kWh
+  gpu_energy      : 0.012568 ± 0.000068 kWh
+  ram_energy      : 0.005762 ± 0.000002 kWh
+===================================================
