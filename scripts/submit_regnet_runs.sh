@@ -6,10 +6,12 @@
 # Results from all runs can then be averaged with plot_measurements.py.
 #
 # Usage:
-#   ./scripts/submit_regnet_runs.sh [NUM_RUNS] [BATCH_SIZE]
+#   ./scripts/submit_regnet_runs.sh [NUM_RUNS] [BATCH_SIZE] [TRAINER_STATS]
 #
-# Default: 3 runs, batch size 8.
-#   ./scripts/submit_regnet_runs.sh 3 32
+# Default: 3 runs, batch size 8, combined stats.
+#   ./scripts/submit_regnet_runs.sh 3 32 combined
+#   ./scripts/submit_regnet_runs.sh 3 32 noop
+#   ./scripts/submit_regnet_runs.sh 3 32 codecarbon_full
 
 set -euo pipefail
 
@@ -17,6 +19,7 @@ SCRIPTS_DIR=$(readlink -f -n "$(dirname "$0")")
 REPO_DIR=$(readlink -f -n "${SCRIPTS_DIR}/..")
 NUM_RUNS="${1:-3}"
 BATCH_SIZE="${2:-8}"
+TRAINER_STATS="${3:-combined}"
 
 # Load the same SLURM configuration that scripts/sbatch.sh uses so we get
 # the correct partition, account, QOS, memory, time limit, etc.
@@ -28,13 +31,13 @@ fi
 
 module load slurm
 
-echo "Submitting ${NUM_RUNS} RegNet run(s) [batch_size=${BATCH_SIZE}] to partition=${COMP597_SLURM_PARTITION} account=${COMP597_SLURM_ACCOUNT}..."
+echo "Submitting ${NUM_RUNS} RegNet run(s) [batch_size=${BATCH_SIZE}, trainer_stats=${TRAINER_STATS}] to partition=${COMP597_SLURM_PARTITION} account=${COMP597_SLURM_ACCOUNT}..."
 echo ""
 
 for RUN in $(seq 0 $((NUM_RUNS - 1))); do
     JOB_ID=$(
         sbatch \
-            --output="${REPO_DIR}/comp597-regnet-run${RUN}-%N-%j.log" \
+            --output="${REPO_DIR}/comp597-regnet-run${RUN}-${TRAINER_STATS}-%N-%j.log" \
             --partition=${COMP597_SLURM_PARTITION} \
             --mem=${COMP597_SLURM_MIN_MEM} \
             --time=${COMP597_SLURM_TIME_LIMIT} \
@@ -44,7 +47,7 @@ for RUN in $(seq 0 $((NUM_RUNS - 1))); do
             --cpus-per-task=${COMP597_SLURM_CPUS_PER_TASK} \
             --qos=${COMP597_SLURM_QOS} \
             --gpus=${COMP597_SLURM_NUM_GPUS} \
-            --export=COMP597_SLURM_SCRIPTS_DIR=${COMP597_SLURM_SCRIPTS_DIR},REGNET_RUN_NUM=${RUN},REGNET_BATCH_SIZE=${BATCH_SIZE} \
+            --export=COMP597_SLURM_SCRIPTS_DIR=${COMP597_SLURM_SCRIPTS_DIR},REGNET_RUN_NUM=${RUN},REGNET_BATCH_SIZE=${BATCH_SIZE},REGNET_TRAINER_STATS=${TRAINER_STATS} \
             "${COMP597_SLURM_JOB_SCRIPT}" \
         | awk '{print $NF}'
     )

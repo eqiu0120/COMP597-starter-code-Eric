@@ -39,7 +39,8 @@ class TimedVisionTrainer(VisionTrainer):
         if model_kwargs is None:
             model_kwargs = {}
 
-        deadline = time.monotonic() + self.duration_seconds
+        t_start = time.monotonic()
+        deadline = t_start + self.duration_seconds
         step = 0
         progress_bar = tqdm.auto.tqdm(desc="loss: N/A")
 
@@ -63,6 +64,13 @@ class TimedVisionTrainer(VisionTrainer):
         self.stats.stop_train()
         progress_bar.close()
         self.stats.log_stats()
+
+        # Always print a summary line so every experiment (including noop) has parseable output
+        elapsed = time.monotonic() - t_start
+        bs = self.loader.batch_size
+        tp = step * bs / elapsed if elapsed > 0 else 0.0
+        print(f"TRAINING_SUMMARY total_steps={step} elapsed_s={elapsed:.1f} "
+              f"batch_size={bs} throughput_samples_per_sec={tp:.2f}")
 
 
 def build_trainer(conf: config.Config, dataset: data.Dataset):

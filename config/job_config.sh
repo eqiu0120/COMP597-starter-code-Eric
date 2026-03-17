@@ -30,14 +30,36 @@ REGNET_RUN_NUM="${REGNET_RUN_NUM:-0}"
 #   --trainer_stats combined: enable GPU resource + CodeCarbon tracking
 #   --trainer_stats_configs.combined.*: pass CodeCarbon output settings
 REGNET_BATCH_SIZE="${REGNET_BATCH_SIZE:-8}"
-REGNET_OUT_DIR="/home/slurm/comp597/students/zqiu6/regnet_measurements/bs_${REGNET_BATCH_SIZE}"
+REGNET_TRAINER_STATS="${REGNET_TRAINER_STATS:-combined}"
 
-export COMP597_JOB_COMMAND="${COMP597_JOB_COMMAND} \
-  --model regnet \
+# Output dir encodes both batch size and experiment type (combined keeps legacy name)
+if [[ "${REGNET_TRAINER_STATS}" == "combined" ]]; then
+    REGNET_OUT_DIR="/home/slurm/comp597/students/zqiu6/regnet_measurements/bs_${REGNET_BATCH_SIZE}"
+else
+    REGNET_OUT_DIR="/home/slurm/comp597/students/zqiu6/regnet_measurements/bs_${REGNET_BATCH_SIZE}_${REGNET_TRAINER_STATS}"
+fi
+
+# Base command (same for all experiments)
+REGNET_BASE_CMD="--model regnet \
   --data regnet \
   --model_configs.regnet.batch_size ${REGNET_BATCH_SIZE} \
   --model_configs.regnet.duration_seconds 300 \
-  --trainer_stats combined \
-  --trainer_stats_configs.combined.run_num ${REGNET_RUN_NUM} \
+  --trainer_stats ${REGNET_TRAINER_STATS}"
+
+# Stats-specific config args
+if [[ "${REGNET_TRAINER_STATS}" == "combined" ]]; then
+    REGNET_STATS_CMD="--trainer_stats_configs.combined.run_num ${REGNET_RUN_NUM} \
   --trainer_stats_configs.combined.project_name regnet-energy \
   --trainer_stats_configs.combined.output_dir ${REGNET_OUT_DIR}"
+elif [[ "${REGNET_TRAINER_STATS}" == "codecarbon_full" ]]; then
+    REGNET_STATS_CMD="--trainer_stats_configs.codecarbon_full.run_num ${REGNET_RUN_NUM} \
+  --trainer_stats_configs.codecarbon_full.project_name regnet-energy \
+  --trainer_stats_configs.codecarbon_full.output_dir ${REGNET_OUT_DIR}"
+else
+    # noop and others: no stats config args needed
+    REGNET_STATS_CMD=""
+fi
+
+export COMP597_JOB_COMMAND="${COMP597_JOB_COMMAND} \
+  ${REGNET_BASE_CMD} \
+  ${REGNET_STATS_CMD}"
