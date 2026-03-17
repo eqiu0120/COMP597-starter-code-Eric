@@ -1,0 +1,5 @@
+batch=8: OK, mem=5.21GB
+batch=16: OK, mem=5.21GB
+batch=32: OK, mem=5.22GB
+batch=64: OOM
+
