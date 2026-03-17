@@ -1,0 +1,61 @@
+Experiment 2 — End-to-End Energy Measurement (CodeCarbon Full)
+==============================================================
+Trainer Stats : codecarbon_full
+Duration      : 300 seconds per run
+Runs          : 3 per batch size
+Model         : RegNet y-128GF
+Dataset       : FakeImageNet (2000 images)
+GPU           : NVIDIA RTX 5000 Ada Generation
+CPU           : AMD EPYC 9474F 48-Core Processor
+Region        : Quebec, Canada (low-carbon grid)
+
+Raw Results
+-----------
+Batch Size 32:
+  Run 0 : duration=300.40s  energy=0.053627 kWh  gpu_energy=0.017929 kWh  cpu_energy=0.029937 kWh  ram_energy=0.005762 kWh  emissions=0.000211 kg CO2
+  Run 1 : duration=300.33s  energy=0.053623 kWh  gpu_energy=0.017973 kWh  cpu_energy=0.029929 kWh  ram_energy=0.005721 kWh  emissions=0.000211 kg CO2
+  Run 2 : duration=300.18s  energy=0.053626 kWh  gpu_energy=0.017980 kWh  cpu_energy=0.029910 kWh  ram_energy=0.005735 kWh  emissions=0.000211 kg CO2
+
+Batch Size 16:
+  Run 0 : duration=300.24s  energy=0.053312 kWh  gpu_energy=0.017642 kWh  cpu_energy=0.029912 kWh  ram_energy=0.005758 kWh  emissions=0.000210 kg CO2
+  Run 1 : duration=300.14s  energy=0.053287 kWh  gpu_energy=0.017653 kWh  cpu_energy=0.029909 kWh  ram_energy=0.005725 kWh  emissions=0.000210 kg CO2
+  Run 2 : duration=300.19s  energy=0.053345 kWh  gpu_energy=0.017668 kWh  cpu_energy=0.029915 kWh  ram_energy=0.005762 kWh  emissions=0.000210 kg CO2
+
+Batch Size 8:
+  Run 0 : duration=300.12s  energy=0.052690 kWh  gpu_energy=0.017060 kWh  cpu_energy=0.029901 kWh  ram_energy=0.005729 kWh  emissions=0.000207 kg CO2
+  Run 1 : duration=300.07s  energy=0.052811 kWh  gpu_energy=0.017166 kWh  cpu_energy=0.029895 kWh  ram_energy=0.005750 kWh  emissions=0.000208 kg CO2
+  Run 2 : duration=300.14s  energy=0.052734 kWh  gpu_energy=0.017119 kWh  cpu_energy=0.029907 kWh  ram_energy=0.005708 kWh  emissions=0.000208 kg CO2
+
+Summary (Mean over 3 runs)
+--------------------------
+Batch Size  | Total Energy  | GPU Energy   | CPU Energy   | RAM Energy   | CO2 Emissions
+------------|---------------|--------------|--------------|--------------|---------------
+bs=32       | 193.05 kJ     | 64.66 kJ     | 107.73 kJ    | 20.66 kJ     | 211.14 mg CO2
+bs=16       | 191.93 kJ     | 63.55 kJ     | 107.68 kJ    | 20.69 kJ     | 209.92 mg CO2
+bs=8        | 189.88 kJ     | 61.61 kJ     | 107.64 kJ    | 20.62 kJ     | 207.68 mg CO2
+
+Key Findings
+------------
+1. Total energy decreases slightly with smaller batch size (~1.7% from bs=32 to bs=8)
+   because smaller batches use less GPU power per step.
+
+2. GPU energy accounts for ~33% of total energy; CPU dominates at ~56%.
+   This is because the AMD EPYC 9474F has a high base power draw (360W TDP).
+
+3. CO2 emissions are very low (~210 mg per 5-min run) thanks to Quebec's
+   clean hydroelectric grid (low carbon intensity).
+
+4. Total energy is nearly identical across batch sizes because all runs
+   consumed the same 300s wall-clock time at similar average power draw.
+
+Comparison vs Experiment 3 (combined — from compare_total_energy.png)
+----------------------------------------------------------------------
+Batch Size  | Exp2 (codecarbon_full) | Exp3 (combined)  | Difference
+------------|------------------------|------------------|------------
+bs=32       | 193.05 kJ              | ~180 kJ          | ~7% higher
+bs=16       | 191.93 kJ              | ~173 kJ          | ~11% higher
+bs=8        | 189.88 kJ              | ~166 kJ          | ~14% higher
+
+Note: Exp2 reports higher total energy than Exp3 because CodeCarbon full
+tracks CPU + GPU + RAM for the entire job duration (including startup/shutdown),
+while Exp3's NVML only measures GPU energy during active training steps.
