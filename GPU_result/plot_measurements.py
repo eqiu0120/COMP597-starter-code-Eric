@@ -137,12 +137,13 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
         series_list = run_series[col]
         if not series_list:
             continue
-        # Align to shortest run
+        # Use actual elapsed seconds from index, align to shortest run
         min_len = min(len(s) for s in series_list)
         arr = np.stack([np.array(s.iloc[:min_len], dtype=float) for s in series_list], axis=0)
         mean = arr.mean(axis=0)
         std  = arr.std(axis=0)
-        t_vals = np.arange(min_len)
+        # Use actual timestamps from the first run's index
+        t_vals = series_list[0].index[:min_len]
 
         fig, ax = plt.subplots()
         ax.plot(t_vals, mean, label="mean")
