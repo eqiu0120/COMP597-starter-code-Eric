@@ -113,7 +113,7 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
         " clocks.current.sm [MHz]":("MHz", "SM Clock (MHz)",        "gpu_clock.png"),
     }
 
-    # Parse all runs; resample to a common time grid (1 s resolution)
+    # Parse all runs; strip units first so values are numeric, then resample
     run_series: dict[str, list] = {k: [] for k in metrics}
     for csv_path in gpu_csvs:
         if not os.path.isfile(csv_path):
@@ -123,10 +123,14 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
         df["timestamp"] = pd.to_datetime(df["timestamp"])
         t = (df["timestamp"] - df["timestamp"].iloc[0]).dt.total_seconds()
         df["t_s"] = t.round(0).astype(int)
+        # Strip units from string columns so groupby can average them
+        for col, (unit, _, _) in metrics.items():
+            if col in df.columns:
+                df[col] = _strip_unit(df[col], unit)
         df_rs = df.groupby("t_s").mean(numeric_only=True)
         for col in metrics:
             if col in df_rs.columns:
-                run_series[col].append(_strip_unit(df_rs[col], metrics[col][0]))
+                run_series[col].append(df_rs[col])
 
     t_label = "Time (s)"
     for col, (unit, ylabel, fname) in metrics.items():
@@ -135,7 +139,7 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
             continue
         # Align to shortest run
         min_len = min(len(s) for s in series_list)
-        arr = np.stack([s.iloc[:min_len].to_numpy() for s in series_list], axis=0)
+        arr = np.stack([np.array(s.iloc[:min_len], dtype=float) for s in series_list], axis=0)
         mean = arr.mean(axis=0)
         std  = arr.std(axis=0)
         t_vals = np.arange(min_len)
