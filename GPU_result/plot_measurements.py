@@ -47,7 +47,7 @@ def save(fig, path):
 
 
 def _strip_unit(series: pd.Series, unit: str) -> pd.Series:
-    return series.astype(str).str.replace(unit, "", regex=False).astype(float)
+    return series.astype(str).str.replace(unit, "", regex=False).str.strip().astype(float)
 
 
 def _load_step_csvs(cc_dir: str, num_runs: int, rank: int) -> list[pd.DataFrame]:
@@ -107,10 +107,10 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
         return
 
     metrics = {
-        " utilization.gpu [%]":        (" %",   "GPU Utilization (%)",   "gpu_util.png"),
-        " memory.used [MiB]":           (" MiB", "GPU Memory Used (MiB)", "gpu_mem.png"),
-        " power.draw [W]":              (" W",   "GPU Power Draw (W)",    "gpu_power.png"),
-        " clocks.current.sm [MHz]":     (" MHz", "SM Clock (MHz)",        "gpu_clock.png"),
+        " utilization.gpu [%]":    ("%",   "GPU Utilization (%)",   "gpu_util.png"),
+        " memory.used [MiB]":      ("MiB", "GPU Memory Used (MiB)", "gpu_mem.png"),
+        " power.draw [W]":         ("W",   "GPU Power Draw (W)",    "gpu_power.png"),
+        " clocks.current.sm [MHz]":("MHz", "SM Clock (MHz)",        "gpu_clock.png"),
     }
 
     # Parse all runs; resample to a common time grid (1 s resolution)
