@@ -175,9 +175,8 @@ def plot_codecarbon_steps(cc_dir: str, num_runs: int, rank: int, out_dir: str):
         steps  = np.arange(len(mean_e))
 
         fig, ax = plt.subplots()
-        ax.bar(steps, mean_e, label="mean energy")
-        ax.errorbar(steps, mean_e, yerr=std_e, fmt="none", color="black",
-                    capsize=2, label="±1 std")
+        ax.plot(steps, mean_e, label="mean energy", linewidth=0.8)
+        ax.fill_between(steps, mean_e - std_e, mean_e + std_e, alpha=0.3, label="±1 std")
         ax.set_xlabel("Step")
         ax.set_ylabel("Energy Consumed (J)")
         ax.set_title(f"Energy per Training Step — averaged over {n_runs} run(s)")
@@ -192,9 +191,8 @@ def plot_codecarbon_steps(cc_dir: str, num_runs: int, rank: int, out_dir: str):
         steps  = np.arange(len(mean_c))
 
         fig, ax = plt.subplots()
-        ax.bar(steps, mean_c, label="mean CO2")
-        ax.errorbar(steps, mean_c, yerr=std_c, fmt="none", color="black",
-                    capsize=2, label="±1 std")
+        ax.plot(steps, mean_c, label="mean CO2", linewidth=0.8)
+        ax.fill_between(steps, mean_c - std_c, mean_c + std_c, alpha=0.3, label="±1 std")
         ax.set_xlabel("Step")
         ax.set_ylabel("CO2 Emissions (mg)")
         ax.set_title(f"CO2 per Training Step — averaged over {n_runs} run(s)")
