@@ -1,0 +1,167 @@
+GPU Utilization Analysis — RegNet y-128GF Training
+====================================================
+Experiments: Exp3 (combined), 3 batch sizes, run 0
+Dataset: 2000 fake ImageNet samples, 5-minute wall-clock budget
+GPU: NVIDIA RTX 5000 Ada Generation
+Measurement: nvidia-smi sampled at 0.1s intervals
+
+============================================================
+STEADY-STATE GPU UTILIZATION SUMMARY (t=20–305s)
+============================================================
+
+Batch Size  Mean Util   Std     Min    Max    Primary Dip Cause
+----------  ---------   -----   ----   ----   -----------------
+bs=32       85.1%       8.5%    46%    94%    Epoch boundary DataLoader reshuffle
+bs=16       77.9%       10.9%   19%    90%    Mixed: epoch boundaries + optimizer steps
+bs=8        77.3%       3.4%    67%    81%    Optimizer step memory-bound idle
+
+Key observation: GPU never reaches 100% utilization even during compute phases.
+Larger batch sizes achieve higher and more stable GPU utilization.
+
+============================================================
+DIP EVENT ANALYSIS
+============================================================
+
+Batch size 32 (job 16142)
+--------------------------
+Dip threshold: <76.5% (mean - 1σ)
+Total dip events in steady state: 2
+
+Event 1: t=220s, util=46%  → near epoch boundary (epoch interval ~25s)
+Event 2: t=245s, util=54%  → near epoch boundary (epoch interval ~25s)
+
+Inter-dip interval: 25.0s (exactly 1 epoch = 62 steps × ~0.35s/step)
+Classification: 2/2 near epoch boundary, 0/2 near optimizer step
+
+Interpretation:
+  GPU is well-utilized between epoch boundaries. The only significant dips
+  occur when the DataLoader exhausts the dataset and reshuffles the index,
+  causing the GPU to stall waiting for the next batch. These dips are
+  periodic and predictable (every ~25s = every epoch).
+
+
+Batch size 16 (job 16148)
+--------------------------
+Dip threshold: <67.1% (mean - 1σ)
+Total dip events in steady state: 4
+
+Event 1: t=35s,  util=64%  → near epoch boundary (epoch interval ~34s)
+Event 2: t=85s,  util=19%  → severe DataLoader stall (worst dip observed)
+Event 3: t=95s,  util=64%  → near epoch boundary (t=100s)
+Event 4: t=150s, util=41%  → near optimizer step
+
+Inter-dip interval: mean=38.4s, std=24.7s (irregular — more variable than bs=32)
+Classification: 2/4 near epoch boundary, 2/4 near optimizer step
+
+Interpretation:
+  bs=16 shows both epoch boundary dips AND optimizer step dips, indicating
+  the optimizer step's relative cost is becoming significant. The severe
+  dip to 19% at t=85s suggests an extended DataLoader stall where the CPU
+  could not supply data fast enough. Higher variability (std=10.9%) compared
+  to bs=32 reflects less stable pipelining between CPU data loading and GPU
+  compute at this batch size.
+
+
+Batch size 8 (job 16182)
+--------------------------
+Dip threshold: <73.9% (mean - 1σ)
+Total dip events in steady state: 9
+
+Event 1: t=25s,  util=71%  → near epoch boundary
+Event 2: t=35s,  util=67%  → near optimizer step
+Event 3: t=45s,  util=71%  → near epoch boundary
+Event 4: t=60s,  util=69%  → near optimizer step
+Event 5: t=65s,  util=70%  → near optimizer step
+Event 6: t=115s, util=72%  → near optimizer step
+Event 7: t=140s, util=72%  → near optimizer step
+Event 8: t=215s, util=73%  → near optimizer step
+Event 9: t=255s, util=73%  → near optimizer step
+
+Inter-dip interval: mean=28.8s, std=24.5s (highly irregular)
+Classification: 2/9 near epoch boundary, 7/9 near optimizer step
+
+Interpretation:
+  At bs=8, the optimizer step is the dominant cause of GPU util dips.
+  With steps only ~160ms total (forward=40ms, backward=60ms, optimizer=61ms),
+  the optimizer step accounts for ~38% of total step time.
+  Unlike forward/backward which are compute-bound (matrix multiplications),
+  the optimizer step is memory-bandwidth bound — it reads and writes all
+  model weights and gradients but performs minimal arithmetic.
+  This means GPU compute units sit idle during the optimizer step while
+  waiting for memory transfers to complete.
+  At bs=32, this effect is hidden because forward/backward dominate.
+  At bs=8, it becomes the primary source of GPU idle time.
+
+============================================================
+RELATIONSHIP BETWEEN GPU UTIL DIPS AND ENERGY/CO2 SPIKES
+============================================================
+
+GPU util dips and energy spikes appear to contradict each other
+(util goes DOWN, energy goes UP). The resolution is TIME:
+
+  - GPU util measures RATE of GPU usage (compute per unit time)
+  - Energy measures TOTAL consumption (power × duration)
+
+When a dip occurs:
+  1. GPU util drops → GPU draws less power per unit time
+  2. But the step wall-clock time STRETCHES (waiting for data/optimizer)
+  3. Total energy = power × time → longer time dominates
+  4. Net result: energy consumed for that step is HIGHER despite lower util
+
+Example — epoch boundary stall (bs=32):
+  Normal step:   200W × 350ms = 70 J per step
+  Stall step:    160W × 600ms = 96 J per step  ← energy spike despite lower power
+
+This is why energy spikes and GPU util dips are the SAME physical events
+measured from different angles:
+  - Util dip  → GPU was less busy
+  - Energy spike → that step consumed more total energy
+  - CO2 spike → proportional to energy (fixed carbon intensity in Quebec)
+  - Throughput dip → step took longer → fewer samples per second
+
+All four metrics spike/dip simultaneously at the same events:
+  - CUDA warmup (t=0–15s)
+  - Epoch boundary DataLoader reshuffle
+  - Optimizer step memory-bound stall (especially bs=8)
+  - Random GPU preemption events (bs=8 step #1071 at t=196s)
+
+============================================================
+OPTIMIZATION RECOMMENDATIONS TO REDUCE GPU STALLS
+============================================================
+
+1. persistent_workers=True on DataLoader  [HIGHEST IMPACT]
+   Eliminates epoch boundary reshuffle stall entirely.
+   Workers stay alive between epochs; reshuffling happens in background.
+   Targets: bs=32 epoch boundary dips, bs=16 mixed dips.
+   Expected gain: bs=32 +5–8% mean util, bs=16 +3–5% mean util.
+
+2. pin_memory=True on DataLoader
+   Pins CPU memory so GPU can DMA-transfer batches without CPU copy step.
+   Reduces inter-step CPU→GPU transfer latency.
+   Targets: small gaps between steps in all batch sizes.
+   Expected gain: +1–2% mean util across all batch sizes.
+
+3. prefetch_factor=2 (or higher)
+   DataLoader prefetches next batch while GPU processes current batch.
+   Hides data loading latency behind compute.
+   Targets: data loading gaps between steps (bs=8 most affected).
+   Expected gain: bs=8 +2–3% mean util.
+
+4. Gradient accumulation for bs=8
+   Accumulate gradients over N=4 small batches, then one optimizer step.
+   Amortizes memory-bound optimizer cost over more samples.
+   Effective batch = 8×4 = 32 without OOM risk.
+   Targets: bs=8 optimizer step dips (7 of 9 dip events).
+   Expected gain: bs=8 +3–5% mean util.
+
+5. Warmup step before measurement
+   Run one dummy forward+backward before starting any timer/energy tracker.
+   Eliminates CUDA kernel compilation overhead on first step.
+   Targets: Forward #1 anomaly (2–7x slower than average).
+   Expected gain: removes outlier from all timing/energy measurements.
+
+6. Mixed precision (torch.cuda.amp / FP16)
+   Reduces memory footprint → allows larger effective batch sizes.
+   Faster matrix ops via Tensor Cores → higher sustained GPU util.
+   Indirect benefit: reduces relative cost of optimizer step.
+   Expected gain: +10–20% throughput, higher GPU util across all batch sizes.
