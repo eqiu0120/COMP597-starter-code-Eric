@@ -1,0 +1,144 @@
+Anomaly Analysis — RegNet y-128GF Training
+==========================================
+Experiments: Exp3 (combined), 3 batch sizes x run 0
+Dataset: 2000 fake ImageNet samples, 5-minute wall-clock budget
+GPU: NVIDIA RTX 5000 Ada Generation
+
+============================================================
+RAW FINDINGS PER BATCH SIZE
+============================================================
+
+Batch size 32 (job 16142)
+--------------------------
+Mean substep duration:
+  Forward:   121.3 ms
+  Backward:  189.2 ms
+  (No Optimizer mean — not reported by CodeCarbon substep)
+
+Slow substep anomalies (>2.5σ):
+  Forward pass #1       t=0s    324.3 ms  — 2.7x above mean
+  Optimisation step #431  t=173s  271.8 ms  — near epoch boundary at t=174s
+
+Energy spike anomalies: 0
+
+GPU util dips (>2.0σ below mean):
+  t=0, 5, 10, 15s  — GPU util = 0%  (initialization warmup)
+
+Epoch boundaries at: 25, 50, 74, 99, 124, 149, 174, 199, 223, 248, 273 s
+Total steps: 743  |  Steps per epoch: 62
+
+
+Batch size 16 (job 16148)
+--------------------------
+Mean substep duration:
+  Forward:   68.8 ms
+  Backward:  105.3 ms
+
+Slow substep anomalies (>2.5σ): 6 events
+  Forward pass #1          t=0s    280.2 ms  — 4.1x above mean
+  Backward pass #1         t=0s    150.7 ms  — 1.4x above mean
+  Optimisation step #151   t=41s   274.5 ms  — just after epoch boundary (step 125)
+  Backward pass #292       t=79s   325.8 ms  — near epoch boundary at t=67s
+  Forward pass #563        t=148s  275.8 ms  — near epoch boundary at t=132s
+  Forward pass #1120       t=292s  272.6 ms  — near epoch boundary at t=294s
+
+Energy spike anomalies (>2.5σ): 29 events
+  Clustered near epoch boundaries (steps 88-165, 278-292, 561-563, 920-976)
+  Backward passes running 15-25% longer and drawing proportionally more energy
+  Peak: Backward pass #292  158.2 mJ vs mean ~70 mJ
+
+GPU util dips (>2.0σ below mean):
+  t=0, 5, 10, 15s  — GPU util = 0%  (initialization warmup)
+  t=85s            — GPU util = 19%  (mid-training stall, near epoch boundary at t=67s)
+  t=315s           — GPU util = 0%  (training ended)
+
+Epoch boundaries at: 34, 67, 100, 132, 164, 197, 229, 262, 294 s
+Total steps: 1138  |  Steps per epoch: 125
+
+
+Batch size 8 (job 16182)
+--------------------------
+Mean substep duration:
+  Forward:   40.1 ms
+  Backward:  59.8 ms
+
+Slow substep anomalies (>2.5σ): 5 events
+  Forward pass #1          t=0s    261.8 ms  — 6.5x above mean
+  Backward pass #1         t=1s    120.2 ms  — 2.0x above mean
+  Optimisation step #209   t=39s   139.8 ms  — near epoch boundary (step 250 at t=47s)
+  Backward pass #225       t=42s    93.3 ms  — near epoch boundary
+  Backward pass #1071      t=196s  268.5 ms  — 4.5x above mean, NOT near epoch boundary
+
+Energy spike anomalies (>2.5σ): 5 events (same as slow anomalies)
+  Backward pass #1071 is most significant: 128.3 mJ vs mean ~40 mJ
+
+GPU util dips (>2.0σ below mean):
+  t=0, 5, 10, 15s  — GPU util = 0%  (initialization warmup)
+  t=315s           — GPU util = 0%  (training ended)
+
+Epoch boundaries at: 47, 92, 138, 183, 229, 275 s
+Total steps: 1624  |  Steps per epoch: 250
+
+============================================================
+ANOMALY INTERPRETATION
+============================================================
+
+1. GPU util 0% at t=0–15s (ALL batch sizes)
+   Cause: CUDA/model initialization warmup. PyTorch loads model weights to GPU,
+   compiles CUDA kernels, and allocates memory before the first step begins.
+   This is unavoidable on first run. Could be mitigated with a dummy warmup
+   forward pass before starting measurements.
+
+2. Forward pass #1 is 2–7x slower than average (ALL batch sizes)
+   Cause: First-time CUDA kernel compilation (JIT). PyTorch compiles each
+   kernel the first time an operation is encountered. All subsequent steps
+   use the cached compiled kernels and are fast.
+   Effect scales inversely with batch size: bs=32 is 2.7x slow, bs=8 is 6.5x
+   slow because the absolute overhead is the same but mean step time is shorter.
+
+3. Backward pass #1071 at t=196s for bs=8 (4.5x slower, NOT near epoch boundary)
+   Cause: Most likely a GPU preemption event — another job on the shared SLURM
+   node briefly acquired GPU resources, causing a stall mid-backward pass.
+   Evidence: duration 268ms vs mean 60ms, energy 128 mJ vs mean 40 mJ,
+   no corresponding epoch boundary or DataLoader event.
+
+4. bs=16: 29 energy spikes in backward passes near epoch boundaries
+   Cause: DataLoader reshuffling at epoch end. When the dataset is exhausted,
+   the DataLoader re-shuffles the sample index and restarts prefetching workers.
+   This causes some batches near the boundary to have slower data transfers
+   (prefetch cache miss), leading to the GPU stalling slightly longer during
+   backward, resulting in 15–25% higher energy for those steps.
+   Clusters at: steps 88–165 (near epoch 1 boundary), 278–292 (epoch 2), etc.
+
+5. Optimizer step anomalies just after epoch boundaries (ALL batch sizes)
+   bs=32: Optimisation step #431 at t=173s  (epoch boundary at t=174s)
+   bs=16: Optimisation step #151 at t=41s   (epoch boundary at step 125)
+   bs=8:  Optimisation step #209 at t=39s   (epoch boundary at step 250)
+   Cause: The CPU is busy reshuffling the DataLoader index at epoch end,
+   which delays the next data batch. The optimizer completes but the next
+   forward pass is blocked waiting for data, making the optimizer step
+   appear anomalously slow in wall-clock terms.
+
+============================================================
+OPTIMIZATION RECOMMENDATIONS BASED ON ANOMALIES
+============================================================
+
+1. Use persistent_workers=True on DataLoader
+   Eliminates epoch-boundary reshuffling stall. Workers stay alive between
+   epochs, so the index is re-shuffled in background without blocking training.
+   Expected gain: eliminates anomaly types 4 and 5 above.
+
+2. Warm up with a dummy forward/backward pass before measurements
+   Run one full step before starting any timer or energy tracker.
+   Eliminates anomaly types 1 and 2 (CUDA kernel compilation overhead).
+
+3. Use drop_last=True on DataLoader
+   Avoids partial last batch at epoch end, reducing one source of boundary stall.
+
+4. For shared SLURM nodes: pin the GPU with exclusive mode or check for
+   co-tenants before benchmarking (anomaly type 3 — preemption).
+   On dedicated nodes this would not occur.
+
+5. Mixed precision (torch.cuda.amp) would reduce step time and memory,
+   allowing larger batch sizes and further reducing the relative impact
+   of fixed overheads (warmup, reshuffle) on total energy.
