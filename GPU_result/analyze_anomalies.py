@@ -41,14 +41,11 @@ def parse_ts(ts_str):
 
 def load_substep_csv(bs, run=0):
     """Load per-substep CodeCarbon CSV. Returns DataFrame with elapsed_s column."""
-    path = os.path.join(BASE, f"bs_{bs}", f"run_{run}_cc_substep_rank_0.csv")
+    path = os.path.join(BASE, f"bs_{bs}", f"run_{run}_cc_substep_rank_0-substeps.csv")
     if not os.path.exists(path):
         print(f"  Missing: {path}")
         return None
     df = pd.read_csv(path)
-    # task_name may or may not exist
-    if "task_name" not in df.columns:
-        df = pd.read_csv(path, names=["task_name"] + list(pd.read_csv(path, nrows=0).columns), skiprows=1)
     df["ts"] = df["timestamp"].apply(parse_ts)
     t0 = df["ts"].min()
     df["elapsed_s"] = (df["ts"] - t0).dt.total_seconds()
@@ -59,7 +56,7 @@ def load_substep_csv(bs, run=0):
 
 def load_step_csv(bs, run=0):
     """Load per-step CodeCarbon CSV."""
-    path = os.path.join(BASE, f"bs_{bs}", f"run_{run}_cc_step_rank_0.csv")
+    path = os.path.join(BASE, f"bs_{bs}", f"run_{run}_cc_step_rank_0-steps.csv")
     if not os.path.exists(path):
         return None
     df = pd.read_csv(path)
