@@ -142,3 +142,9 @@ OPTIMIZATION RECOMMENDATIONS BASED ON ANOMALIES
 5. Mixed precision (torch.cuda.amp) would reduce step time and memory,
    allowing larger batch sizes and further reducing the relative impact
    of fixed overheads (warmup, reshuffle) on total energy.
+
+Identified that even with a tiny 2000-image dataset, DataLoader overhead causes measurable GPU stalls. On a real dataset the effect would be even more pronounced because:
+
+More images = more disk I/O
+More complex augmentations = more CPU preprocessing time
+Larger batches = heavier transfers
