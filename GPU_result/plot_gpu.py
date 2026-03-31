@@ -10,7 +10,6 @@ csv = sorted(glob.glob("/home/slurm/comp597/students/zqiu6/gpu_measurements/gpu_
 print("Using:", csv)
 df = pd.read_csv(csv)
 
-# parse time -> seconds since start
 df["timestamp"] = pd.to_datetime(df["timestamp"])
 t = (df["timestamp"] - df["timestamp"].iloc[0]).dt.total_seconds()
 

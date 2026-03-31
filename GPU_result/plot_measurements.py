@@ -1,27 +1,5 @@
-"""
-plot_measurements.py
-====================
-Visualises and averages the combined GPU-resource and CodeCarbon measurements
-produced by N independent RegNet training runs.
-
-Output layout produced by the training job (job_config.sh):
-  REGNET_OUT_DIR/
-    run_<N>_cc_full_rank_0.csv          <- total-training CodeCarbon summary
-    run_<N>_cc_step_rank_0-steps.csv    <- per-step CodeCarbon energy/emissions
-    run_<N>_cc_substep_rank_0-substeps.csv
-    losses/
-      run_<N>_cc_loss_rank_0.csv
-
-External nvidia-smi CSV (produced by job.sh when COMP597_LOG_GPU=1):
-  /home/slurm/comp597/students/<USER>/gpu_measurements/gpu_<JOBID>.csv
-
-Usage (on SLURM after all runs finish):
-  python GPU_result/plot_measurements.py \\
-      --cc_dir   /home/slurm/comp597/students/$USER/regnet_measurements \\
-      --out_dir  /home/slurm/comp597/students/$USER/regnet_plots \\
-      --num_runs 3 \\
-      --gpu_csvs /home/.../gpu_<JOB0>.csv /home/.../gpu_<JOB1>.csv ...
-"""
+# Visualises and averages GPU-resource and CodeCarbon measurements across runs.
+# Usage: python GPU_result/plot_measurements.py --cc_dir ... --out_dir ... --num_runs 3
 
 import argparse
 import os
@@ -35,10 +13,6 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 
-# ------------------------------------------------------------------ #
-# Helpers                                                             #
-# ------------------------------------------------------------------ #
-
 def save(fig, path):
     fig.tight_layout()
     fig.savefig(path, dpi=200)
@@ -51,7 +25,6 @@ def _strip_unit(series: pd.Series, unit: str) -> pd.Series:
 
 
 def _load_step_csvs(cc_dir: str, num_runs: int, rank: int) -> list[pd.DataFrame]:
-    """Load per-step CodeCarbon CSVs for all runs that exist."""
     dfs = []
     for run in range(num_runs):
         path = os.path.join(cc_dir, f"run_{run}_cc_step_rank_{rank}-steps.csv")
@@ -85,23 +58,14 @@ def _load_loss_csvs(cc_dir: str, num_runs: int, rank: int) -> list[pd.DataFrame]
 
 
 def _align_and_stack(dfs: list[pd.DataFrame], col: str) -> np.ndarray:
-    """Stack a column from multiple run DataFrames into shape (num_runs, steps).
-
-    Truncates to the shortest run so the array is rectangular.
-    """
     arrays = [df[col].to_numpy() for df in dfs if col in df.columns]
     if not arrays:
         return np.empty((0,))
     min_len = min(len(a) for a in arrays)
-    return np.stack([a[:min_len] for a in arrays], axis=0)  # (runs, steps)
+    return np.stack([a[:min_len] for a in arrays], axis=0)
 
-
-# ------------------------------------------------------------------ #
-# nvidia-smi plots (one file per run, align by relative time)         #
-# ------------------------------------------------------------------ #
 
 def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
-    """Averaged time-series from one or more nvidia-smi logs."""
     if not gpu_csvs:
         print("No nvidia-smi CSVs provided; skipping GPU time-series plots.")
         return
@@ -113,7 +77,6 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
         " clocks.current.sm [MHz]":("MHz", "SM Clock (MHz)",        "gpu_clock.png"),
     }
 
-    # Parse all runs; strip units first so values are numeric, then resample
     run_series: dict[str, list] = {k: [] for k in metrics}
     for csv_path in gpu_csvs:
         if not os.path.isfile(csv_path):
@@ -123,7 +86,6 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
         df["timestamp"] = pd.to_datetime(df["timestamp"])
         t = (df["timestamp"] - df["timestamp"].iloc[0]).dt.total_seconds()
         df["t_s"] = t.round(0).astype(int)
-        # Strip units from string columns so groupby can average them
         for col, (unit, _, _) in metrics.items():
             if col in df.columns:
                 df[col] = _strip_unit(df[col], unit)
@@ -137,12 +99,10 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
         series_list = run_series[col]
         if not series_list:
             continue
-        # Use actual elapsed seconds from index, align to shortest run
         min_len = min(len(s) for s in series_list)
         arr = np.stack([np.array(s.iloc[:min_len], dtype=float) for s in series_list], axis=0)
         mean = arr.mean(axis=0)
         std  = arr.std(axis=0)
-        # Use actual timestamps from the first run's index
         t_vals = series_list[0].index[:min_len]
 
         fig, ax = plt.subplots()
@@ -155,9 +115,6 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
         save(fig, os.path.join(out_dir, fname))
 
 
-# ------------------------------------------------------------------ #
-# CodeCarbon per-step plots                                           #
-# ------------------------------------------------------------------ #
 
 def plot_codecarbon_steps(cc_dir: str, num_runs: int, rank: int, out_dir: str):
     dfs = _load_step_csvs(cc_dir, num_runs, rank)
@@ -167,8 +124,7 @@ def plot_codecarbon_steps(cc_dir: str, num_runs: int, rank: int, out_dir: str):
 
     n_runs = len(dfs)
 
-    # Energy per step (kWh -> mJ for readability)
-    energy_arr = _align_and_stack(dfs, "energy_consumed") * 3_600_000  # kWh -> J *1e3 = mJ /1 = J
+    energy_arr = _align_and_stack(dfs, "energy_consumed") * 3_600_000
     if energy_arr.ndim == 2:
         mean_e = energy_arr.mean(axis=0)
         std_e  = energy_arr.std(axis=0)
@@ -183,8 +139,7 @@ def plot_codecarbon_steps(cc_dir: str, num_runs: int, rank: int, out_dir: str):
         ax.legend()
         save(fig, os.path.join(out_dir, "cc_energy_per_step.png"))
 
-    # CO2 per step (kg -> mg)
-    co2_arr = _align_and_stack(dfs, "emissions") * 1e6  # kg -> mg
+    co2_arr = _align_and_stack(dfs, "emissions") * 1e6
     if co2_arr.ndim == 2:
         mean_c = co2_arr.mean(axis=0)
         std_c  = co2_arr.std(axis=0)
@@ -199,7 +154,6 @@ def plot_codecarbon_steps(cc_dir: str, num_runs: int, rank: int, out_dir: str):
         ax.legend()
         save(fig, os.path.join(out_dir, "cc_co2_per_step.png"))
 
-    # Cumulative energy curve
     if energy_arr.ndim == 2:
         cum_arr = np.cumsum(energy_arr, axis=1)
         mean_cum = cum_arr.mean(axis=0)
@@ -217,9 +171,6 @@ def plot_codecarbon_steps(cc_dir: str, num_runs: int, rank: int, out_dir: str):
         save(fig, os.path.join(out_dir, "cc_energy_cumulative.png"))
 
 
-# ------------------------------------------------------------------ #
-# CodeCarbon per-substep plots                                        #
-# ------------------------------------------------------------------ #
 
 def plot_codecarbon_substeps(cc_dir: str, num_runs: int, rank: int, out_dir: str):
     dfs = _load_substep_csvs(cc_dir, num_runs, rank)
@@ -231,7 +182,6 @@ def plot_codecarbon_substeps(cc_dir: str, num_runs: int, rank: int, out_dir: str
     substep_labels = ["forward", "backward", "optimizer"]
     substep_patterns = ["Forward", "Backward", "Optim"]
 
-    # Accumulate total energy per substep type across all runs
     totals_per_run = []
     for df in dfs:
         if "task_name" not in df.columns or "energy_consumed" not in df.columns:
@@ -245,7 +195,7 @@ def plot_codecarbon_substeps(cc_dir: str, num_runs: int, rank: int, out_dir: str
     if not totals_per_run:
         return
 
-    totals_df = pd.DataFrame(totals_per_run)  # shape (n_runs, 3)
+    totals_df = pd.DataFrame(totals_per_run)
     mean_totals = totals_df.mean()
     std_totals  = totals_df.std()
 
@@ -259,9 +209,6 @@ def plot_codecarbon_substeps(cc_dir: str, num_runs: int, rank: int, out_dir: str
     save(fig, os.path.join(out_dir, "cc_energy_substeps.png"))
 
 
-# ------------------------------------------------------------------ #
-# Loss curve                                                          #
-# ------------------------------------------------------------------ #
 
 def plot_losses(cc_dir: str, num_runs: int, rank: int, out_dir: str):
     dfs = _load_loss_csvs(cc_dir, num_runs, rank)
@@ -289,15 +236,6 @@ def plot_losses(cc_dir: str, num_runs: int, rank: int, out_dir: str):
     save(fig, os.path.join(out_dir, "training_loss.png"))
 
 
-# ------------------------------------------------------------------ #
-# SLURM stdout log parsing (ResourceTrainerStats per-step lines)      #
-# ------------------------------------------------------------------ #
-
-# Matches lines produced by ResourceTrainerStats.log_step(), e.g.:
-#   step 450.1234 -- forward 120.56 -- backward 200.12 -- optimizer step 50.45 \
-#   -- data_loading 79.00 -- gpu_util% 85.20 -- gpu_mem(MB) 12000.0 \
-#   -- io_read(B) 1024 -- io_write(B) 0 \
-#   -- energy_step(mJ) 500.0 -- energy_fwd(mJ) 150.0 ...
 _STEP_LINE_RE = re.compile(
     r"step\s+(?P<step>[\d.]+)\s+--\s+"
     r"forward\s+(?P<fwd>[\d.]+)\s+--\s+"
@@ -313,7 +251,6 @@ _STEP_LINE_RE = re.compile(
 )
 
 def parse_stdout_log(log_path: str) -> pd.DataFrame:
-    """Parse per-step ResourceTrainerStats lines from a SLURM log file."""
     rows = []
     with open(log_path) as f:
         for line in f:
@@ -338,7 +275,6 @@ def _load_stdout_logs(log_files: list[str]) -> list[pd.DataFrame]:
 
 
 def plot_time_breakdown(log_files: list[str], out_dir: str, batch_size: int = 0):
-    """Per-phase bars (forward/backward/optimizer/data_loading) with mean ± std."""
     dfs = _load_stdout_logs(log_files)
     if not dfs:
         print("No stdout log files provided; skipping time-breakdown plots.")
@@ -348,7 +284,6 @@ def plot_time_breakdown(log_files: list[str], out_dir: str, batch_size: int = 0)
     labels   = ["forward", "backward", "optimizer", "data_loading"]
     cols_map = ["fwd",     "bwd",      "opt",       "data"]
 
-    # Collect per-step values across all runs
     all_vals = {lbl: [] for lbl in labels}
     for df in dfs:
         for lbl, col in zip(labels, cols_map):
@@ -361,7 +296,6 @@ def plot_time_breakdown(log_files: list[str], out_dir: str, batch_size: int = 0)
     means = [np.mean(all_vals[l]) if all_vals[l] else 0 for l in labels]
     stds  = [np.std(all_vals[l])  if all_vals[l] else 0 for l in labels]
 
-    # Separate bars per phase with error bars
     colors = ["#4e79a7", "#f28e2b", "#59a14f", "#e15759"]
     x = np.arange(len(labels))
     fig, ax = plt.subplots(figsize=(8, 5))
@@ -377,7 +311,6 @@ def plot_time_breakdown(log_files: list[str], out_dir: str, batch_size: int = 0)
                 f"{mean:.1f}", ha="center", va="bottom", fontsize=9)
     save(fig, os.path.join(out_dir, "time_breakdown.png"))
 
-    # Also save stacked version for total step time view
     fig2, ax2 = plt.subplots(figsize=(5, 6))
     bottom = 0.0
     for j, (label, color) in enumerate(zip(labels, colors)):
@@ -389,7 +322,6 @@ def plot_time_breakdown(log_files: list[str], out_dir: str, batch_size: int = 0)
     ax2.legend(loc="upper right")
     save(fig2, os.path.join(out_dir, "time_breakdown_stacked.png"))
 
-    # Line chart: data-loading overhead per step (early vs late steps)
     if all("data" in df.columns or ("step" in df.columns) for df in dfs):
         data_arrays = []
         for df in dfs:
@@ -416,7 +348,6 @@ def plot_time_breakdown(log_files: list[str], out_dir: str, batch_size: int = 0)
 
 
 def plot_nvml_energy(log_files: list[str], out_dir: str):
-    """Per-substep NVML GPU energy from stdout logs."""
     dfs = _load_stdout_logs(log_files)
     energy_cols = {"e_step": "step", "e_fwd": "forward", "e_bwd": "backward", "e_opt": "optimizer"}
     if not dfs or not any("e_step" in df.columns for df in dfs):
@@ -425,7 +356,6 @@ def plot_nvml_energy(log_files: list[str], out_dir: str):
 
     n_runs = len(dfs)
 
-    # Substep energy breakdown bar (averaged over all steps and runs)
     substep_labels = ["forward", "backward", "optimizer"]
     substep_cols   = ["e_fwd",   "e_bwd",    "e_opt"]
     totals_per_run = []
@@ -447,7 +377,6 @@ def plot_nvml_energy(log_files: list[str], out_dir: str):
     ax.set_title(f"GPU Energy Breakdown by Substep — {n_runs} run(s)")
     save(fig, os.path.join(out_dir, "nvml_energy_substeps.png"))
 
-    # Per-step GPU energy trend
     e_step_arrays = [df["e_step"].to_numpy() for df in dfs if "e_step" in df.columns]
     if e_step_arrays:
         min_len = min(len(a) for a in e_step_arrays)
@@ -465,12 +394,8 @@ def plot_nvml_energy(log_files: list[str], out_dir: str):
         save(fig, os.path.join(out_dir, "nvml_energy_per_step.png"))
 
 
-# ------------------------------------------------------------------ #
-# CPU utilization timeline                                            #
-# ------------------------------------------------------------------ #
 
 def plot_cpu_util(cpu_csvs: list[str], out_dir: str, batch_size: int = 0):
-    """Averaged CPU utilization timeline from cpu_monitor.py logs."""
     if not cpu_csvs:
         print("No CPU CSVs provided; skipping CPU timeline plot.")
         return
@@ -510,12 +435,8 @@ def plot_cpu_util(cpu_csvs: list[str], out_dir: str, batch_size: int = 0):
     save(fig, os.path.join(out_dir, "cpu_util.png"))
 
 
-# ------------------------------------------------------------------ #
-# Throughput                                                          #
-# ------------------------------------------------------------------ #
 
 def plot_throughput(log_files: list[str], out_dir: str, batch_size: int = 8):
-    """Samples/sec throughput over time, derived from per-step timing logs."""
     dfs = _load_stdout_logs(log_files)
     if not dfs:
         return
@@ -524,7 +445,6 @@ def plot_throughput(log_files: list[str], out_dir: str, batch_size: int = 8):
     throughput_arrays = []
     for df in dfs:
         if "step" in df.columns:
-            # step time is in ms; throughput = batch_size / (step_time_s)
             step_s = df["step"] / 1000.0
             tp = batch_size / step_s.replace(0, np.nan)
             throughput_arrays.append(tp.dropna().to_numpy())
@@ -548,9 +468,6 @@ def plot_throughput(log_files: list[str], out_dir: str, batch_size: int = 8):
     save(fig, os.path.join(out_dir, "throughput.png"))
 
 
-# ------------------------------------------------------------------ #
-# Total summary table                                                 #
-# ------------------------------------------------------------------ #
 
 def print_total_summary(cc_dir: str, num_runs: int, rank: int):
     rows = []
@@ -585,9 +502,6 @@ def print_total_summary(cc_dir: str, num_runs: int, rank: int):
     print("=" * 51 + "\n")
 
 
-# ------------------------------------------------------------------ #
-# Main                                                                #
-# ------------------------------------------------------------------ #
 
 def main():
     parser = argparse.ArgumentParser(description="Plot and average RegNet measurement results")
@@ -612,7 +526,6 @@ def main():
     os.makedirs(args.out_dir, exist_ok=True)
     print(f"\nAveraging over {args.num_runs} run(s) from: {args.cc_dir}")
 
-    # Auto-detect nvidia-smi CSVs if none provided
     gpu_csvs = args.gpu_csvs
     if not gpu_csvs:
         pattern = f"/home/slurm/comp597/students/{os.environ.get('USER', 'zqiu6')}/gpu_measurements/gpu_*.csv"
@@ -620,7 +533,6 @@ def main():
         if gpu_csvs:
             print(f"Auto-detected {len(gpu_csvs)} GPU CSV(s): {gpu_csvs}")
 
-    # Auto-detect CPU CSVs if none provided
     cpu_csvs = args.cpu_csvs
     if not cpu_csvs:
         pattern = f"/home/slurm/comp597/students/{os.environ.get('USER', 'zqiu6')}/gpu_measurements/cpu_*.csv"
@@ -628,7 +540,6 @@ def main():
         if cpu_csvs:
             print(f"Auto-detected {len(cpu_csvs)} CPU CSV(s): {cpu_csvs}")
 
-    # Auto-detect SLURM log files if none provided
     log_files = args.log_files
     if not log_files:
         log_files = sorted(glob.glob("comp597-regnet-run*-*.log"))
@@ -637,23 +548,14 @@ def main():
 
     bs = args.batch_size
 
-    # --- Plots from nvidia-smi (GPU time-series) ---
     plot_nvidia_smi(gpu_csvs, args.out_dir)
-
-    # --- CPU utilization timeline ---
     plot_cpu_util(cpu_csvs, args.out_dir, batch_size=bs)
-
-    # --- Plots from CodeCarbon CSVs (energy / CO2 per step) ---
     plot_codecarbon_steps(args.cc_dir, args.num_runs, args.rank, args.out_dir)
     plot_codecarbon_substeps(args.cc_dir, args.num_runs, args.rank, args.out_dir)
     plot_losses(args.cc_dir, args.num_runs, args.rank, args.out_dir)
-
-    # --- Plots from SLURM stdout logs ---
     plot_time_breakdown(log_files, args.out_dir, batch_size=bs)
     plot_nvml_energy(log_files, args.out_dir)
     plot_throughput(log_files, args.out_dir, batch_size=bs if bs else 8)
-
-    # --- Summary table ---
     print_total_summary(args.cc_dir, args.num_runs, args.rank)
 
     print(f"\nAll plots written to: {args.out_dir}")

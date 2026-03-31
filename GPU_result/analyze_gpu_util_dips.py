@@ -1,12 +1,5 @@
-"""
-Focused analysis of GPU utilization dips — including small periodic dips
-that occur between training steps during steady-state training.
-
-Correlates nvidia-smi GPU util timeline with per-substep timing data.
-
-Usage:
-    python GPU_result/analyze_gpu_util_dips.py
-"""
+# GPU utilization dip analysis: correlates nvidia-smi timeline with per-substep data.
+# Usage: python GPU_result/analyze_gpu_util_dips.py
 
 import os
 import pandas as pd
@@ -82,7 +75,6 @@ def analyze_gpu_dips(bs):
     util_col = [c for c in gpu.columns if "utilization" in c.lower()][0]
     pow_col  = [c for c in gpu.columns if "power" in c.lower()][0]
 
-    # Focus on steady-state: skip first 20s (warmup) and last 5s (shutdown)
     steady = gpu[(gpu["elapsed_s"] > 20) & (gpu["elapsed_s"] < 305)].copy()
     mean_util = steady[util_col].mean()
     std_util  = steady[util_col].std()
@@ -93,13 +85,11 @@ def analyze_gpu_dips(bs):
     print(f"  Min:    {steady[util_col].min():.1f}%")
     print(f"  Max:    {steady[util_col].max():.1f}%")
 
-    # Find ALL dips below (mean - 1σ) — catches small periodic dips
     dip_thresh = mean_util - std_util
     dips = steady[steady[util_col] < dip_thresh].copy()
     print(f"\nDip threshold: <{dip_thresh:.1f}% (mean - 1σ)")
     print(f"Total dip events: {len(dips)}")
 
-    # Cluster consecutive dip rows into dip events
     if len(dips) > 0:
         dips = dips.reset_index(drop=True)
         dips["gap"] = dips["elapsed_s"].diff().fillna(999)
@@ -114,7 +104,6 @@ def analyze_gpu_dips(bs):
         print(f"\nClustered dip events: {len(dip_summary)}")
         print(dip_summary.to_string(index=False))
 
-        # Compute inter-dip intervals
         if len(dip_summary) > 1:
             intervals = dip_summary["t_start"].diff().dropna()
             print(f"\nInter-dip interval stats (s):")
@@ -123,7 +112,6 @@ def analyze_gpu_dips(bs):
             print(f"  Min:    {intervals.min():.1f}s")
             print(f"  Max:    {intervals.max():.1f}s")
 
-        # Correlate dip times with substep phases
         if sub is not None:
             print(f"\nCorrelating dip times with training phases...")
             steps_per_epoch = 2000 // bs
@@ -137,7 +125,6 @@ def analyze_gpu_dips(bs):
             near_optim = 0
             near_data  = 0
 
-            # Optimizer substep times (every 3rd substep row)
             optim_rows = sub[sub["task_name"].str.contains("Optim", na=False)]
             optim_times = optim_rows["elapsed_s"].values
 
@@ -161,7 +148,6 @@ def analyze_gpu_dips(bs):
             print(f"  Near optimizer step (±1s): {near_optim}")
             print(f"  Other (data loading gap):  {near_data}")
 
-    # ── Plot ──────────────────────────────────────────────────────
     fig, axes = plt.subplots(3, 1, figsize=(15, 12), sharex=True)
     fig.suptitle(f"GPU Utilization Dip Analysis — batch size {bs}", fontsize=13)
 
@@ -172,7 +158,6 @@ def analyze_gpu_dips(bs):
         if idx < len(sub):
             epoch_times.append(sub.iloc[idx]["elapsed_s"])
 
-    # 1. Full GPU util with dip threshold line and epoch markers
     ax = axes[0]
     ax.plot(gpu["elapsed_s"], gpu[util_col], color="teal", linewidth=0.7, label="GPU util (%)")
     ax.axhline(dip_thresh, color="red", linestyle="--", linewidth=1,
@@ -190,7 +175,6 @@ def analyze_gpu_dips(bs):
     ax.legend(fontsize=7, ncol=3)
     ax.set_ylim(-5, 105)
 
-    # 2. Zoomed window (first 100s) to see small periodic dips clearly
     ax = axes[1]
     zoom = gpu[gpu["elapsed_s"] <= 100]
     ax.plot(zoom["elapsed_s"], zoom[util_col], color="teal", linewidth=1, label="GPU util (%)")
@@ -199,7 +183,6 @@ def analyze_gpu_dips(bs):
     for et in [e for e in epoch_times if e <= 100]:
         ax.axvline(et, color="orange", alpha=0.5, linewidth=1, label="epoch boundary")
 
-    # Shade optimizer steps in zoom window
     optim_zoom = sub[(sub["task_name"].str.contains("Optim", na=False)) &
                      (sub["elapsed_s"] <= 100)]
     for _, row in optim_zoom.iterrows():
@@ -211,7 +194,6 @@ def analyze_gpu_dips(bs):
     ax.set_title("Zoomed: first 100s — purple = optimizer step duration")
     ax.set_ylim(-5, 105)
 
-    # 3. GPU power with epoch markers
     ax = axes[2]
     ax.plot(gpu["elapsed_s"], gpu[pow_col], color="purple", linewidth=0.7, label="GPU power (W)")
     for et in epoch_times:

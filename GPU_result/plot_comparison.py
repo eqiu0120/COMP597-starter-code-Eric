@@ -1,17 +1,5 @@
-"""
-plot_comparison.py
-==================
-Compares RegNet measurements across batch sizes (32, 16, 8).
-Run this AFTER plot_measurements.py has been run for each batch size.
-
-Usage:
-    python GPU_result/plot_comparison.py \
-        --base_dir /home/slurm/comp597/students/zqiu6/regnet_measurements \
-        --out_dir  ~/COMP597-starter-code-Eric/GPU_result/plots/comparison \
-        --batch_sizes 32 16 8 \
-        --num_runs 3 \
-        --log_dirs  comp597-logs/bs32 comp597-logs/bs16 comp597-logs/bs8
-"""
+# Compares RegNet measurements across batch sizes (32, 16, 8).
+# Usage: python GPU_result/plot_comparison.py --base_dir ... --out_dir ... --batch_sizes 32 16 8 --num_runs 3
 
 import argparse
 import os
@@ -85,12 +73,8 @@ def main():
     os.makedirs(args.out_dir, exist_ok=True)
     batch_sizes = args.batch_sizes
 
-    # Map batch size -> explicit log files
     logs_map = {32: args.logs_bs32, 16: args.logs_bs16, 8: args.logs_bs8}
 
-    # ------------------------------------------------------------------ #
-    # Load per-batch-size data                                            #
-    # ------------------------------------------------------------------ #
     throughput_means, throughput_stds = [], []
     energy_per_sample_means, energy_per_sample_stds = [], []
     gpu_util_means, gpu_util_stds = [], []
@@ -110,7 +94,6 @@ def main():
             for p in phase_means: phase_means[p].append(0); phase_stds[p].append(0)
             continue
 
-        # Throughput (samples/sec)
         if "step" in df.columns:
             tp = bs / (df["step"] / 1000.0).replace(0, np.nan)
             throughput_means.append(tp.mean())
@@ -118,7 +101,6 @@ def main():
         else:
             throughput_means.append(0); throughput_stds.append(0)
 
-        # Energy per sample (mJ/sample)
         if "e_step" in df.columns:
             eps = df["e_step"] / bs
             energy_per_sample_means.append(eps.mean())
@@ -126,14 +108,12 @@ def main():
         else:
             energy_per_sample_means.append(0); energy_per_sample_stds.append(0)
 
-        # GPU utilization
         if "gpu_util" in df.columns:
             gpu_util_means.append(df["gpu_util"].mean())
             gpu_util_stds.append(df["gpu_util"].std())
         else:
             gpu_util_means.append(0); gpu_util_stds.append(0)
 
-        # Phase times
         for phase, col in [("forward","fwd"), ("backward","bwd"), ("optimizer","opt")]:
             if col in df.columns:
                 phase_means[phase].append(df[col].mean())
@@ -144,9 +124,6 @@ def main():
     x = np.arange(len(batch_sizes))
     xlabels = [f"bs={b}" for b in batch_sizes]
 
-    # ------------------------------------------------------------------ #
-    # Throughput vs batch size                                            #
-    # ------------------------------------------------------------------ #
     fig, ax = plt.subplots()
     ax.bar(x, throughput_means, yerr=throughput_stds, capsize=5, color="#4e79a7")
     ax.set_xticks(x); ax.set_xticklabels(xlabels)
@@ -154,9 +131,6 @@ def main():
     ax.set_title("Throughput vs Batch Size")
     save(fig, os.path.join(args.out_dir, "compare_throughput.png"))
 
-    # ------------------------------------------------------------------ #
-    # Energy per sample vs batch size                                     #
-    # ------------------------------------------------------------------ #
     fig, ax = plt.subplots()
     ax.bar(x, energy_per_sample_means, yerr=energy_per_sample_stds, capsize=5, color="#f28e2b")
     ax.set_xticks(x); ax.set_xticklabels(xlabels)
@@ -164,9 +138,6 @@ def main():
     ax.set_title("Energy per Sample vs Batch Size\n(lower = more efficient)")
     save(fig, os.path.join(args.out_dir, "compare_energy_per_sample.png"))
 
-    # ------------------------------------------------------------------ #
-    # GPU utilization vs batch size                                       #
-    # ------------------------------------------------------------------ #
     fig, ax = plt.subplots()
     ax.bar(x, gpu_util_means, yerr=gpu_util_stds, capsize=5, color="#59a14f")
     ax.set_xticks(x); ax.set_xticklabels(xlabels)
@@ -175,9 +146,6 @@ def main():
     ax.set_ylim(0, 100)
     save(fig, os.path.join(args.out_dir, "compare_gpu_util.png"))
 
-    # ------------------------------------------------------------------ #
-    # Phase time breakdown vs batch size (grouped bars)                  #
-    # ------------------------------------------------------------------ #
     phases = ["forward", "backward", "optimizer"]
     colors = ["#4e79a7", "#f28e2b", "#59a14f"]
     width  = 0.25
@@ -192,14 +160,11 @@ def main():
     ax.legend()
     save(fig, os.path.join(args.out_dir, "compare_phase_times.png"))
 
-    # ------------------------------------------------------------------ #
-    # CodeCarbon total energy vs batch size                               #
-    # ------------------------------------------------------------------ #
     cc_energy_means, cc_energy_stds = [], []
     for bs in batch_sizes:
         df_cc = load_cc_full(args.base_dir, bs, args.num_runs)
         if not df_cc.empty and "energy_consumed" in df_cc.columns:
-            vals = df_cc["energy_consumed"] * 3600  # kWh -> kJ
+            vals = df_cc["energy_consumed"] * 3600
             cc_energy_means.append(vals.mean())
             cc_energy_stds.append(vals.std())
         else:
