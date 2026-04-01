@@ -24,7 +24,7 @@ OVERHEAD = {
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--out_dir", default="GPU_result/figures")
+    parser.add_argument("--out_dir", default="GPU_result/comparison")
     args = parser.parse_args()
     os.makedirs(args.out_dir, exist_ok=True)
 
@@ -34,10 +34,8 @@ def main():
     width = 0.18
     colors = ["#4C72B0", "#55A868", "#C44E52", "#8172B2"]
 
-    fig, axes = plt.subplots(1, 2, figsize=(11, 4.5))
-
-    # Left panel: absolute ms/step
-    ax = axes[0]
+    # Figure 1: absolute ms/step
+    fig, ax = plt.subplots(figsize=(7, 4.5))
     for i, exp in enumerate(exps):
         vals = [DATA[bs][exp] for bs in batch_sizes]
         bars = ax.bar(x + (i - 1.5) * width, vals, width, label=exp, color=colors[i])
@@ -50,9 +48,14 @@ def main():
     ax.set_title("Per-Step Time by Experiment")
     ax.legend(fontsize=8)
     ax.set_ylim(0, max(v for d in DATA.values() for v in d.values()) * 1.22)
+    fig.tight_layout()
+    out1 = os.path.join(args.out_dir, "overhead_perstep_time.png")
+    fig.savefig(out1, dpi=200)
+    plt.close(fig)
+    print(f"Saved: {out1}")
 
-    # Right panel: overhead %
-    ax = axes[1]
+    # Figure 2: overhead %
+    fig, ax = plt.subplots(figsize=(7, 4.5))
     for i, exp in enumerate(exps):
         vals = [OVERHEAD[bs][exp] for bs in batch_sizes]
         bars = ax.bar(x + (i - 1.5) * width, vals, width, label=exp, color=colors[i])
@@ -67,12 +70,11 @@ def main():
     ax.set_title("Time Overhead by Experiment")
     ax.legend(fontsize=8)
     ax.set_ylim(0, max(v for d in OVERHEAD.values() for v in d.values()) * 1.22)
-
     fig.tight_layout()
-    out = os.path.join(args.out_dir, "overhead_comparison.png")
-    fig.savefig(out, dpi=200)
+    out2 = os.path.join(args.out_dir, "overhead_percent.png")
+    fig.savefig(out2, dpi=200)
     plt.close(fig)
-    print(f"Saved: {out}")
+    print(f"Saved: {out2}")
 
 
 if __name__ == "__main__":
