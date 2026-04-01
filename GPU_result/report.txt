@@ -211,27 +211,40 @@ Section 3.4.
 
 3.1 End-to-End Metrics
 
-Table 1 summarizes throughput from Exp1 (baseline, no
-instrumentation) averaged over 3 runs. All runs
-completed in exactly 300 seconds by design.
+Table 1 compares mean time per step across all four
+experiments, quantifying the overhead of each
+instrumentation level. Per-step time is computed as
+elapsed_s / steps_completed averaged over 3 runs,
+equivalent to the end-to-end time required to complete
+the same number of steps with and without
+instrumentation.
 
-Table 1: Baseline throughput (Exp1, mean over 3 runs)
+Table 1: Per-step time and overhead across experiments
 ------------------------------------------------------
-Batch Size  Steps Completed  Throughput (samples/sec)
-----------  ---------------  ------------------------
-32          845.3            90.11
-16          1390.3           74.11
-8           2028.7           54.07
+Batch  Exp1 noop   Exp2 cc_full  Overhead  Exp4 per_step  Overhead  Exp3 combined  Overhead
+Size   (ms/step)   (ms/step)               (ms/step)                (ms/step)
+-----  ---------   ------------  --------  -------------  --------  -------------  --------
+32     355         358           +0.8%     357            +0.6%     403            +13.5%
+16     216         216           +0.0%     221            +2.3%     262            +21.3%
+8      148         147           -0.7%     149            +0.7%     185            +25.0%
 
-A counterintuitive but important result is that smaller
-batch sizes complete more steps (2028 vs. 845) in the
-same time budget. This is because each step processes
-fewer samples, making individual steps faster. However,
-throughput measured in samples per second is highest
-at bs=32 (90.11), because each step at bs=32 processes
-32 images efficiently whereas at bs=8 each step
-processes only 8 images with proportionally higher
-overhead per sample.
+Note: Exp1/Exp2/Exp3 are averaged over 3 runs; Exp4
+(per_step) is a single run. Exp2 negative overhead at
+bs=8 is within run-to-run noise (~1%).
+
+Exp2 (end-to-end CodeCarbon only) and Exp4 (per-step
+with calibration) both introduce negligible overhead
+across all batch sizes, confirming the ~5% target is
+achievable. Exp4 uses full per-phase syncs for the
+first 50 calibration steps to establish phase ratios,
+then switches to two syncs per step for the remainder,
+reducing the fixed overhead from ~50ms (Exp3) to
+~1–5ms per step. Exp3 overhead grows substantially at
+smaller batch sizes because three per-phase
+cuda.synchronize() calls and three NVML+RAPL reads per
+step remain roughly constant in absolute time while
+step duration shrinks, significantly exceeding the ~5%
+target at all batch sizes.
 
 Table 2 reports total system energy from Exp2
 (end-to-end CodeCarbon), broken down by component.
@@ -280,35 +293,6 @@ while Exp3's NVML counters measure only active GPU
 energy during training steps. Neither is wrong — they
 measure different scopes — but Exp2 provides the more
 complete picture of total carbon cost.
-
-Table 3 compares mean time per step across all three
-experiments, quantifying the overhead of each
-instrumentation level. Per-step time is computed as
-elapsed_s / steps_completed averaged over 3 runs,
-equivalent to the end-to-end time required to complete
-the same number of steps with and without
-instrumentation.
-
-Table 3: Per-step time and overhead across experiments
-(mean over 3 runs)
-------------------------------------------------------
-Batch  Exp1 noop  Exp2 cc_full  Overhead  Exp3 combined  Overhead
-Size   (ms/step)  (ms/step)               (ms/step)
------  ---------  ------------  --------  -------------  --------
-32     355        358           +0.8%     403            +13.5%
-16     216        216           +0.0%     262            +21.3%
-8      148        147           -0.7%     185            +25.0%
-
-Exp2 (end-to-end CodeCarbon only) introduces negligible
-overhead — within run-to-run noise — confirming that
-coarse energy tracking does not perturb the workload.
-Exp3 overhead grows substantially at smaller batch
-sizes because the fixed per-step instrumentation cost
-(three cuda.synchronize() calls, per-substep CodeCarbon
-context managers, NVML reads) remains roughly constant
-in absolute time while step duration shrinks. This
-overhead significantly exceeds the ~5% target at all
-batch sizes and is discussed further in Section 4.
 
 [FIGURE 1: compare_total_energy.png — Bar chart comparing
 total, GPU, CPU, and RAM energy across batch sizes 32/16/8.
@@ -634,26 +618,33 @@ and most favorable energy-per-sample among the tested
 configurations.
 
 Measurement Overhead.
-Table 3 shows that Exp3 (combined) adds 13.5%, 21.3%,
-and 25.0% per-step time overhead at bs=32, bs=16, and
-bs=8 respectively — well above the ~5% target at all
-batch sizes. The overhead grows at smaller batch sizes
-because the instrumentation cost per step is largely
-fixed: three cuda.synchronize() calls, three CodeCarbon
-context manager entries/exits (each triggering NVML and
-RAPL reads), and psutil/nvidia-smi polling all cost
-roughly the same absolute time (~50ms per step)
-regardless of how much useful computation the step
-performs. At bs=32 a step is 355ms so the fixed
-overhead is ~13%; at bs=8 a step is only 148ms so the
-same fixed cost inflates it to ~25%. This amortization
-effect explains why workloads with longer steps —
-training on larger datasets or higher-resolution images
-— can experience negligible overhead from the same
-tooling. Exp2 introduces overhead within run-to-run
-noise (~0%), confirming that end-to-end CodeCarbon
-tracking is practical for production use without
-perturbing the workload.
+Table 1 compares per-step time across all four
+experiment configurations. Exp3 (combined, full
+per-phase instrumentation) adds 13.5%, 21.3%, and
+25.0% overhead at bs=32, bs=16, and bs=8 respectively
+— well above the ~5% target. The overhead grows at
+smaller batch sizes because the instrumentation cost
+is largely fixed: three cuda.synchronize() calls and
+three NVML+RAPL reads per step cost roughly the same
+~50ms regardless of step duration. At bs=32 (355ms
+step) this is 13%; at bs=8 (148ms step) it is 25%.
+
+Both Exp2 (end-to-end CodeCarbon) and Exp4 (per-step
+with calibration) meet the ~5% target at all batch
+sizes. Exp4 achieves this by using full per-phase
+syncs only during the first 50 calibration steps to
+establish phase time and energy ratios, then switching
+to two syncs per step for the remainder. This reduces
+fixed overhead from ~50ms to ~1–5ms per step while
+still providing estimated per-phase breakdowns. The
+trade-off is that Exp4 cannot detect per-phase
+anomalies after calibration — a stall would appear at
+the step level only, without identifying which phase
+caused it. For sustainability analysis requiring
+fine-grained phase attribution, Exp3's overhead is
+the unavoidable cost. For production energy monitoring
+where only total step cost matters, Exp2 or Exp4 are
+the appropriate choices.
 
 Limitations.
 Several limitations of this study warrant note. First,
