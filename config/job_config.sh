@@ -55,6 +55,8 @@ elif [[ "${REGNET_TRAINER_STATS}" == "codecarbon_full" ]]; then
     REGNET_STATS_CMD="--trainer_stats_configs.codecarbon_full.run_num ${REGNET_RUN_NUM} \
   --trainer_stats_configs.codecarbon_full.project_name regnet-energy \
   --trainer_stats_configs.codecarbon_full.output_dir ${REGNET_OUT_DIR}"
+elif [[ "${REGNET_TRAINER_STATS}" == "per_step" ]]; then
+    REGNET_STATS_CMD="--trainer_stats_configs.per_step.calibration_steps 50"
 else
     # noop and others: no stats config args needed
     REGNET_STATS_CMD=""

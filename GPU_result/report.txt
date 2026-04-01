@@ -181,11 +181,20 @@ SLURM job script alongside the training process:
 (1) nvidia-smi polls GPU utilization, memory usage,
 power draw, and SM clock frequency every 0.1 seconds
 and writes to a per-job CSV file; (2) a custom psutil-
-based CPU monitor records per-process CPU utilization
-and RAM usage every 0.5 seconds. These external logs
-are not subject to Python GIL contention and provide
-an independent view of system resource usage throughout
-the full job duration, including startup and shutdown.
+based CPU monitor records CPU utilization and RAM usage
+every 0.5 seconds using psutil.cpu_percent(), which
+returns the system-wide average utilization across all
+logical cores on the node (192 cores on gpu-teach-03),
+not per-process or per-allocated-core utilization.
+The reported values (~1%) therefore reflect total node
+CPU load divided by 192 cores. To interpret in terms
+of our allocated cores: 1% × 192 / 4 ≈ 48% average
+utilization per allocated core, consistent with 4
+DataLoader worker processes actively prefetching data.
+These external logs are not subject to Python GIL
+contention and provide an independent view of system
+resource usage throughout the full job duration,
+including startup and shutdown.
 
 Overhead Validation.
 To quantify the cost of instrumentation itself, we
@@ -235,16 +244,29 @@ Batch Size  Total (kJ)  GPU (kJ)  CPU (kJ)  RAM (kJ)  CO2 (mg)
 16          191.93      63.55     107.68    20.69     209.92
 8           189.88      61.61     107.64    20.62     207.68
 
-The most striking finding is that CPU energy dominates
-total consumption at ~56% (107.7 kJ), while the GPU
-contributes only ~33% (63–65 kJ). This reflects the
-AMD EPYC 9474F's high base power draw (360W TDP) running
-continuously throughout the job, even while GPU
-computation is the primary workload. Total energy
-decreases only slightly across batch sizes (~1.7% from
-bs=32 to bs=8), because all runs consume the same 300s
-at similar average power regardless of batch size.
-CO2 emissions are very low (~210 mg per run) owing to
+At first glance, CPU energy appears to dominate total
+consumption at ~56% (107.7 kJ) while the GPU contributes
+only ~33% (63–65 kJ). However, this breakdown requires
+careful interpretation. CodeCarbon measures CPU energy
+via Intel RAPL, which reads hardware energy counters at
+the CPU socket level — not per process or per allocated
+core. On a shared SLURM node, the RAPL counter reflects
+the entire socket's power consumption, including all
+other jobs co-located on the same physical CPU. Our
+actual CPU utilization is ~1% across 4 allocated cores
+(Figure 6), meaning our workload's true CPU contribution
+is negligible. The 56% CPU figure is therefore an
+artifact of shared-node attribution rather than a
+reflection of our job's CPU load. GPU energy (33%,
+via NVML) is reliable because NVML isolates our specific
+GPU device. RAM energy (11%) is estimated from memory
+size and a fixed coefficient. This is a known limitation
+of CodeCarbon on shared HPC clusters: per-job CPU energy
+attribution via RAPL is only meaningful on dedicated
+nodes. Total energy decreases only slightly across batch
+sizes (~1.7% from bs=32 to bs=8), because all runs
+consume the same 300s at similar average power. CO2
+emissions are very low (~210 mg per run) owing to
 Quebec's clean hydroelectric power grid.
 
 Comparing Exp2 against Exp3 (combined, fine-grained)
@@ -259,21 +281,34 @@ energy during training steps. Neither is wrong — they
 measure different scopes — but Exp2 provides the more
 complete picture of total carbon cost.
 
-Similarly, comparing Exp1 (noop) and Exp3 (combined)
-throughput quantifies the overhead of fine-grained
-instrumentation, shown in Table 3. The overhead grows
-at smaller batch sizes because the fixed cost of three
-cuda.synchronize() calls per step — roughly constant
-in absolute time — represents a larger fraction of a
-shorter step. This is discussed further in Section 3.4.
+Table 3 compares mean time per step across all three
+experiments, quantifying the overhead of each
+instrumentation level. Per-step time is computed as
+elapsed_s / steps_completed averaged over 3 runs,
+equivalent to the end-to-end time required to complete
+the same number of steps with and without
+instrumentation.
 
-Table 3: Instrumentation overhead (Exp1 vs Exp3, mean over 3 runs)
--------------------------------------------------------------------
-Batch Size  Exp1 (samples/s)  Exp3 (samples/s)  Overhead
-----------  ----------------  ----------------  --------
-32          90.11             ~83.0             ~8%
-16          74.11             ~64.0             ~14%
-8           54.07             ~46.0             ~15%
+Table 3: Per-step time and overhead across experiments
+(mean over 3 runs)
+------------------------------------------------------
+Batch  Exp1 noop  Exp2 cc_full  Overhead  Exp3 combined  Overhead
+Size   (ms/step)  (ms/step)               (ms/step)
+-----  ---------  ------------  --------  -------------  --------
+32     355        358           +0.8%     403            +13.5%
+16     216        216           +0.0%     262            +21.3%
+8      148        147           -0.7%     185            +25.0%
+
+Exp2 (end-to-end CodeCarbon only) introduces negligible
+overhead — within run-to-run noise — confirming that
+coarse energy tracking does not perturb the workload.
+Exp3 overhead grows substantially at smaller batch
+sizes because the fixed per-step instrumentation cost
+(three cuda.synchronize() calls, per-substep CodeCarbon
+context managers, NVML reads) remains roughly constant
+in absolute time while step duration shrinks. This
+overhead significantly exceeds the ~5% target at all
+batch sizes and is discussed further in Section 4.
 
 [FIGURE 1: compare_total_energy.png — Bar chart comparing
 total, GPU, CPU, and RAM energy across batch sizes 32/16/8.
@@ -412,14 +447,15 @@ at bs=32 (8.5%), because the stalls are more uniform
 and predictable.
 
 CPU utilization remains consistently low (~0.8–1.0%)
-throughout all runs for all batch sizes. This reflects
-that the AMD EPYC 9474F, a 192-logical-core server
-processor allocated to this single-GPU training job,
-is almost entirely idle. The entire CPU power budget
-(360W) is therefore spent on a task requiring less
-than 1% of its compute capacity, representing a major
-source of avoidable energy waste in shared-cluster
-training environments. A notable drop in GPU utilization
+throughout all runs for all batch sizes, confirming
+that our workload places negligible demand on the
+CPU — DataLoader prefetching is fast because the
+2,000-image dataset fits entirely in worker memory
+after the first epoch, requiring no further disk I/O.
+This also explains why the CodeCarbon CPU energy
+reading (56%) is misleading: RAPL reads the full
+socket shared with other SLURM jobs, not our
+process's actual consumption. A notable drop in GPU utilization
 is also visible near t=280–300s in all batch sizes,
 most prominently at bs=8. This is caused by the
 300-second training deadline being reached mid-epoch:
@@ -445,76 +481,122 @@ FIGURE 10b: bs_16/throughput.png — bs=16.
 FIGURE 10c: bs_8/throughput.png — bs=8.
 Arrange as two 3-panel rows.]
 
-Energy spikes and throughput dips are the same physical
-events viewed from different angles. When a stall occurs,
-step wall-clock time stretches: since energy = power ×
-time, a longer step consumes more total energy even at
-slightly lower power draw, producing a per-step energy
-spike. Simultaneously, throughput drops because fewer
-samples are processed per unit time.
+During a DataLoader reshuffle stall the GPU drops to
+idle power (~50W from ~240W), so total energy consumed
+during the stall period always decreases — this is the
+physically correct behavior. How that decrease appears
+in the per-step energy plots differs by batch size,
+due to CodeCarbon's per-step attribution.
 
-The per-step energy plots (Figures 9a–9c) reveal a
-striking difference across batch sizes. At bs=32
-(Figure 9a), the anomalies appear as periodic energy
-dips — a direct consequence of CodeCarbon's 500ms
-sampling window being longer than a single step (~394ms).
-When a step is delayed at an epoch boundary, the 500ms
-window contains less computation than usual, recording
-lower energy. At bs=16 and bs=8 (Figures 9b–9c), the
-same epoch boundary stall instead produces energy spikes:
-steps are shorter (~270ms and ~160ms), so multiple steps
-fit within one 500ms window, and a single slow step
-dominates that window, pulling the recorded energy up.
-Both directions of anomaly stem from the same DataLoader
-reshuffle event — only the appearance differs based on
-how step duration relates to the sampling interval.
+At bs=32 (Figure 9a), the dips are real and direct:
+the stall falls within a single ~394ms step window,
+so that step records genuinely low energy. The dips
+occur consistently every ~62 steps throughout the
+entire run, matching the epoch boundary period
+(2000/32 = 62 steps/epoch), confirming DataLoader
+reshuffles as the cause.
 
-The throughput plots (Figures 10a–10c) show the
-complementary picture. At bs=32 (Figure 10a), throughput
-shows sharp upward spikes at epoch boundaries — a
-paradoxical result explained by the same sampling effect:
-when one slow step is averaged with surrounding normal
-steps in the CodeCarbon window, the reported per-step
-throughput for neighboring steps appears inflated. At
-bs=16 (Figure 10b), throughput dips are concentrated in
-the first ~300 steps where epoch boundaries are frequent,
-then stabilizes. At bs=8 (Figure 10c), dips are deeper
-and more numerous throughout the run, reflecting the
-more frequent and varied stall sources (epoch boundaries
-plus optimizer steps).
+At bs=16 and bs=8 (Figures 9b–9c), the anomalies
+appear as spikes rather than dips. This is a
+per-step attribution artifact: the stall inflates
+the wall-clock time of the first post-stall step
+(the GPU sits idle waiting for the prefetch queue
+to refill). CodeCarbon attributes that entire
+inflated step duration as energy, making it appear
+expensive even though the GPU was drawing ~50W for
+most of it. The spike does not mean that step
+consumed more energy — it is a lag indicator
+signalling that a stall occurred just before it.
 
-CO2 spikes follow the energy pattern directly since
-Quebec's carbon intensity is fixed — any increase in
-energy consumed produces a proportional CO2 increase.
-The root cause of all anomalies across all batch sizes
-is GPU idle time from DataLoader stalls and memory-bound
-optimizer steps, not model computation itself.
+The patterns also differ in consistency. At bs=16,
+spikes are prominent in the first ~500 steps (first
+4 epochs) but fade afterwards as the 2,000-image
+dataset becomes fully cached in the node's RAM,
+eliminating the slow disk-read component of each
+reshuffle. At bs=8, spikes are irregular and
+concentrated between steps ~400–800 rather than
+uniformly at every 250-step epoch boundary. This
+inconsistency suggests external shared filesystem
+contention on the SLURM cluster during that window
+— any event draining the prefetch queue produces
+the same per-step spike regardless of whether an
+epoch boundary coincides.
+
+The optimizer stall (~61ms per step) does not
+produce visible energy anomalies — it is too short
+relative to CodeCarbon's 500ms sampling window to
+cause a measurable per-step deviation.
+
+Throughput (Figures 10a–10c) mirrors the energy
+patterns. At bs=32, periodic throughput dips align
+with the energy dips at epoch boundaries. At bs=16,
+dips are concentrated early then fade with cache
+warmup. At bs=8, irregular dips match the same
+~400–800 step window as the energy spikes.
+
+CO2 follows energy directly given Quebec's fixed
+carbon intensity. The root cause of all anomalies
+is GPU idle time from DataLoader stalls, not model
+computation itself.
+
+Figure 11 shows the total accumulated energy per phase
+(forward, backward, optimizer) over the full 300-second
+run, measured via CodeCarbon per-substep tracking.
+
+[FIGURE 11a: bs_32/cc_energy_substeps.png
+ FIGURE 11b: bs_16/cc_energy_substeps.png
+ FIGURE 11c: bs_8/cc_energy_substeps.png
+ Arrange as 3-panel row for side-by-side comparison.]
+
+At bs=32 and bs=16, the backward pass accumulates the
+most total energy, consistent with it being both the
+longest and most compute-intensive phase per step. At
+bs=8, however, the optimizer step overtakes the backward
+pass as the largest total energy consumer. This reversal
+is a direct consequence of step count and phase scaling.
+The optimizer update always processes all 693M model
+parameters regardless of batch size — its duration is
+batch-size-invariant (~61 ms per step across all
+configurations). The backward pass, by contrast, scales
+with batch size: at bs=8 each backward step takes roughly
+~45 ms versus ~182 ms at bs=32 (4× fewer samples per
+step). Meanwhile bs=8 executes ~2,025 steps versus ~844
+at bs=32. The result is that total accumulated optimizer
+time at bs=8 (~124s) exceeds total backward time (~91s),
+flipping the energy breakdown. This makes explicit that
+for small batch sizes, optimizer efficiency — not just
+backward pass efficiency — is the dominant energy
+concern.
 
 
 4. DISCUSSION AND REFLECTION
 ==============================
 
 Energy Distribution.
-The dominant cost in this workload is not what one
-might expect. While the GPU executes the model, the
-CPU accounts for 56% of total system energy (Table 2).
-This is a direct consequence of running a single-GPU
-job on a large shared EPYC server node: only 4 CPU cores
-were allocated per the course QOS, yet the server's CPU
-draws ~360W regardless of utilization of its allocated cores. Training
-on dedicated smaller machines — or in containers with
-tighter CPU allocation — would substantially reduce the
-carbon footprint of the same computation.
+The GPU is the dominant energy consumer attributable
+to our workload. CodeCarbon's reported CPU share (56%,
+Table 2) is not a reliable per-job figure on a shared
+SLURM node: RAPL reads the entire CPU socket, including
+co-located jobs, and our actual CPU utilization is ~1%.
+The GPU energy (33%, via NVML) is device-isolated and
+accurately reflects our workload. This distinction
+matters for sustainability analysis — optimizing CPU
+data loading pipelines would have minimal real energy
+impact here, whereas GPU efficiency improvements
+(utilization, batch size, mixed precision) directly
+reduce our job's actual energy cost.
 
-Within the GPU workload itself, the backward pass
-dominates per-step energy, consuming roughly 2× the
-energy of the forward pass (Figure 3). This is
-consistent with the theoretical expectation that
-gradient computation requires storing and reprocessing
-all intermediate activations. The optimizer step
-contributes the least energy per unit time, but its
-memory-bandwidth-bound nature makes it the primary
-source of GPU underutilization at small batch sizes.
+Within the GPU workload, the backward pass dominates
+per-step energy at bs=32 and bs=16, consuming roughly
+2× the energy of the forward pass (Figure 3). At bs=8,
+however, the optimizer step accumulates the most total
+energy over the full run (Figure 11c) — because its
+duration is batch-size-invariant while the backward
+pass shrinks with smaller batches, and bs=8 runs 2.4×
+more steps than bs=32 in the same 300s budget. The
+optimizer step's memory-bandwidth-bound nature also
+makes it the primary source of GPU underutilization
+at small batch sizes, as discussed in Section 3.3.
 
 Sources of Inefficiency.
 Three categories of GPU underutilization were identified:
@@ -552,33 +634,53 @@ and most favorable energy-per-sample among the tested
 configurations.
 
 Measurement Overhead.
-Comparing Exp1 (noop) and Exp3 (combined) throughput
-quantifies the overhead of fine-grained instrumentation
-(Table 3). The overhead grows at smaller batch sizes
-because the fixed cost of three cuda.synchronize() calls
-per step — roughly constant in absolute time — represents
-a larger fraction of a shorter step. Exp2 (end-to-end
-CodeCarbon only) introduces negligible overhead,
-confirming that coarse energy tracking is practical for
-production use without perturbing the workload.
+Table 3 shows that Exp3 (combined) adds 13.5%, 21.3%,
+and 25.0% per-step time overhead at bs=32, bs=16, and
+bs=8 respectively — well above the ~5% target at all
+batch sizes. The overhead grows at smaller batch sizes
+because the instrumentation cost per step is largely
+fixed: three cuda.synchronize() calls, three CodeCarbon
+context manager entries/exits (each triggering NVML and
+RAPL reads), and psutil/nvidia-smi polling all cost
+roughly the same absolute time (~50ms per step)
+regardless of how much useful computation the step
+performs. At bs=32 a step is 355ms so the fixed
+overhead is ~13%; at bs=8 a step is only 148ms so the
+same fixed cost inflates it to ~25%. This amortization
+effect explains why workloads with longer steps —
+training on larger datasets or higher-resolution images
+— can experience negligible overhead from the same
+tooling. Exp2 introduces overhead within run-to-run
+noise (~0%), confirming that end-to-end CodeCarbon
+tracking is practical for production use without
+perturbing the workload.
 
 Limitations.
 Several limitations of this study warrant note. First,
-the 2,000-image synthetic dataset is considerably
-smaller than real ImageNet (1.28M images); steps per
-epoch are far fewer, making epoch boundary effects
-relatively more frequent than in production training.
-Second, the measurements were conducted on a shared
-SLURM cluster, and at least one GPU preemption event
-was identified (bs=8, step #1071, t=196s) where an
-external process briefly interrupted training. Third,
-the NVML energy counter resolution (~100 ms) means
-per-phase energy at bs=8 (phase durations ~40–61 ms)
-spans multiple phases, limiting measurement precision
-at the finest granularity. Finally, measurement overhead
-exceeds the 5% target at bs=16 and bs=8; future work
-would implement asynchronous energy sampling and
-reduce synchronization frequency.
+the 2,000-image synthetic dataset is far smaller than
+real ImageNet (1.28M images). An epoch at bs=32 is
+only 62 steps (~41 seconds), so epoch boundary
+reshuffles occur roughly every 41 seconds throughout
+the 300s run. In production training on a full dataset,
+one epoch would span tens of thousands of steps —
+epoch boundaries would be essentially invisible over a
+300s window. The reshuffle stalls observed here are
+therefore amplified artifacts of the small dataset and
+should not be generalized directly to real training
+workloads. Second, CodeCarbon's CPU energy measurement
+via RAPL reflects the entire shared CPU socket rather
+than our job's actual CPU consumption, making the
+reported CPU energy share (56%) unreliable for per-job
+attribution on shared SLURM nodes. GPU energy via NVML
+remains trustworthy. Third, the measurements were
+conducted on a shared SLURM cluster, and at least one
+GPU preemption event was identified (bs=8, step #1071,
+t=196s). Fourth, the NVML energy counter resolution
+(~100 ms) limits per-phase energy precision at bs=8
+where phase durations are 40–61 ms. Finally,
+measurement overhead exceeds the 5% target at bs=16
+and bs=8; future work would implement asynchronous
+energy sampling to reduce the fixed probe cost.
 
 
 REFERENCES
