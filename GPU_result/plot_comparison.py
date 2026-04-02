@@ -20,11 +20,19 @@ def save(fig, path):
     print(f"Saved: {path}")
 
 
+PHASE_COLORS = {
+    "forward":      "#4e79a7",
+    "backward":     "#f28e2b",
+    "optimizer":    "#59a14f",
+    "data_loading": "#e15759",
+}
+
 _STEP_LINE_RE = re.compile(
     r"step\s+(?P<step>[\d.]+)\s+--\s+"
     r"forward\s+(?P<fwd>[\d.]+)\s+--\s+"
     r"backward\s+(?P<bwd>[\d.]+)\s+--\s+"
     r"optimizer step\s+(?P<opt>[\d.]+)"
+    r"(?:.*?data_loading\s+(?P<data>[\d.]+))?"
     r"(?:.*?gpu_util%\s+(?P<gpu_util>[\d.]+))?"
     r"(?:.*?gpu_mem\(MB\)\s+(?P<gpu_mem>[\d.]+))?"
     r"(?:.*?energy_step\(mJ\)\s+(?P<e_step>[\d.]+))?"
@@ -42,6 +50,89 @@ def parse_logs(log_files):
                 if m:
                     rows.append({k: float(v) for k, v in m.groupdict().items() if v is not None})
     return pd.DataFrame(rows)
+
+
+def parse_gpu_csv(path, fmt='%Y/%m/%d %H:%M:%S.%f'):
+    """Load nvidia-smi CSV, return (t_seconds, util_percent) arrays."""
+    df = pd.read_csv(path)
+    df["timestamp"] = pd.to_datetime(df["timestamp"], format=fmt)
+    t0 = df["timestamp"].iloc[0]
+    df["t_s"] = (df["timestamp"] - t0).dt.total_seconds()
+    col = " utilization.gpu [%]"
+    df[col] = df[col].astype(str).str.replace("%", "").str.strip().astype(float)
+    return df["t_s"].to_numpy(), df[col].to_numpy()
+
+
+def plot_gpu_util_zoomed(gpu_csv, log_files, batch_size, zoom_center, out_dir):
+    """
+    Plot a one-epoch-wide zoomed window of GPU utilization with phase shading.
+    zoom_center: time in seconds around which to centre the window.
+    """
+    # Load GPU util timeline
+    t_gpu, util = parse_gpu_csv(gpu_csv)
+
+    # Build phase timeline from log (first log file only)
+    phase_bands = []   # (t_start, t_end, phase_label)
+    if log_files:
+        df_log = parse_logs([log_files[0]])
+        if not df_log.empty and all(c in df_log.columns for c in ["fwd", "bwd", "opt"]):
+            t_cursor = 0.0
+            for _, row in df_log.iterrows():
+                fwd  = row["fwd"]  / 1000.0
+                bwd  = row["bwd"]  / 1000.0
+                opt  = row["opt"]  / 1000.0
+                dat  = (row["data"] / 1000.0) if "data" in df_log.columns and not pd.isna(row.get("data", float("nan"))) else 0.0
+                phase_bands.append((t_cursor,               t_cursor + fwd,           "forward"))
+                phase_bands.append((t_cursor + fwd,         t_cursor + fwd + bwd,     "backward"))
+                phase_bands.append((t_cursor + fwd + bwd,   t_cursor + fwd + bwd + opt, "optimizer"))
+                if dat > 0:
+                    phase_bands.append((t_cursor + fwd + bwd + opt,
+                                        t_cursor + fwd + bwd + opt + dat, "data_loading"))
+                t_cursor += fwd + bwd + opt + dat
+
+    # Determine zoom window: one epoch wide centred on zoom_center
+    steps_per_epoch = 2000 / batch_size
+    # Estimate epoch duration from log
+    if log_files:
+        df_log = parse_logs([log_files[0]])
+        if not df_log.empty and "step" in df_log.columns:
+            mean_step_s = df_log["step"].mean() / 1000.0
+            epoch_s = steps_per_epoch * mean_step_s
+        else:
+            epoch_s = 30.0
+    else:
+        epoch_s = 30.0
+
+    t_lo = zoom_center - epoch_s / 2
+    t_hi = zoom_center + epoch_s / 2
+
+    fig, ax = plt.subplots(figsize=(8, 3.5))
+
+    # Phase background shading
+    seen = set()
+    for (ts, te, phase) in phase_bands:
+        if te < t_lo or ts > t_hi:
+            continue
+        label = phase if phase not in seen else None
+        ax.axvspan(max(ts, t_lo), min(te, t_hi),
+                   color=PHASE_COLORS[phase], alpha=0.18, linewidth=0, label=label)
+        seen.add(phase)
+
+    # GPU util line
+    mask = (t_gpu >= t_lo) & (t_gpu <= t_hi)
+    ax.plot(t_gpu[mask], util[mask], color="black", linewidth=1.2,
+            label="GPU util (%)", zorder=3)
+    ax.set_xlim(t_lo, t_hi)
+    ax.set_ylim(0, 105)
+    ax.set_xlabel("Time (s)")
+    ax.set_ylabel("GPU Utilization (%)")
+    ax.set_title(f"GPU Utilization — bs={batch_size}, zoomed ~{t_lo:.0f}–{t_hi:.0f}s\n"
+                 f"(phase shading from single run)")
+    # Reorder legend: gpu util first, then phases
+    handles, labels = ax.get_legend_handles_labels()
+    ax.legend(handles, labels, fontsize=8, loc="lower right")
+    fname = f"gpu_util_zoomed_bs{batch_size}.png"
+    save(fig, os.path.join(out_dir, fname))
 
 
 def load_cc_full(base_dir, batch_size, num_runs, rank=0):
@@ -68,6 +159,12 @@ def main():
                         help="Log files for batch size 16")
     parser.add_argument("--logs_bs8",    nargs="*", default=[],
                         help="Log files for batch size 8")
+    parser.add_argument("--gpu_csv_bs32", default="",
+                        help="Single nvidia-smi CSV for bs=32 zoomed plot")
+    parser.add_argument("--gpu_csv_bs16", default="",
+                        help="Single nvidia-smi CSV for bs=16 zoomed plot")
+    parser.add_argument("--gpu_csv_bs8",  default="",
+                        help="Single nvidia-smi CSV for bs=8 zoomed plot")
     args = parser.parse_args()
 
     os.makedirs(args.out_dir, exist_ok=True)
@@ -176,6 +273,18 @@ def main():
     ax.set_ylabel("Total Energy (kJ) — CodeCarbon")
     ax.set_title("Total Training Energy vs Batch Size (5 min run)")
     save(fig, os.path.join(args.out_dir, "compare_total_energy.png"))
+
+    # Zoomed GPU util plots centred on known big-dip regions
+    zoom_cfg = [
+        (32, args.gpu_csv_bs32, args.logs_bs32, 232.0),  # dips at t~220-245s
+        (16, args.gpu_csv_bs16, args.logs_bs16,  85.0),  # dip at t~85s
+        (8,  args.gpu_csv_bs8,  args.logs_bs8,   90.0),  # dip at t~90s
+    ]
+    for bs, gpu_csv, log_files, center in zoom_cfg:
+        if gpu_csv and os.path.isfile(gpu_csv):
+            plot_gpu_util_zoomed(gpu_csv, log_files, bs, center, args.out_dir)
+        else:
+            print(f"  [skip] no gpu_csv for bs={bs} zoomed plot")
 
     print(f"\nAll comparison plots written to: {args.out_dir}")
 
