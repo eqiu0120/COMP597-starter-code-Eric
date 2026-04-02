@@ -27,10 +27,11 @@ and external system monitoring (nvidia-smi, psutil), we perform
 fine-grained per-phase measurements across the forward pass,
 backward pass, and optimizer update. Our results show that
 while larger batch sizes improve GPU utilization and throughput,
-all configurations exhibit periodic underutilization driven by
-DataLoader epoch boundary reshuffling and memory-bandwidth-bound
-optimizer steps. These idle periods represent concrete
-opportunities for improving training energy efficiency.
+all configurations exhibit periodic GPU underutilization driven
+by DataLoader stalls — at epoch boundary reshuffles and from
+transient shared filesystem contention. These idle periods
+represent concrete opportunities for improving training energy
+efficiency.
 
 
 1. WORKLOAD DESCRIPTION
@@ -104,7 +105,7 @@ enabling fair cross-batch comparison. Each experiment
 configuration was repeated 3 times; reported metrics
 represent the mean ± standard deviation across runs.
 
-We conducted three experiment types:
+We conducted four experiment types:
 
   Exp1 (noop): Training runs with no measurement
   instrumentation whatsoever. This establishes the
@@ -126,6 +127,20 @@ We conducted three experiment types:
   memory, power draw, and SM clock at 0.1-second intervals.
   A separate CPU monitor (psutil) records CPU utilization
   and RAM usage every 0.5 seconds.
+
+  Exp4 (per_step): A reduced-overhead alternative to
+  Exp3 that estimates per-phase energy without full
+  per-phase instrumentation at every step. The first 50
+  steps (calibration phase) run with full CUDA
+  synchronization and NVML reads to establish the
+  forward/backward/optimizer time ratios. For all
+  subsequent steps, only two synchronizations are
+  performed per step (one at step start, one at step
+  end) — and phase energy is
+  estimated by applying the calibrated ratios to the
+  total step energy. This reduces the fixed overhead
+  per step from ~50ms (Exp3) to ~1–5ms. Exp4 is run
+  once per batch size (single run, not averaged).
 
 Batch Size Selection.
 The maximum batch size that fits in GPU memory without
@@ -203,7 +218,7 @@ and Exp3 (combined, full instrumentation) under
 identical conditions. The target is that instrumentation
 should not increase end-to-end training time by more
 than ~5%. Results of this comparison are reported in
-Section 3.4.
+Section 3.1.
 
 
 3. RESULTS
@@ -211,26 +226,19 @@ Section 3.4.
 
 3.1 End-to-End Metrics
 
-Table 1 compares mean time per step across all four
-experiments, quantifying the overhead of each
-instrumentation level. Per-step time is computed as
-elapsed_s / steps_completed averaged over 3 runs,
-equivalent to the end-to-end time required to complete
-the same number of steps with and without
-instrumentation.
+Figure 1 shows the time overhead (% increase over Exp1
+noop baseline) for each experiment and batch size.
+Per-step time is computed as elapsed_s /
+steps_completed averaged over 3 runs (Exp4 is a single
+run), equivalent to the end-to-end time required to
+complete the same number of steps with and without
+instrumentation. Absolute ms/step values are provided
+in Appendix D.
 
-Table 1: Per-step time and overhead across experiments
-------------------------------------------------------
-Batch  Exp1 noop   Exp2 cc_full  Overhead  Exp4 per_step  Overhead  Exp3 combined  Overhead
-Size   (ms/step)   (ms/step)               (ms/step)                (ms/step)
------  ---------   ------------  --------  -------------  --------  -------------  --------
-32     355         358           +0.8%     357            +0.6%     403            +13.5%
-16     216         216           +0.0%     221            +2.3%     262            +21.3%
-8      148         147           -0.7%     149            +0.7%     185            +25.0%
-
-Note: Exp1/Exp2/Exp3 are averaged over 3 runs; Exp4
-(per_step) is a single run. Exp2 negative overhead at
-bs=8 is within run-to-run noise (~1%).
+[FIGURE 1: overhead_percent.png — Bar chart showing
+time overhead (%) vs. Exp1 baseline for Exp2, Exp3,
+and Exp4 across batch sizes 32/16/8, with 5% target
+line.]
 
 Exp2 (end-to-end CodeCarbon only) and Exp4 (per-step
 with calibration) both introduce negligible overhead
@@ -267,16 +275,13 @@ core. On a shared SLURM node, the RAPL counter reflects
 the entire socket's power consumption, including all
 other jobs co-located on the same physical CPU. Our
 actual CPU utilization is ~1% across 4 allocated cores
-(Figure 6), meaning our workload's true CPU contribution
+(Figure 7), meaning our workload's true CPU contribution
 is negligible. The 56% CPU figure is therefore an
 artifact of shared-node attribution rather than a
 reflection of our job's CPU load. GPU energy (33%,
 via NVML) is reliable because NVML isolates our specific
 GPU device. RAM energy (11%) is estimated from memory
-size and a fixed coefficient. This is a known limitation
-of CodeCarbon on shared HPC clusters: per-job CPU energy
-attribution via RAPL is only meaningful on dedicated
-nodes. Total energy decreases only slightly across batch
+size and a fixed coefficient. Total energy decreases only slightly across batch
 sizes (~1.7% from bs=32 to bs=8), because all runs
 consume the same 300s at similar average power. CO2
 emissions are very low (~210 mg per run) owing to
@@ -294,26 +299,26 @@ energy during training steps. Neither is wrong — they
 measure different scopes — but Exp2 provides the more
 complete picture of total carbon cost.
 
-[FIGURE 1: compare_total_energy.png — Bar chart comparing
+[FIGURE 2: compare_total_energy.png — Bar chart comparing
 total, GPU, CPU, and RAM energy across batch sizes 32/16/8.
 Place as full-width figure at top of results page.]
 
-[FIGURE 2: compare_energy_per_sample.png — Energy per
+[FIGURE 3: compare_energy_per_sample.png — Energy per
 sample across batch sizes, showing bs=32 is most efficient.]
 
 
 3.2 Per-Phase Timing Analysis
 
-Figure 3 shows the average duration per phase (forward,
+Figure 4 shows the average duration per phase (forward,
 backward, optimizer) for each batch size, measured in
 Exp3 using CUDA-synchronized timestamps and averaged
 over all steps across 3 runs.
 
-[FIGURE 3: compare_phase_times.png — Three grouped bar
+[FIGURE 4: compare_phase_times.png — Three grouped bar
 plots (one per batch size) showing mean ± std for
 forward, backward, optimizer phase duration. Column-width.]
 
-As shown in Figure 3, the backward pass is consistently
+As shown in Figure 4, the backward pass is consistently
 the most time-consuming phase across all configurations.
 At bs=32, backward takes 189 ms on average versus 121 ms
 for forward, 61 ms for the optimizer, and ~31 ms for
@@ -337,7 +342,7 @@ the optimizer update reads and writes all model parameters
 and gradients — whose size depends only on model
 architecture, not batch size. This batch-size invariance
 of the optimizer phase has important implications
-discussed in Section 3.3.
+discussed in Section 4.
 
 A significant concern with per-phase measurement at
 smaller batch sizes is NVML resolution. The NVML energy
@@ -351,26 +356,26 @@ account for this by using CodeCarbon's 500 ms sampling
 interval to infer per-step energy, which spans multiple
 NVML updates and is therefore more reliable.
 
-[FIGURE 4: bs_32/time_breakdown.png, bs_16/time_breakdown.png,
+[FIGURE 5: bs_32/time_breakdown.png, bs_16/time_breakdown.png,
 bs_8/time_breakdown.png — Phase time bars per batch size,
 with std error bars. Arrange as 3 side-by-side subfigures.]
 
 
 3.3 GPU Utilization and System Timelines
 
-Figure 5 shows GPU utilization, GPU memory usage, and
+Figure 6 shows GPU utilization, GPU memory usage, and
 CPU utilization over the full 300-second training run
 for each batch size, measured externally via nvidia-smi
 and psutil.
 
-[FIGURE 5: bs_32/gpu_util.png — GPU utilization timeline
+[FIGURE 6: bs_32/gpu_util.png — GPU utilization timeline
 for bs=32. Companion figures: bs_16/gpu_util.png,
 bs_8/gpu_util.png. Arrange as 3-row subfigure panel.]
 
-[FIGURE 6: bs_32/cpu_util.png — CPU utilization timeline.
-Arrange alongside Figure 5 as a companion panel.]
+[FIGURE 7: bs_32/cpu_util.png — CPU utilization timeline.
+Arrange alongside Figure 6 as a companion panel.]
 
-[FIGURE 7: bs_32/gpu_memory.png — GPU memory timeline.]
+[FIGURE 8: bs_32/gpu_memory.png — GPU memory timeline.]
 
 A consistent pattern across all batch sizes is the 15-
 second initialization period at the start of each run
@@ -385,50 +390,34 @@ Beyond the warmup period, GPU utilization never reaches
   bs=16:  77.9% (std=10.9%, min=19%)
   bs=8:   77.3% (std=3.4%,  min=67%)
 
-At bs=32, GPU utilization dips are rare (2 events) and
-occur exclusively at epoch boundaries, where the
-DataLoader exhausts the dataset and reshuffles the
-sample index before beginning the next epoch. With 62
-steps per epoch at bs=32, these boundaries occur every
-~25 seconds, and are clearly visible as periodic valleys
-in Figure 5. The minimum observed utilization of 46% during these
-stalls represents the lowest point of a brief periodic
-dip — not a sustained level — caused by the DataLoader
-workers reshuffling the dataset index at epoch end
-before the next batch can be supplied to the GPU.
+The large GPU utilization dips visible across all three
+batch sizes share a common root cause: DataLoader
+stalls draining the prefetch queue. When the queue
+empties — whether at an epoch boundary reshuffle or
+from a mid-epoch I/O slowdown — the GPU runs out of
+batches and drops to idle until new data is ready.
 
-At bs=16, the pattern becomes more complex. With steps
-taking ~270ms, epoch boundaries occur every ~34s and
-the optimizer step is beginning to contribute
-meaningfully to idle time — resulting in 4 dip events
-split evenly between the two causes. Epoch boundary
-dips occur at t=35s and t=95s (near epoch boundaries
-at t=34s and t=100s), while optimizer step dips occur
-at t=85s and t=150s. The most severe dip reaches 19%
-at t=85s — an extended optimizer stall occurring between
-two back-to-back epoch boundaries where DataLoader
-pressure is at its highest. The wide standard deviation of
-10.9% reflects that the three runs hit these stalls
-at slightly different points, so the averaged curve
-shows more variability than any individual run — making
-bs=16 visually appear the least stable of the three
-configurations.
+Some large dips do coincide with epoch boundaries
+(every ~25s at bs=32, ~27s at bs=16, ~37s at bs=8),
+where the DataLoader must reshuffle the full dataset
+index before starting the next epoch. However, not all
+large dips align with epoch boundaries. Several occur
+mid-epoch, most likely due to transient shared
+filesystem contention on the SLURM cluster — another
+job's I/O activity temporarily slowing the DataLoader
+workers enough to drain the prefetch buffer.
 
-At bs=8, the character of underutilization shifts
-fundamentally: 7 of 9 dip events are attributed to the
-optimizer step rather than epoch boundaries. With each
-step completing in only ~160 ms total, the optimizer
-update (which takes ~61 ms, or 38% of step time) is
-clearly visible as a periodic GPU stall. The optimizer
-is memory-bandwidth bound — it must read all model
-parameters and gradients from GPU memory and write
-updated weights back — but performs minimal arithmetic.
-As a result, GPU compute units sit idle during this
-phase, unable to overlap with useful computation.
-Paradoxically, despite more stall events at bs=8, the
-standard deviation in utilization is lower (3.4%) than
-at bs=32 (8.5%), because the stalls are more uniform
-and predictable.
+At bs=32, only 2 large dips appear (near t=240–260s),
+both seemingly mid-epoch, suggesting occasional
+contention rather than a consistent reshuffle penalty.
+At bs=16, dips are more frequent (~4 events) and deeper
+(minimum 19%), reflecting a combination of epoch
+boundary stalls and contention. The high standard
+deviation (10.9%) indicates the three runs hit these
+events at different times. At bs=8, large dips are
+similarly sparse and irregular — the cluster near
+t=80–140s likely reflects a window of elevated cluster
+contention shared across all batch sizes.
 
 CPU utilization remains consistently low (~0.8–1.0%)
 throughout all runs for all batch sizes, confirming
@@ -449,7 +438,7 @@ terminal dip is an artifact of the time-bounded
 training design and is not accounted for in our
 steady-state analysis.
 
-[FIGURE 8: compare_gpu_util.png — Side-by-side mean GPU
+[FIGURE 9: compare_gpu_util.png — Side-by-side mean GPU
 utilization timelines for bs=32, bs=16, bs=8 on same axes.
 Full-width figure for easy comparison.]
 
@@ -457,12 +446,12 @@ Full-width figure for easy comparison.]
 
 3.5 Batch Size Effects — Fine-Grained Anomaly Analysis
 
-[FIGURE 9a: bs_32/cc_energy_per_step.png — Energy per step
-for bs=32. FIGURE 9b: bs_16/cc_energy_per_step.png — bs=16.
-FIGURE 9c: bs_8/cc_energy_per_step.png — bs=8.
-FIGURE 10a: bs_32/throughput.png — Throughput per step bs=32.
-FIGURE 10b: bs_16/throughput.png — bs=16.
-FIGURE 10c: bs_8/throughput.png — bs=8.
+[FIGURE 10a: bs_32/cc_energy_per_step.png — Energy per step
+for bs=32. FIGURE 10b: bs_16/cc_energy_per_step.png — bs=16.
+FIGURE 10c: bs_8/cc_energy_per_step.png — bs=8.
+FIGURE 11a: bs_32/throughput.png — Throughput per step bs=32.
+FIGURE 11b: bs_16/throughput.png — bs=16.
+FIGURE 11c: bs_8/throughput.png — bs=8.
 Arrange as two 3-panel rows.]
 
 During a DataLoader reshuffle stall the GPU drops to
@@ -472,15 +461,19 @@ physically correct behavior. How that decrease appears
 in the per-step energy plots differs by batch size,
 due to CodeCarbon's per-step attribution.
 
-At bs=32 (Figure 9a), the dips are real and direct:
+At bs=32 (Figure 10a), the dips are real and direct:
 the stall falls within a single ~394ms step window,
-so that step records genuinely low energy. The dips
-occur consistently every ~62 steps throughout the
-entire run, matching the epoch boundary period
-(2000/32 = 62 steps/epoch), confirming DataLoader
-reshuffles as the cause.
+so that step records genuinely low energy. Epoch
+boundaries occur every ~62 steps (2000/32), but GPU
+utilization only visibly drops at a few of them,
+concentrated near t=240–280s. Most reshuffles are
+absorbed without a measurable dip, likely because the
+dataset is cached in RAM and the stall is too short
+to outlast the prefetch buffer. Only when occasional
+filesystem contention extends the stall does the GPU
+visibly idle.
 
-At bs=16 and bs=8 (Figures 9b–9c), the anomalies
+At bs=16 and bs=8 (Figures 10b–10c), the anomalies
 appear as spikes rather than dips. This is a
 per-step attribution artifact: the stall inflates
 the wall-clock time of the first post-stall step
@@ -511,11 +504,11 @@ produce visible energy anomalies — it is too short
 relative to CodeCarbon's 500ms sampling window to
 cause a measurable per-step deviation.
 
-Throughput (Figures 10a–10c) mirrors the energy
-patterns. At bs=32, periodic throughput dips align
-with the energy dips at epoch boundaries. At bs=16,
-dips are concentrated early then fade with cache
-warmup. At bs=8, irregular dips match the same
+Throughput (Figures 11a–11c) mirrors the energy
+patterns. At bs=32, throughput dips align with the
+energy dips at the same DataLoader stall events.
+At bs=16, dips are concentrated early then fade with
+cache warmup. At bs=8, irregular dips match the same
 ~400–800 step window as the energy spikes.
 
 CO2 follows energy directly given Quebec's fixed
@@ -523,13 +516,13 @@ carbon intensity. The root cause of all anomalies
 is GPU idle time from DataLoader stalls, not model
 computation itself.
 
-Figure 11 shows the total accumulated energy per phase
+Figure 12 shows the total accumulated energy per phase
 (forward, backward, optimizer) over the full 300-second
 run, measured via CodeCarbon per-substep tracking.
 
-[FIGURE 11a: bs_32/cc_energy_substeps.png
- FIGURE 11b: bs_16/cc_energy_substeps.png
- FIGURE 11c: bs_8/cc_energy_substeps.png
+[FIGURE 12a: bs_32/cc_energy_substeps.png
+ FIGURE 12b: bs_16/cc_energy_substeps.png
+ FIGURE 12c: bs_8/cc_energy_substeps.png
  Arrange as 3-panel row for side-by-side comparison.]
 
 At bs=32 and bs=16, the backward pass accumulates the
@@ -572,9 +565,9 @@ reduce our job's actual energy cost.
 
 Within the GPU workload, the backward pass dominates
 per-step energy at bs=32 and bs=16, consuming roughly
-2× the energy of the forward pass (Figure 3). At bs=8,
+2× the energy of the forward pass (Figure 4). At bs=8,
 however, the optimizer step accumulates the most total
-energy over the full run (Figure 11c) — because its
+energy over the full run (Figure 12c) — because its
 duration is batch-size-invariant while the backward
 pass shrinks with smaller batches, and bs=8 runs 2.4×
 more steps than bs=32 in the same 300s budget. The
@@ -590,19 +583,13 @@ Three categories of GPU underutilization were identified:
     dummy warmup forward pass before measurement begins
     would eliminate this entirely.
 
-(2) Epoch boundary DataLoader stalls: At bs=32, these
-    account for all observed GPU idle periods. Enabling
-    persistent_workers=True in the DataLoader would
-    keep worker processes alive between epochs,
-    eliminating the reshuffle-induced stall with a
-    single configuration change.
-
-(3) Memory-bandwidth-bound optimizer steps: At bs=8,
-    the optimizer step causes 7 of 9 observed GPU idle
-    events. Gradient accumulation (accumulating gradients
-    over 4 small batches before each optimizer step)
-    would reduce the frequency of optimizer steps by 4×,
-    directly addressing this bottleneck.
+(2) DataLoader stalls: Observed across all batch sizes,
+    caused by epoch boundary reshuffles and transient
+    shared filesystem contention draining the prefetch
+    queue. Enabling persistent_workers=True would keep
+    worker processes alive between epochs, reducing
+    reshuffle latency. Increasing prefetch_factor would
+    provide a deeper buffer against short I/O spikes.
 
 Trade-offs.
 The results reveal a fundamental tension between batch
@@ -779,4 +766,21 @@ GPU steady-state utilization (t=20–305s):
   bs=8:  77.3% ± 3.4%
 
 Measurement overhead (Exp1 vs Exp3):
-  bs=32: 8%   bs=16: 14%   bs=8: 15%
+  bs=32: +13.5%   bs=16: +21.3%   bs=8: +25.0%
+
+
+D. Per-Step Time Detail
+------------------------
+Absolute ms/step values for all experiments (mean over
+3 runs except Exp4 which is a single run).
+
+[FIGURE D1: overhead_perstep_time.png — Grouped bar
+chart of absolute ms/step for Exp1, Exp2, Exp3, Exp4
+across batch sizes 32/16/8.]
+
+Batch  Exp1 noop   Exp2 cc_full  Exp3 combined  Exp4 per_step
+Size   (ms/step)   (ms/step)     (ms/step)      (ms/step)
+-----  ---------   ------------  -------------  -------------
+32     355         358           403            357
+16     216         216           262            221
+8      148         147           185            149

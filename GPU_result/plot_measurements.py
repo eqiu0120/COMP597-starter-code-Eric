@@ -13,11 +13,29 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 
+PHASE_COLORS = {
+    "forward":     "#4e79a7",
+    "backward":    "#f28e2b",
+    "optimizer":   "#59a14f",
+    "data_loading":"#e15759",
+}
+PHASE_ALPHAS = 0.15   # background shading
+EPOCH_LINE_KW = dict(color="gray", linestyle="--", linewidth=0.8, alpha=0.6)
+
+
 def save(fig, path):
     fig.tight_layout()
     fig.savefig(path, dpi=200)
     plt.close(fig)
     print(f"Saved: {path}")
+
+
+def _add_epoch_lines(ax, epoch_period, total, label_first=True):
+    """Draw vertical dashed lines at each epoch boundary."""
+    boundaries = np.arange(epoch_period, total, epoch_period)
+    for i, b in enumerate(boundaries):
+        ax.axvline(b, **EPOCH_LINE_KW,
+                   label="epoch boundary" if (i == 0 and label_first) else None)
 
 
 def _strip_unit(series: pd.Series, unit: str) -> pd.Series:
@@ -65,10 +83,45 @@ def _align_and_stack(dfs: list[pd.DataFrame], col: str) -> np.ndarray:
     return np.stack([a[:min_len] for a in arrays], axis=0)
 
 
-def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
+def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str,
+                    batch_size: int = 0, log_files: list[str] = None):
     if not gpu_csvs:
         print("No nvidia-smi CSVs provided; skipping GPU time-series plots.")
         return
+
+    # Compute mean step time from logs to estimate epoch period in seconds
+    epoch_period_s = None
+    if batch_size and log_files:
+        dfs_log = _load_stdout_logs(log_files)
+        if dfs_log:
+            all_step_ms = np.concatenate([df["step"].to_numpy() for df in dfs_log if "step" in df.columns])
+            if len(all_step_ms):
+                mean_step_s = np.mean(all_step_ms) / 1000.0
+                steps_per_epoch = 2000 / batch_size
+                epoch_period_s = steps_per_epoch * mean_step_s
+
+    # Compute cumulative phase boundaries in time for background shading on gpu_util
+    phase_bands = []   # list of (t_start, t_end, phase_name)
+    if epoch_period_s and log_files:
+        dfs_log = _load_stdout_logs(log_files)
+        if dfs_log:
+            # Use first run's step data to build phase timeline
+            df0 = dfs_log[0]
+            if all(c in df0.columns for c in ["fwd", "bwd", "opt"]):
+                t_cursor = 0.0
+                data_col = df0.get("data", None)
+                for i, row in df0.iterrows():
+                    fwd = row["fwd"] / 1000.0
+                    bwd = row["bwd"] / 1000.0
+                    opt = row["opt"] / 1000.0
+                    dat = (data_col.iloc[i] / 1000.0) if data_col is not None else 0.0
+                    phase_bands.append((t_cursor, t_cursor + fwd, "forward"))
+                    phase_bands.append((t_cursor + fwd, t_cursor + fwd + bwd, "backward"))
+                    phase_bands.append((t_cursor + fwd + bwd, t_cursor + fwd + bwd + opt, "optimizer"))
+                    if dat > 0:
+                        phase_bands.append((t_cursor + fwd + bwd + opt,
+                                            t_cursor + fwd + bwd + opt + dat, "data_loading"))
+                    t_cursor += fwd + bwd + opt + dat
 
     metrics = {
         " utilization.gpu [%]":    ("%",   "GPU Utilization (%)",   "gpu_util.png"),
@@ -106,23 +159,43 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str):
         t_vals = series_list[0].index[:min_len]
 
         fig, ax = plt.subplots()
-        ax.plot(t_vals, mean, label="mean")
-        ax.fill_between(t_vals, mean - std, mean + std, alpha=0.3, label="±1 std")
+
+        # Phase background shading (gpu_util only — too dense for other metrics)
+        if fname == "gpu_util.png" and phase_bands:
+            seen_phases = set()
+            for (ts, te, phase) in phase_bands:
+                if te > t_vals[-1]:
+                    break
+                label = phase if phase not in seen_phases else None
+                ax.axvspan(ts, te, color=PHASE_COLORS[phase],
+                           alpha=PHASE_ALPHAS, linewidth=0, label=label)
+                seen_phases.add(phase)
+
+        ax.plot(t_vals, mean, color="steelblue", linewidth=1.0, label="mean", zorder=3)
+        ax.fill_between(t_vals, mean - std, mean + std, alpha=0.25, color="steelblue",
+                        label="±1 std", zorder=2)
+
+        # Epoch boundary lines (gpu_util only)
+        if fname == "gpu_util.png" and epoch_period_s:
+            _add_epoch_lines(ax, epoch_period_s, t_vals[-1])
+
         ax.set_xlabel(t_label)
         ax.set_ylabel(ylabel)
         ax.set_title(f"{ylabel} — averaged over {len(series_list)} run(s)")
-        ax.legend()
+        ax.legend(fontsize=7)
         save(fig, os.path.join(out_dir, fname))
 
 
 
-def plot_codecarbon_steps(cc_dir: str, num_runs: int, rank: int, out_dir: str):
+def plot_codecarbon_steps(cc_dir: str, num_runs: int, rank: int, out_dir: str,
+                          batch_size: int = 0):
     dfs = _load_step_csvs(cc_dir, num_runs, rank)
     if not dfs:
         print("No per-step CodeCarbon CSVs found; skipping.")
         return
 
     n_runs = len(dfs)
+    steps_per_epoch = (2000 / batch_size) if batch_size else None
 
     energy_arr = _align_and_stack(dfs, "energy_consumed") * 3_600_000
     if energy_arr.ndim == 2:
@@ -130,13 +203,16 @@ def plot_codecarbon_steps(cc_dir: str, num_runs: int, rank: int, out_dir: str):
         std_e  = energy_arr.std(axis=0)
         steps  = np.arange(len(mean_e))
 
-        fig, ax = plt.subplots()
-        ax.plot(steps, mean_e, label="mean energy", linewidth=0.8)
-        ax.fill_between(steps, mean_e - std_e, mean_e + std_e, alpha=0.3, label="±1 std")
+        fig, ax = plt.subplots(figsize=(9, 4))
+        ax.plot(steps, mean_e, color="steelblue", linewidth=0.8, label="mean energy")
+        ax.fill_between(steps, mean_e - std_e, mean_e + std_e,
+                        alpha=0.3, color="steelblue", label="±1 std")
+        if steps_per_epoch:
+            _add_epoch_lines(ax, steps_per_epoch, len(mean_e))
         ax.set_xlabel("Step")
         ax.set_ylabel("Energy Consumed (J)")
         ax.set_title(f"Energy per Training Step — averaged over {n_runs} run(s)")
-        ax.legend()
+        ax.legend(fontsize=8)
         save(fig, os.path.join(out_dir, "cc_energy_per_step.png"))
 
     co2_arr = _align_and_stack(dfs, "emissions") * 1e6
@@ -347,14 +423,14 @@ def plot_time_breakdown(log_files: list[str], out_dir: str, batch_size: int = 0)
             save(fig, os.path.join(out_dir, "data_loading_overhead.png"))
 
 
-def plot_nvml_energy(log_files: list[str], out_dir: str):
+def plot_nvml_energy(log_files: list[str], out_dir: str, batch_size: int = 0):
     dfs = _load_stdout_logs(log_files)
-    energy_cols = {"e_step": "step", "e_fwd": "forward", "e_bwd": "backward", "e_opt": "optimizer"}
     if not dfs or not any("e_step" in df.columns for df in dfs):
         print("No NVML energy data found in logs; skipping NVML energy plots.")
         return
 
     n_runs = len(dfs)
+    steps_per_epoch = (2000 / batch_size) if batch_size else None
 
     substep_labels = ["forward", "backward", "optimizer"]
     substep_cols   = ["e_fwd",   "e_bwd",    "e_opt"]
@@ -364,33 +440,69 @@ def plot_nvml_energy(log_files: list[str], out_dir: str):
                for label, col in zip(substep_labels, substep_cols)}
         totals_per_run.append(row)
 
-    totals_df  = pd.DataFrame(totals_per_run)
-    mean_t     = totals_df.mean()
-    std_t      = totals_df.std()
+    totals_df = pd.DataFrame(totals_per_run)
+    mean_t    = totals_df.mean()
+    std_t     = totals_df.std()
 
     fig, ax = plt.subplots()
     x = np.arange(len(substep_labels))
-    ax.bar(x, mean_t, yerr=std_t, capsize=5)
+    colors = [PHASE_COLORS[l] for l in substep_labels]
+    ax.bar(x, mean_t, yerr=std_t, capsize=5, color=colors, alpha=0.85)
     ax.set_xticks(x)
     ax.set_xticklabels(substep_labels)
     ax.set_ylabel("Avg GPU Energy per Step (mJ) — NVML direct")
     ax.set_title(f"GPU Energy Breakdown by Substep — {n_runs} run(s)")
     save(fig, os.path.join(out_dir, "nvml_energy_substeps.png"))
 
-    e_step_arrays = [df["e_step"].to_numpy() for df in dfs if "e_step" in df.columns]
+    # Per-step energy with stacked phase areas and epoch boundary lines
+    phase_arrays = {col: [] for col in substep_cols}
+    e_step_arrays = []
+    for df in dfs:
+        if "e_step" in df.columns:
+            e_step_arrays.append(df["e_step"].to_numpy())
+        for col in substep_cols:
+            if col in df.columns:
+                phase_arrays[col].append(df[col].to_numpy())
+
     if e_step_arrays:
         min_len = min(len(a) for a in e_step_arrays)
+        steps = np.arange(min_len)
+
+        fig, ax = plt.subplots(figsize=(9, 4))
+
+        # Stacked phase areas (forward, backward, optimizer)
+        has_phases = all(len(phase_arrays[c]) == n_runs for c in substep_cols)
+        if has_phases:
+            phase_means = {}
+            for col, label in zip(substep_cols, substep_labels):
+                arr = np.stack([a[:min_len] for a in phase_arrays[col]])
+                phase_means[label] = arr.mean(axis=0)
+
+            bottom = np.zeros(min_len)
+            for label in substep_labels:
+                vals = phase_means[label]
+                ax.fill_between(steps, bottom, bottom + vals,
+                                color=PHASE_COLORS[label], alpha=0.55,
+                                label=label, linewidth=0)
+                bottom += vals
+
+        # Total step energy line on top
         arr = np.stack([a[:min_len] for a in e_step_arrays])
         mean_e = arr.mean(axis=0)
         std_e  = arr.std(axis=0)
-        steps  = np.arange(min_len)
-        fig, ax = plt.subplots()
-        ax.plot(steps, mean_e, label="mean GPU energy/step")
-        ax.fill_between(steps, mean_e - std_e, mean_e + std_e, alpha=0.3, label="±1 std")
+        ax.plot(steps, mean_e, color="black", linewidth=0.8,
+                label="total (mean)", zorder=4)
+        ax.fill_between(steps, mean_e - std_e, mean_e + std_e,
+                        color="black", alpha=0.12, zorder=3)
+
+        # Epoch boundary lines
+        if steps_per_epoch:
+            _add_epoch_lines(ax, steps_per_epoch, min_len)
+
         ax.set_xlabel("Step")
         ax.set_ylabel("GPU Energy (mJ) — NVML direct")
         ax.set_title(f"GPU Energy per Step — {n_runs} run(s)")
-        ax.legend()
+        ax.legend(fontsize=8)
         save(fig, os.path.join(out_dir, "nvml_energy_per_step.png"))
 
 
@@ -548,13 +660,13 @@ def main():
 
     bs = args.batch_size
 
-    plot_nvidia_smi(gpu_csvs, args.out_dir)
+    plot_nvidia_smi(gpu_csvs, args.out_dir, batch_size=bs, log_files=log_files)
     plot_cpu_util(cpu_csvs, args.out_dir, batch_size=bs)
-    plot_codecarbon_steps(args.cc_dir, args.num_runs, args.rank, args.out_dir)
+    plot_codecarbon_steps(args.cc_dir, args.num_runs, args.rank, args.out_dir, batch_size=bs)
     plot_codecarbon_substeps(args.cc_dir, args.num_runs, args.rank, args.out_dir)
     plot_losses(args.cc_dir, args.num_runs, args.rank, args.out_dir)
     plot_time_breakdown(log_files, args.out_dir, batch_size=bs)
-    plot_nvml_energy(log_files, args.out_dir)
+    plot_nvml_energy(log_files, args.out_dir, batch_size=bs)
     plot_throughput(log_files, args.out_dir, batch_size=bs if bs else 8)
     print_total_summary(args.cc_dir, args.num_runs, args.rank)
 
