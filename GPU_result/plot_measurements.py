@@ -498,12 +498,14 @@ def plot_gpu_util_all_runs(gpu_csvs: list[str], out_dir: str,
                 linewidth=0.9, alpha=0.85, label=f"run {i}")
 
     if epoch_period_s:
-        max_t = max(
-            df.groupby("t_s").mean().index[-1]
-            for csv_path in gpu_csvs
-            if os.path.isfile(csv_path)
-            for df in [pd.read_csv(csv_path)]
-        )
+        max_t = 0.0
+        for csv_path in gpu_csvs:
+            if not os.path.isfile(csv_path):
+                continue
+            _df = pd.read_csv(csv_path)
+            _df["timestamp"] = pd.to_datetime(_df["timestamp"])
+            _t = (_df["timestamp"] - _df["timestamp"].iloc[0]).dt.total_seconds()
+            max_t = max(max_t, float(_t.iloc[-1]))
         boundaries = np.arange(epoch_period_s, max_t, epoch_period_s)
         for j, b in enumerate(boundaries):
             ax.axvline(b, color="gray", linestyle="--", linewidth=0.7, alpha=0.5,
