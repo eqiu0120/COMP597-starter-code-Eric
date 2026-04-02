@@ -100,28 +100,6 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str,
                 steps_per_epoch = 2000 / batch_size
                 epoch_period_s = steps_per_epoch * mean_step_s
 
-    # Compute cumulative phase boundaries in time for background shading on gpu_util
-    phase_bands = []   # list of (t_start, t_end, phase_name)
-    if epoch_period_s and log_files:
-        dfs_log = _load_stdout_logs(log_files)
-        if dfs_log:
-            # Use first run's step data to build phase timeline
-            df0 = dfs_log[0]
-            if all(c in df0.columns for c in ["fwd", "bwd", "opt"]):
-                t_cursor = 0.0
-                data_col = df0.get("data", None)
-                for i, row in df0.iterrows():
-                    fwd = row["fwd"] / 1000.0
-                    bwd = row["bwd"] / 1000.0
-                    opt = row["opt"] / 1000.0
-                    dat = (data_col.iloc[i] / 1000.0) if data_col is not None else 0.0
-                    phase_bands.append((t_cursor, t_cursor + fwd, "forward"))
-                    phase_bands.append((t_cursor + fwd, t_cursor + fwd + bwd, "backward"))
-                    phase_bands.append((t_cursor + fwd + bwd, t_cursor + fwd + bwd + opt, "optimizer"))
-                    if dat > 0:
-                        phase_bands.append((t_cursor + fwd + bwd + opt,
-                                            t_cursor + fwd + bwd + opt + dat, "data_loading"))
-                    t_cursor += fwd + bwd + opt + dat
 
     metrics = {
         " utilization.gpu [%]":    ("%",   "GPU Utilization (%)",   "gpu_util.png"),
@@ -159,17 +137,6 @@ def plot_nvidia_smi(gpu_csvs: list[str], out_dir: str,
         t_vals = series_list[0].index[:min_len]
 
         fig, ax = plt.subplots()
-
-        # Phase background shading (gpu_util only — too dense for other metrics)
-        if fname == "gpu_util.png" and phase_bands:
-            seen_phases = set()
-            for (ts, te, phase) in phase_bands:
-                if te > t_vals[-1]:
-                    break
-                label = phase if phase not in seen_phases else None
-                ax.axvspan(ts, te, color=PHASE_COLORS[phase],
-                           alpha=PHASE_ALPHAS, linewidth=0, label=label)
-                seen_phases.add(phase)
 
         ax.plot(t_vals, mean, color="steelblue", linewidth=1.0, label="mean", zorder=3)
         ax.fill_between(t_vals, mean - std, mean + std, alpha=0.25, color="steelblue",
