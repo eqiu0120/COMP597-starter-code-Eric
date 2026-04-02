@@ -474,6 +474,50 @@ def plot_nvml_energy(log_files: list[str], out_dir: str, batch_size: int = 0):
 
 
 
+def plot_gpu_util_all_runs(gpu_csvs: list[str], out_dir: str,
+                           batch_size: int = 0, epoch_period_s: float = None):
+    if not gpu_csvs:
+        return
+
+    run_colors = ["#4e79a7", "#f28e2b", "#59a14f"]
+    fig, ax = plt.subplots(figsize=(10, 4))
+
+    for i, csv_path in enumerate(gpu_csvs):
+        if not os.path.isfile(csv_path):
+            print(f"  [warn] GPU CSV not found: {csv_path}")
+            continue
+        df = pd.read_csv(csv_path)
+        df["timestamp"] = pd.to_datetime(df["timestamp"])
+        t0 = df["timestamp"].iloc[0]
+        df["t_s"] = (df["timestamp"] - t0).dt.total_seconds()
+        col = " utilization.gpu [%]"
+        df[col] = _strip_unit(df[col], "%")
+        df_rs = df.groupby("t_s")[col].mean()
+        ax.plot(df_rs.index, df_rs.values,
+                color=run_colors[i % len(run_colors)],
+                linewidth=0.9, alpha=0.85, label=f"run {i}")
+
+    if epoch_period_s:
+        max_t = max(
+            df.groupby("t_s").mean().index[-1]
+            for csv_path in gpu_csvs
+            if os.path.isfile(csv_path)
+            for df in [pd.read_csv(csv_path)]
+        )
+        boundaries = np.arange(epoch_period_s, max_t, epoch_period_s)
+        for j, b in enumerate(boundaries):
+            ax.axvline(b, color="gray", linestyle="--", linewidth=0.7, alpha=0.5,
+                       label="epoch boundary" if j == 0 else None)
+
+    bs_str = f" — batch size {batch_size}" if batch_size else ""
+    ax.set_xlabel("Time (s)")
+    ax.set_ylabel("GPU Utilization (%)")
+    ax.set_title(f"GPU Utilization — all 3 runs (not averaged){bs_str}")
+    ax.set_ylim(0, 105)
+    ax.legend(fontsize=8)
+    save(fig, os.path.join(out_dir, "gpu_util_all_runs.png"))
+
+
 def plot_cpu_util(cpu_csvs: list[str], out_dir: str, batch_size: int = 0):
     if not cpu_csvs:
         print("No CPU CSVs provided; skipping CPU timeline plot.")
@@ -628,6 +672,15 @@ def main():
     bs = args.batch_size
 
     plot_nvidia_smi(gpu_csvs, args.out_dir, batch_size=bs, log_files=log_files)
+
+    epoch_s = None
+    if bs and log_files:
+        dfs_tmp = _load_stdout_logs(log_files)
+        if dfs_tmp:
+            all_steps = np.concatenate([df["step"].to_numpy() for df in dfs_tmp if "step" in df.columns])
+            if len(all_steps):
+                epoch_s = (np.mean(all_steps) / 1000.0) * (2000 / bs)
+    plot_gpu_util_all_runs(gpu_csvs, args.out_dir, batch_size=bs, epoch_period_s=epoch_s)
     plot_cpu_util(cpu_csvs, args.out_dir, batch_size=bs)
     plot_codecarbon_steps(args.cc_dir, args.num_runs, args.rank, args.out_dir, batch_size=bs)
     plot_codecarbon_substeps(args.cc_dir, args.num_runs, args.rank, args.out_dir)
