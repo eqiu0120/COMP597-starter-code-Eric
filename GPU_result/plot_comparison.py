@@ -174,6 +174,7 @@ def main():
 
     throughput_means, throughput_stds = [], []
     energy_per_sample_means, energy_per_sample_stds = [], []
+    energy_per_step_means, energy_per_step_stds = [], []
     gpu_util_means, gpu_util_stds = [], []
     phase_means = {"forward": [], "backward": [], "optimizer": []}
     phase_stds  = {"forward": [], "backward": [], "optimizer": []}
@@ -202,8 +203,11 @@ def main():
             eps = df["e_step"] / bs
             energy_per_sample_means.append(eps.mean())
             energy_per_sample_stds.append(eps.std())
+            energy_per_step_means.append(df["e_step"].mean())
+            energy_per_step_stds.append(df["e_step"].std())
         else:
             energy_per_sample_means.append(0); energy_per_sample_stds.append(0)
+            energy_per_step_means.append(0); energy_per_step_stds.append(0)
 
         if "gpu_util" in df.columns:
             gpu_util_means.append(df["gpu_util"].mean())
@@ -234,6 +238,13 @@ def main():
     ax.set_ylabel("GPU Energy per Sample (mJ) — NVML")
     ax.set_title("Energy per Sample vs Batch Size\n(lower = more efficient)")
     save(fig, os.path.join(args.out_dir, "compare_energy_per_sample.png"))
+
+    fig, ax = plt.subplots()
+    ax.bar(x, energy_per_step_means, yerr=energy_per_step_stds, capsize=5, color="#f28e2b")
+    ax.set_xticks(x); ax.set_xticklabels(xlabels)
+    ax.set_ylabel("GPU Energy per Step (mJ) — NVML")
+    ax.set_title("Energy per Step vs Batch Size")
+    save(fig, os.path.join(args.out_dir, "compare_energy_per_step.png"))
 
     fig, ax = plt.subplots()
     ax.bar(x, gpu_util_means, yerr=gpu_util_stds, capsize=5, color="#59a14f")
